@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">Foobar Part 2</string>
+    <string name="app_name" translatable="false">Foobar</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="display_name">Display Name</string>
+    <string name="password">Password</string>
+    <string name="foobar">FOOBAR</string>
+    <string name="create_a_new_account">Create a new account</string>
+    <string name="username">Username</string>
+    <string name="upload_a_profile_photo">upload a profile photo</string>
+    <string name="profile_image">profile_image</string>
+    <string name="Already_have_an_Account">Already have an Account:</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="upload_a_profile">upload a profile</string>
+    <string name="do_not_have_an_account">Do not have an Account:</string>
 </resources>
