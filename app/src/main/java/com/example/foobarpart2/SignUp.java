@@ -1,20 +1,32 @@
 package com.example.foobarpart2;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.foobarpart2.databinding.ActivitySignUpBinding;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import kotlin.text.Regex;
 
 public class SignUp extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private static final int GALLERY_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
+
+    private Uri imageUri = null;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +48,11 @@ public class SignUp extends AppCompatActivity {
             String confirmPassword = binding.confirmPasswordTextSignup.getText().toString();
             String displayName = binding.displayNameTextSignup.getText().toString();
 
-            if (validateInput(userName,password,confirmPassword,displayName)){
+            if (validateInput(userName,password,confirmPassword,displayName,this.imageUri)){
                 Intent i = new Intent(this, SignIn.class);
+                user = new User(userName,password,displayName,this.imageUri);
+                UserManager userManager = UserManager.getInstance();
+                userManager.addUser(this.user);
                 startActivity(i);
             }
         });
@@ -61,7 +76,8 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         try {
             startActivityForResult(intent, GALLERY_REQUEST_CODE);
         } catch (Exception e) {
@@ -83,12 +99,17 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        imageUri = null;
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             if (extras != null && extras.containsKey("data")) {
+                this.imageUri = data.getData();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
+                String savedImagePath = storeImageBitmap(imageBitmap);
+                this.imageUri = Uri.parse("file://" + savedImagePath);
                 binding.profileImage.setImageBitmap(imageBitmap);
-            } else {
+            } else{
+                binding.profileImage.setImageBitmap(null);
                 Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             }
         }
@@ -97,14 +118,16 @@ public class SignUp extends AppCompatActivity {
             if (selectedImageUri != null) {
                 // Set the selected image URI to the ImageView
                 binding.profileImage.setImageURI(selectedImageUri);
+                this.imageUri = selectedImageUri;
             } else {
+                binding.profileImage.setImageBitmap(null);
                 Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     boolean validateInput(String username, String password, String confirmPassword,
-                          String displayName){
+                          String displayName,Uri imageUri){
         if(username.isEmpty() || password.isEmpty()
             || confirmPassword.isEmpty() || displayName.isEmpty()){
             Toast.makeText(this, "Please fill in all fields"
@@ -125,6 +148,34 @@ public class SignUp extends AppCompatActivity {
                     , Toast.LENGTH_LONG).show();
             return false;
         }
+        if (imageUri == null){
+            Toast.makeText(this, "must upload a profile image"
+                    , Toast.LENGTH_LONG).show();
+            return false;
+        }
         return true;
+    }
+
+    private String storeImageBitmap(Bitmap imageBitmap) {
+        // Create a unique file name
+        String fileName = "temp_image_" + System.currentTimeMillis() + ".jpg";
+
+        // Get the external storage directory
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // Create the file
+        File imageFile = new File(storageDir, fileName);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null; // Return null if saving failed
+        }
+
+        // Return the saved image path
+        return imageFile.getAbsolutePath();
     }
 }
