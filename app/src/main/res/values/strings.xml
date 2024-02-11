@@ -15,4 +15,6 @@
     <string name="sign_in">Sign In</string>
     <string name="upload_a_profile">upload a profile</string>
     <string name="do_not_have_an_account">Do not have an Account:</string>
+    <string name="post">post</string>
+    <string name="todo">TODO</string>
 </resources>
