@@ -35,11 +35,11 @@ public class Feed extends AppCompatActivity {
 
         UserManager userManager = UserManager.getInstance();
         User user = userManager.getUserByUsername(userManager.getCurrentUser());
-        posts.add(new Post("Alice1","Hello world1",R.drawable.pic1,
+        posts.add(new Post("Alice1","Hello world1",15,R.drawable.pic1,
                 user.getProfileImage()));
-        posts.add(new Post("Alice2","Hello world2",R.drawable.pic1,
+        posts.add(new Post("Alice2","Hello world2",3,R.drawable.pic1,
                 user.getProfileImage()));
-        posts.add(new Post("Alice3","Hello world3",R.drawable.pic1,
+        posts.add(new Post("Alice3","Hello world3",4,R.drawable.pic1,
                 user.getProfileImage()));
         posts.add(new Post("Alice4","Hello world4",R.drawable.pic1,
                 user.getProfileImage()));

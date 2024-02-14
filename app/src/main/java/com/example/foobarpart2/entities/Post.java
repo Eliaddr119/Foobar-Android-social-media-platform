@@ -8,7 +8,7 @@ public class Post {
     private int id;
     private String author;
     private String content;
-    private int likes;
+    private int likes = 0;
     private boolean isLiked = false;
     private int pic;
     private Uri profile;
