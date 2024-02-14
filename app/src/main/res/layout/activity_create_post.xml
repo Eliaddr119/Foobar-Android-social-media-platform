@@ -14,7 +14,17 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
-
+    <TextView
+        android:id="@+id/createPostHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Post"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:padding="16dp"
+        android:background="#068A7E"
+        android:textColor="@android:color/white"/>
     <EditText
         android:id="@+id/editTextPostContent"
         android:layout_width="match_parent"
