@@ -37,9 +37,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="-50dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout2"
         app:layout_constraintTop_toBottomOf="@+id/tvContent"/>
-    
+
+    <LinearLayout
+        android:id="@+id/bottomLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/bottomLayout">
+
+        <TextView
+            android:id="@+id/num_of_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_weight="0.5"
+            android:background="@android:color/transparent"
+            android:text="@string/zero" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:gravity="start"
+            android:layout_weight="0.4"
+            android:background="@android:color/transparent"
+            android:text="@string/likes_string" />
+        <TextView
+            android:id="@+id/num_of_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_weight="0.4"
+            android:text="@string/zero"
+            android:background="@android:color/transparent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:layout_marginStart="3dp"
+            android:gravity="start"
+            android:text="@string/comments_string"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
@@ -49,18 +91,21 @@
         app:layout_constraintBottom_toBottomOf="parent">
         
         <ImageButton
+            android:id="@+id/btnLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_like"
             android:background="@android:color/transparent"/>
         <ImageButton
+            android:id="@+id/btnComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_comment"
             android:background="@android:color/transparent"/>
         <ImageButton
+            android:id="@+id/btnShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

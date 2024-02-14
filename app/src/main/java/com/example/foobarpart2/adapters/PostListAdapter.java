@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +21,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final TextView tvAuthor;
         private final TextView tvContent;
         private final ImageView ivPic;
-
         private final ImageView profile;
+        private final ImageButton btnLike;
+        private final ImageButton btnComment;
+        private final ImageButton btnShare;
+        private final TextView numOfLikes;
+        private final TextView numOfComments;
 
         private PostViewHolder(View itemView) {
             super(itemView);
@@ -29,7 +34,29 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             tvContent = itemView.findViewById(R.id.tvContent);
             ivPic = itemView.findViewById(R.id.ivPic);
             profile = itemView.findViewById(R.id.profile_pic);
+            btnLike = itemView.findViewById(R.id.btnLike);
+            btnComment = itemView.findViewById(R.id.btnComment);
+            btnShare = itemView.findViewById(R.id.btnShare);
+            numOfLikes = itemView.findViewById(R.id.num_of_likes);
+            numOfComments = itemView.findViewById(R.id.num_of_comments);
+
+            btnLike.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Post post = posts.get(position);
+                    post.toggleLikeStatus();
+                    int likeCount = post.getLikes();
+                    numOfLikes.setText(String.valueOf(likeCount));
+                    if (post.isLiked()) {
+                        btnLike.setImageResource(R.drawable.ic_liked);
+                    } else {
+                        btnLike.setImageResource(R.drawable.ic_like);
+                    }
+                }
+            });
         }
+
+
     }
     private final LayoutInflater mInflater;
     private List<Post> posts;

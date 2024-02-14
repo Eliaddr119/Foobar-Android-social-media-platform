@@ -33,12 +33,6 @@ public class Feed extends AppCompatActivity {
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        FloatingActionButton fab = findViewById(R.id.btnAdd);
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CreatePostActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ADD_POST);
-        });
-
         UserManager userManager = UserManager.getInstance();
         User user = userManager.getUserByUsername(userManager.getCurrentUser());
         posts.add(new Post("Alice1","Hello world1",R.drawable.pic1,
@@ -51,6 +45,12 @@ public class Feed extends AppCompatActivity {
                 user.getProfileImage()));
 
         adapter.setPosts(posts);
+
+        FloatingActionButton fab = findViewById(R.id.btnAdd);
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CreatePostActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_ADD_POST);
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
