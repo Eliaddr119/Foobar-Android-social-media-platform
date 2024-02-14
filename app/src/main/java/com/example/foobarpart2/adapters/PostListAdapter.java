@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
+    public interface OnCommentButtonClickListener {
+        void onCommentButtonClicked(int position);
+    }
+
     class PostViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvAuthor;
         private final TextView tvContent;
@@ -28,6 +32,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final TextView numOfLikes;
         private final TextView numOfComments;
         private final ImageButton deletePostButton;
+
+
 
         private PostViewHolder(View itemView) {
             super(itemView);
@@ -67,13 +73,25 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 }
             });
 
+            btnComment.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    commentButtonClickListener.onCommentButtonClicked(position);
+                }
+            });
         }
 
 
     }
     private final LayoutInflater mInflater;
     private List<Post> posts;
-    public PostListAdapter(Context context) { mInflater = LayoutInflater.from(context);}
+
+    private OnCommentButtonClickListener commentButtonClickListener;
+    public PostListAdapter(Context context,OnCommentButtonClickListener listener) {
+        mInflater = LayoutInflater.from(context);
+        this.commentButtonClickListener = listener;
+
+    }
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType){

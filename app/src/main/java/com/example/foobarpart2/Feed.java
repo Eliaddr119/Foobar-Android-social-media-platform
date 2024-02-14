@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.adapters.PostListAdapter;
+import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,7 +26,17 @@ public class Feed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-        adapter = new PostListAdapter(this);
+
+        UserManager userManager = UserManager.getInstance();
+        User user = userManager.getUserByUsername(userManager.getCurrentUser());
+
+        adapter = new PostListAdapter(this, position -> {
+            Intent intent = new Intent(Feed.this, CommentActivity.class);
+            intent.putExtra("postId", adapter.getPosts().get(position).getId());
+            intent.putExtra("author", user.getDisplayName());
+            startActivity(intent);
+        });
+
         posts = new ArrayList<>();
 
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
@@ -33,15 +44,14 @@ public class Feed extends AppCompatActivity {
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        UserManager userManager = UserManager.getInstance();
-        User user = userManager.getUserByUsername(userManager.getCurrentUser());
-        posts.add(new Post("Alice1","Hello world1",15,R.drawable.pic1,
+
+        posts.add(new Post("Alice1", "Hello world1", 15, R.drawable.pic1,
                 user.getProfileImage()));
-        posts.add(new Post("Alice2","Hello world2",3,R.drawable.pic1,
+        posts.add(new Post("Alice2", "Hello world2", 3, R.drawable.pic1,
                 user.getProfileImage()));
-        posts.add(new Post("Alice3","Hello world3",4,R.drawable.pic1,
+        posts.add(new Post("Alice3", "Hello world3", 4, R.drawable.pic1,
                 user.getProfileImage()));
-        posts.add(new Post("Alice4","Hello world4",R.drawable.pic1,
+        posts.add(new Post("Alice4", "Hello world4", R.drawable.pic1,
                 user.getProfileImage()));
 
         adapter.setPosts(posts);
@@ -51,7 +61,10 @@ public class Feed extends AppCompatActivity {
             Intent intent = new Intent(this, CreatePostActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ADD_POST);
         });
+
+
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -59,11 +72,11 @@ public class Feed extends AppCompatActivity {
             // Extract post details from data, create a Post object
             String author = data.getStringExtra("author");
             String content = data.getStringExtra("content");
-            String p  = data.getStringExtra("profileUri");
+            String p = data.getStringExtra("profileUri");
             Uri profile = Uri.parse(p);
 
 
-            Post newPost = new Post(author, content,profile);
+            Post newPost = new Post(author, content, profile);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
         }
