@@ -33,14 +33,29 @@
         android:minLines="4"
         android:hint="@string/what_is_on_your_mind"
         android:autofillHints="what's on your mind?" />
+    <Button
+        android:id="@+id/btn_upload_pic_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#000000"
+        app:backgroundTint="#068A7E"
+        android:text="@string/share_a_photo"/>
+
+    <ImageView
+        android:id="@+id/post_pic"
+        android:layout_width="match_parent"
+        android:layout_height="426dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/buttonSubmitPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="#068A7E"
-        android:text="Post"/>
+        android:textColor="#000000"
+        app:backgroundTint="#068A7E"
+        android:text="@string/post"/>
 
 </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

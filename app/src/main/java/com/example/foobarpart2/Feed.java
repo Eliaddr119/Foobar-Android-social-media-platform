@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.adapters.PostListAdapter;
-import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -73,10 +72,12 @@ public class Feed extends AppCompatActivity {
             String author = data.getStringExtra("author");
             String content = data.getStringExtra("content");
             String p = data.getStringExtra("profileUri");
+            String photo = data.getStringExtra("picResource");
             Uri profile = Uri.parse(p);
+            Uri photoUri = Uri.parse(photo);
 
 
-            Post newPost = new Post(author, content, profile);
+            Post newPost = new Post(author, content,photoUri, profile);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
         }

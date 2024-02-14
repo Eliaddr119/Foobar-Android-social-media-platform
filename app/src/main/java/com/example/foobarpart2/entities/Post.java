@@ -10,7 +10,8 @@ public class Post {
     private String content;
     private int likes = 0;
     private boolean isLiked = false;
-    private int pic;
+    private int pic = -1;
+    private Uri picUri;
     private Uri profile;
     public Post(){
         this.pic = R.drawable.pic1;
@@ -32,6 +33,12 @@ public class Post {
         this.pic = pic;
         this.profile = profile;
         this.likes = likes;
+    }
+    public Post(String author, String content, Uri pic , Uri profile){
+        this.author = author;
+        this.content = content;
+        this.picUri = pic;
+        this.profile = profile;
     }
 
     public Post(String author, String content,Uri profile){
@@ -92,5 +99,9 @@ public class Post {
 
     public Uri getProfile() {
         return profile;
+    }
+
+    public Uri getPicUri() {
+        return picUri;
     }
 }

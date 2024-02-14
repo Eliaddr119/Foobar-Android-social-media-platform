@@ -104,7 +104,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             final Post current = posts.get(position);
             holder.tvAuthor.setText(current.getAuthor());
             holder.tvContent.setText(current.getContent());
-            holder.ivPic.setImageResource(current.getPic());
+            if (current.getPic() == -1){
+                holder.ivPic.setImageURI(current.getPicUri());
+            }else {
+                holder.ivPic.setImageResource(current.getPic());
+            }
             holder.profile.setImageURI(current.getProfile());
         }
     }
