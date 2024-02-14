@@ -88,6 +88,22 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             holder.tvContent.setText(current.getContent());
             holder.ivPic.setImageResource(current.getPic());
             holder.profile.setImageURI(current.getProfile());
+            holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+
+            holder.btnLike.setOnClickListener(v -> {
+                // Toggle like status for the current post
+                current.toggleLikeStatus();
+
+                // Update like count in the UI
+                holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+
+                // Update like button icon based on like status
+                if (current.isLiked()) {
+                    holder.btnLike.setImageResource(R.drawable.ic_liked);
+                } else {
+                    holder.btnLike.setImageResource(R.drawable.ic_like);
+                }
+            });
         }
     }
     public void setPosts(List<Post> s){
