@@ -60,7 +60,8 @@ public class SignIn extends AppCompatActivity {
             String userName = binding.username.getText().toString();
             String password = binding.password.getText().toString();
             if(userManager.authenticate(userName,password)){
-                Intent i = new Intent(this, SignUp.class);
+                userManager.setCurrentUser(userName);
+                Intent i = new Intent(this, Feed.class);
                 startActivity(i);
             }else if(!userName.isEmpty() && !password.isEmpty()) {
                 Toast.makeText(this, "Incorrect username or password"

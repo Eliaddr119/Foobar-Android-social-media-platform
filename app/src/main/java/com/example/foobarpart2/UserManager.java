@@ -6,6 +6,7 @@ import java.util.List;
 public class UserManager {
     private static UserManager instance;
     private List<User> users = new ArrayList<User>();
+    private String currentUser;
 
     public static UserManager getInstance() {
         if (instance == null) {
@@ -34,5 +35,13 @@ public class UserManager {
             }
         }
         return null;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
     }
 }
