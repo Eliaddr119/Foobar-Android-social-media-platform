@@ -27,6 +27,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final ImageButton btnShare;
         private final TextView numOfLikes;
         private final TextView numOfComments;
+        private final ImageButton deletePostButton;
 
         private PostViewHolder(View itemView) {
             super(itemView);
@@ -39,6 +40,33 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             btnShare = itemView.findViewById(R.id.btnShare);
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
+            deletePostButton = itemView.findViewById(R.id.deletePostButton);
+
+            btnLike.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Post post = posts.get(position);
+                    post.toggleLikeStatus();
+                    int likeCount = post.getLikes();
+                    numOfLikes.setText(String.valueOf(likeCount));
+                    if (post.isLiked()) {
+                        btnLike.setImageResource(R.drawable.ic_liked);
+                    } else {
+                        btnLike.setImageResource(R.drawable.ic_like);
+                    }
+                }
+            });
+
+            deletePostButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        removeAt(position);
+                    }
+                }
+            });
+
         }
 
 
@@ -97,5 +125,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         }else return 0;
     }
     public List<Post> getPosts() { return posts;}
+
+    public void removeAt(int position) {
+        posts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, posts.size());
+    }
+
 
 }

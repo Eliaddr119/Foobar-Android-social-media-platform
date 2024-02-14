@@ -21,9 +21,18 @@
             android:src="@drawable/ic_close" />
         <TextView
             android:id="@+id/tvAuthor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/deletePostButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"/>
+            android:text="@string/delete_post"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_close"/>
     </LinearLayout>
     
     <TextView
