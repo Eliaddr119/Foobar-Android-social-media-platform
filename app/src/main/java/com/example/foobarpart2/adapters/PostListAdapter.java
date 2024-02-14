@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.entities.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -53,6 +54,14 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         posts = s;
         notifyDataSetChanged();
     }
+    public void addPost(Post post) {
+        if (posts == null) {
+            posts = new ArrayList<>();
+        }
+        posts.add(post);
+        notifyItemInserted(posts.size() - 1);
+    }
+
     @Override
     public int getItemCount(){
         if (posts != null){

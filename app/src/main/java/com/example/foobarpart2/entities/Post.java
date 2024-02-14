@@ -21,6 +21,13 @@ public class Post {
         this.profile = profile;
     }
 
+    public Post(String author, String content,Uri profile){
+        this.author = author;
+        this.content = content;
+        this.profile = profile;
+        this.pic = 0;
+    }
+
     public int getId() {
         return id;
     }
