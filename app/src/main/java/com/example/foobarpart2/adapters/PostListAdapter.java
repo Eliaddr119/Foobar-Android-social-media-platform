@@ -39,21 +39,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             btnShare = itemView.findViewById(R.id.btnShare);
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
-
-            btnLike.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Post post = posts.get(position);
-                    post.toggleLikeStatus();
-                    int likeCount = post.getLikes();
-                    numOfLikes.setText(String.valueOf(likeCount));
-                    if (post.isLiked()) {
-                        btnLike.setImageResource(R.drawable.ic_liked);
-                    } else {
-                        btnLike.setImageResource(R.drawable.ic_like);
-                    }
-                }
-            });
         }
 
 
@@ -75,6 +60,22 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             holder.tvContent.setText(current.getContent());
             holder.ivPic.setImageResource(current.getPic());
             holder.profile.setImageURI(current.getProfile());
+            holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+
+            holder.btnLike.setOnClickListener(v -> {
+                // Toggle like status for the current post
+                current.toggleLikeStatus();
+
+                // Update like count in the UI
+                holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+
+                // Update like button icon based on like status
+                if (current.isLiked()) {
+                    holder.btnLike.setImageResource(R.drawable.ic_liked);
+                } else {
+                    holder.btnLike.setImageResource(R.drawable.ic_like);
+                }
+            });
         }
     }
     public void setPosts(List<Post> s){
