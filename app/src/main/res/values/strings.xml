@@ -17,4 +17,9 @@
     <string name="do_not_have_an_account">Do not have an Account:</string>
     <string name="post">post</string>
     <string name="todo">TODO</string>
+    <string name="zero">0</string>
+    <string name="likes_string">likes</string>
+    <string name="comments_string">comments</string>
+    <string name="delete_post">Delete</string>
+    <string name="what_is_on_your_mind">what is on your mind?</string>
 </resources>
