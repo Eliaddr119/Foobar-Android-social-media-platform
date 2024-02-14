@@ -49,9 +49,9 @@ public class SignUp extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode",false);
 
-        if (nightMode){
+        if (!nightMode){
             switchMode.setChecked(true);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         switchMode.setOnClickListener(new View.OnClickListener() {
             @Override

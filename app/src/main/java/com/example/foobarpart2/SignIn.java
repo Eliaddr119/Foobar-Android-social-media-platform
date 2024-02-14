@@ -28,14 +28,14 @@ public class SignIn extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        switchMode = binding.switchMode;
+        switchMode = findViewById(R.id.switchMode);
 
         sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode",false);
 
-        if (nightMode){
+        if (!nightMode){
             switchMode.setChecked(true);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         switchMode.setOnClickListener(v -> {
             if (nightMode){

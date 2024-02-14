@@ -11,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:thumb="@drawable/thumb"
-        app:track="@drawable/track"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0"
+        app:track="@drawable/track" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -103,7 +103,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/do_not_have_an_account"
-                android:textColor="@color/black"
+                android:textColor="@color/lavender"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

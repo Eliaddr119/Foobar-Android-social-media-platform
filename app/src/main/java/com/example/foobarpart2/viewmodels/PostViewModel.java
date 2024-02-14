@@ -1,6 +1,8 @@
 package com.example.foobarpart2.viewmodels;
 
-//public class PostViewModel extends ViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class PostViewModel extends ViewModel {
 //    private PostRepository mRepository;
 //    private LiveData<List<Post>> posts;
 //
@@ -13,4 +15,4 @@ package com.example.foobarpart2.viewmodels;
 //    public void add(Post post){ mRepository.add(post);}
 //    public void delete(Post post) { mRepository.delete(post);}
 //    public void reload() { mRepository.reload();}
-//}
+}
