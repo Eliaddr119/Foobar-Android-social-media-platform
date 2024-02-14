@@ -9,6 +9,7 @@ public class Post {
     private String author;
     private String content;
     private int likes;
+    private boolean isLiked = false;
     private int pic;
     private Uri profile;
     public Post(){
@@ -21,11 +22,32 @@ public class Post {
         this.profile = profile;
     }
 
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public Post(String author, String content, int likes, int pic , Uri profile){
+        this.author = author;
+        this.content = content;
+        this.pic = pic;
+        this.profile = profile;
+        this.likes = likes;
+    }
+
     public Post(String author, String content,Uri profile){
         this.author = author;
         this.content = content;
         this.profile = profile;
         this.pic = 0;
+    }
+
+    public void toggleLikeStatus() {
+        isLiked = !isLiked; // Toggle the like status
+        if (isLiked) {
+            likes++; // If liked, increment the like count
+        } else {
+            likes--; // If unliked, decrement the like count
+        }
     }
 
     public int getId() {
