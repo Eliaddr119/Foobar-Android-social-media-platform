@@ -98,7 +98,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         if (posts == null) {
             posts = new ArrayList<>();
         }
-        posts.add(post);
+        posts.add(0,post);
         notifyItemInserted(posts.size() - 1);
     }
 
