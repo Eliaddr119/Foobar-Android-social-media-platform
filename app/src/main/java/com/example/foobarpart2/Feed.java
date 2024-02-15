@@ -137,7 +137,7 @@ public class Feed extends AppCompatActivity {
 
                 // Extract post information
                 int id = jsonObject.get("id").getAsInt();
-                String author = jsonObject.getAsJsonObject("user").get("username")
+                String author = jsonObject.getAsJsonObject("user").get("displayName")
                         .getAsString();
                 String content = jsonObject.get("content").getAsString();
                 String postTime = jsonObject.get("postTime").getAsString();
