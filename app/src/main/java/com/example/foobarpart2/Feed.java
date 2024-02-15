@@ -28,7 +28,6 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Feed extends AppCompatActivity {
@@ -192,12 +191,17 @@ public class Feed extends AppCompatActivity {
             String author = data.getStringExtra("author");
             String content = data.getStringExtra("content");
             String p = data.getStringExtra("profileUri");
-            String photo = data.getStringExtra("picResource");
             Uri profile = Uri.parse(p);
-            Uri photoUri = Uri.parse(photo);
+            String photo = data.getStringExtra("picResource");
+            Post newPost;
+            if(photo.equals("null")){
+                newPost = new Post(author,content,profile);
+            }else {
+                Uri photoUri = Uri.parse(photo);
+                newPost = new Post(author, content,photoUri, profile);
+            }
 
             int nextId = adapter.getItemCount() + 1;
-            Post newPost = new Post(author, content,photoUri, profile);
             newPost.setId(nextId);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();

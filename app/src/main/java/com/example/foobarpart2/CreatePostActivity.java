@@ -141,9 +141,13 @@ public class CreatePostActivity extends AppCompatActivity {
             Uri profileImage = user != null ? user.getProfileImage() : null;
 
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("author", user.getUsername());
+            returnIntent.putExtra("author", user.getDisplayName());
             returnIntent.putExtra("content", content);
-            returnIntent.putExtra("picResource", photoUri.toString());
+            if(photoUri !=null) {
+                returnIntent.putExtra("picResource", photoUri.toString());
+            }else {
+                returnIntent.putExtra("picResource", "null");
+            }
             returnIntent.putExtra("profileUri", profileImage.toString());
             setResult(RESULT_OK, returnIntent);
             finish();
