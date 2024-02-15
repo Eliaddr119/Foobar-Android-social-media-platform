@@ -1,16 +1,21 @@
 package com.example.foobarpart2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.foobarpart2.databinding.ActivitySignUpBinding;
 
@@ -27,12 +32,42 @@ public class SignUp extends AppCompatActivity {
 
     private Uri imageUri = null;
     private User user;
+
+    SwitchCompat switchMode;
+    boolean nightMode;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        switchMode = binding.switchMode;
+
+        sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE);
+        nightMode = sharedPreferences.getBoolean("nightMode",false);
+
+        if (!nightMode){
+            switchMode.setChecked(true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        switchMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (nightMode){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("nightMode",false);
+                }else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("nightMode",true);
+                }
+                editor.apply();
+            }
+        });
 
         binding.uploadPhotoBtn.setOnClickListener(v -> showImageSourceDialog());
 

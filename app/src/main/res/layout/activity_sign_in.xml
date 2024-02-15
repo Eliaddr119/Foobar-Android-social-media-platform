@@ -6,7 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".SignIn">
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/thumb"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:track="@drawable/track" />
+
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -71,17 +83,17 @@
             android:id="@+id/btn_SignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/login"
             android:textColor="#000000"
-            app:backgroundTint="#068A7E"
-            android:text="@string/login" />
+            app:backgroundTint="#068A7E" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -91,7 +103,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/do_not_have_an_account"
-                android:textColor="@color/black"
+                android:textColor="@color/lavender"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -100,8 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:text="@string/sign_up"
                 android:textColor="#C52121"
                 android:textSize="14sp"

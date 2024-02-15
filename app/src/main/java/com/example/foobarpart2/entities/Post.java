@@ -12,9 +12,11 @@ public class Post {
     private int id;
     private String author;
     private String content;
+
     private String postTime;
     private int likes = 0;
     private int commentsCount = 0;
+
     private boolean isLiked = false;
     private int pic = -1;
     private Uri picUri;
