@@ -25,7 +25,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     private RecyclerView commentsRecyclerView;
     private EditText newCommentEditText;
     private Button addCommentButton;
-
+    //check
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
