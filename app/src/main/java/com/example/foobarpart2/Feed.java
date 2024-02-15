@@ -11,7 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.adapters.PostListAdapter;
 import com.example.foobarpart2.entities.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,24 +51,25 @@ public class Feed extends AppCompatActivity {
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
 
 
-        Post post1 = new Post("Alice1", "Hello world1", 15, R.drawable.pic1,
-                user.getProfileImage());
-        Post post2 = new Post("Alice2", "Hello world2", 3, R.drawable.pic1,
-                user.getProfileImage());
-        Post post3 = new Post("Alice3", "Hello world3", 4, R.drawable.pic1,
-                user.getProfileImage());
-        Post post4 = new Post("Alice4", "Hello world4", R.drawable.pic1,
-                user.getProfileImage());
-        post1.setId(1);
-        post2.setId(2);
-        post3.setId(3);
-        post4.setId(4);
-        posts.add(post1);
-        posts.add(post2);
-        posts.add(post3);
-        posts.add(post4);
-
-        adapter.setPosts(posts);
+//        Post post1 = new Post("Alice1", "Hello world1", 15, R.drawable.pic1,
+//                user.getProfileImage());
+//        Post post2 = new Post("Alice2", "Hello world2", 3, R.drawable.pic1,
+//                user.getProfileImage());
+//        Post post3 = new Post("Alice3", "Hello world3", 4, R.drawable.pic1,
+//                user.getProfileImage());
+//        Post post4 = new Post("Alice4", "Hello world4", R.drawable.pic1,
+//                user.getProfileImage());
+//        post1.setId(1);
+//        post2.setId(2);
+//        post3.setId(3);
+//        post4.setId(4);
+//        posts.add(post1);
+//        posts.add(post2);
+//        posts.add(post3);
+//        posts.add(post4);
+//
+//        adapter.setPosts(posts);
+        loadPostsFromJson();
 
         FloatingActionButton fab = findViewById(R.id.btnAdd);
         fab.setOnClickListener(view -> {
@@ -71,6 +79,49 @@ public class Feed extends AppCompatActivity {
 
 
     }
+
+    private void loadPostsFromJson() {
+        try {
+            // Open the JSON file from the res/raw directory
+            InputStream inputStream = getResources().openRawResource(R.raw.posts);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            // Parse the JSON data using Gson
+            Gson gson = new Gson();
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+            // Create a list to hold all the Post objects
+            List<Post> posts = new ArrayList<>();
+
+            // Iterate through the JSON array
+            for (JsonElement jsonElement : jsonArray) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                // Extract post information
+                int id = jsonObject.get("id").getAsInt();
+                String author = jsonObject.getAsJsonObject("user").get("username").getAsString();
+                String content = jsonObject.get("content").getAsString();
+                int likes = jsonObject.get("likes").getAsInt();
+                String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
+                Uri profileUri = Uri.parse(profileImage);
+
+                // Create a new Post object with extracted information
+                Post post = new Post(author, content, likes, R.drawable.pic1, profileUri);
+                post.setId(id);
+
+                // Add the Post object to the list
+                posts.add(post);
+            }
+
+            // Update your RecyclerView adapter with the list of posts
+            adapter.setPosts(posts);
+            adapter.notifyDataSetChanged();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

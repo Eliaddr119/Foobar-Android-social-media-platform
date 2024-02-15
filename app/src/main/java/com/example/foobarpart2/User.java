@@ -15,6 +15,13 @@ public class User {
         this.profileImage = profileImage;
     }
 
+    public User(String username, String displayName, Uri profileImage) {
+        this.username = username;
+        this.displayName = displayName;
+        this.profileImage = profileImage;
+        password = null;
+    }
+
     public String getUsername() {
         return username;
     }

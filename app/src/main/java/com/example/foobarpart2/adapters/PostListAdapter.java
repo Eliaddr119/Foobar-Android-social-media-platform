@@ -110,6 +110,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 holder.ivPic.setImageResource(current.getPic());
             }
             holder.profile.setImageURI(current.getProfile());
+            holder.numOfLikes.setText(String.valueOf(current.getLikes()));
         }
     }
     public void setPosts(List<Post> s){
