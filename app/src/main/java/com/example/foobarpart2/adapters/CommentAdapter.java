@@ -18,8 +18,16 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<Comment> comments;
 
-    public CommentAdapter(List<Comment> comments) {
+    private CommentActionListener actionListener;
+
+    public CommentAdapter(List<Comment> comments, CommentActionListener actionListener) {
         this.comments = comments;
+        this.actionListener = actionListener;
+    }
+
+
+    public interface CommentActionListener {
+        void onEditComment(int position, Comment comment);
     }
 
     @NonNull
@@ -47,14 +55,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
 
-    static class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView authorTextView;
         TextView contentTextView;
+        TextView editCommentButton, deleteCommentButton;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
             authorTextView = itemView.findViewById(R.id.commentAuthor);
             contentTextView = itemView.findViewById(R.id.commentContent);
+            editCommentButton = itemView.findViewById(R.id.editComment);
+            deleteCommentButton = itemView.findViewById(R.id.deleteComment);
+
+            editCommentButton.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    actionListener.onEditComment(position, comments.get(position));
+                }
+            });
+
+            deleteCommentButton.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                comments.remove(position);
+                notifyItemRemoved(position);
+                // Additionally, update your data source to reflect this change
+            });
+
         }
     }
 }

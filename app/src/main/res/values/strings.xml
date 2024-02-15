@@ -23,4 +23,6 @@
     <string name="delete_post">Delete</string>
     <string name="what_is_on_your_mind">what is on your mind?</string>
     <string name="share_a_photo">Share a photo</string>
+    <string name="delete">delete</string>
+    <string name="edit">edit</string>
 </resources>
