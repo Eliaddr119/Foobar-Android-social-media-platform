@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.entities.Post;
+import com.example.foobarpart2.entities.PostsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +91,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public PostListAdapter(Context context,OnCommentButtonClickListener listener) {
         mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = listener;
-
+        this.posts = PostsManager.getInstance().getPosts();
     }
 
     @Override
@@ -101,7 +102,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position){
         if (posts != null){
-            final Post current = posts.get(position);
+            final Post current = PostsManager.getInstance().getPosts().get(position);
             holder.tvAuthor.setText(current.getAuthor());
             holder.tvContent.setText(current.getContent());
             if (current.getPic() == -1){
@@ -133,14 +134,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         }
     }
     public void setPosts(List<Post> s){
-        posts = s;
+        posts = PostsManager.getInstance().getPosts();
         notifyDataSetChanged();
     }
     public void addPost(Post post) {
-        if (posts == null) {
-            posts = new ArrayList<>();
-        }
-        posts.add(0,post);
+        PostsManager.getInstance().addPost(post);
         notifyItemInserted(posts.size() - 1);
     }
 

@@ -16,7 +16,6 @@ public class Post {
     private String postTime;
     private int likes = 0;
     private int commentsCount = 0;
-
     private boolean isLiked = false;
     private int pic = -1;
     private Uri picUri;
@@ -58,22 +57,20 @@ public class Post {
         this.pic = 0;
     }
 
-    public Post(String author, String content,String postTime, int likes, int commentsCount, Uri picUri, Uri profile ){
+    public Post(String author, String content,String postTime, int likes, Uri picUri, Uri profile ){
         this.author = author;
         this.content = content;
         this.postTime = postTime;
         this.likes = likes;
-        this.commentsCount = commentsCount;
         this.picUri = picUri;
         this.profile = profile;
     }
 
-    public Post(String author, String content,String postTime, int likes, int commentsCount, int pic, Uri profile ){
+    public Post(String author, String content,String postTime, int likes, int pic, Uri profile ){
         this.author = author;
         this.content = content;
         this.postTime = postTime;
         this.likes = likes;
-        this.commentsCount = commentsCount;
         this.pic = pic;
         this.profile = profile;
     }
@@ -154,6 +151,7 @@ public class Post {
     // Method to add a comment to the post
     public void addComment(Comment comment) {
         this.comments.add(comment);
+        this.commentsCount++;
         CommentStorage.commentsMap.put(id,comments);
     }
     // Getter for the comments list

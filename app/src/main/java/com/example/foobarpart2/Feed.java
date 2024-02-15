@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.adapters.PostListAdapter;
 import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
+import com.example.foobarpart2.entities.PostsManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -51,8 +52,8 @@ public class Feed extends AppCompatActivity {
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
         });
-
-        posts = new ArrayList<>();
+        PostsManager postsManager = PostsManager.getInstance();
+        posts = postsManager.getPosts();
         btnSettings = findViewById(R.id.settings);
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
@@ -129,7 +130,7 @@ public class Feed extends AppCompatActivity {
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
             // Create a list to hold all the Post objects
-            List<Post> posts = new ArrayList<>();
+            List<Post> posts = PostsManager.getInstance().getPosts();
 
             // Iterate through the JSON array
             for (JsonElement jsonElement : jsonArray) {
@@ -142,7 +143,6 @@ public class Feed extends AppCompatActivity {
                 String content = jsonObject.get("content").getAsString();
                 String postTime = jsonObject.get("postTime").getAsString();
                 int likes = jsonObject.get("likes").getAsInt();
-                int commentsCount = jsonObject.get("commentsCount").getAsInt();
                 String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
                 int lastIndex = profileImage.lastIndexOf('/');
                 profileImage = profileImage.substring(lastIndex + 1).split("\\.")[0];
@@ -155,7 +155,7 @@ public class Feed extends AppCompatActivity {
                 Uri postImUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
 
                 // Create a new Post object with extracted information
-                Post post = new Post(author, content,postTime, likes,commentsCount,
+                Post post = new Post(author, content,postTime, likes,
                         postImUri, profileUri);
                 post.setId(id);
                 JsonArray commentsArray = jsonObject.getAsJsonArray("comments");

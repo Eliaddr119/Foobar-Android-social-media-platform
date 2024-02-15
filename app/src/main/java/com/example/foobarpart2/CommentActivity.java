@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.adapters.CommentAdapter;
+import com.example.foobarpart2.entities.Post;
+import com.example.foobarpart2.entities.PostsManager;
 import com.example.foobarpart2.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
@@ -64,7 +66,11 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             }
             commentsForPost.add(newComment);
             CommentStorage.commentsMap.put(postId, commentsForPost);
+
+            Post postToUpdate = PostsManager.getInstance().findPostById(postId);
+            postToUpdate.addComment(newComment);
         });
+
 
     }
     @Override
