@@ -28,7 +28,7 @@ public class EditPostActivity extends AppCompatActivity {
     private Button btnEditP;
     private Button btnSave;
     private ImageView photo;
-    Uri photoUri = null;
+    Uri photoUri;
     private int postId;
     private static final int GALLERY_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -47,6 +47,7 @@ public class EditPostActivity extends AppCompatActivity {
         postId = getIntent().getIntExtra("postId", -1);
         String content = getIntent().getStringExtra("content");
         Uri photoS =Uri.parse(getIntent().getStringExtra("postPic"));
+        photoUri = photoS;
         photo.setImageURI(photoS);
 
         editTextContent.setText(content);
@@ -108,7 +109,6 @@ public class EditPostActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        photoUri = null;
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             if (extras != null && extras.containsKey("data")) {
