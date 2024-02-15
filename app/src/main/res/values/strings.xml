@@ -36,5 +36,7 @@
     <string name="copy_link">Copy Link</string>
     <string name="postSettings">postSettings</string>
     <string name="edit_post">Edit Post</string>
+    <string name="edit_post_hint">Edit Post</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>
