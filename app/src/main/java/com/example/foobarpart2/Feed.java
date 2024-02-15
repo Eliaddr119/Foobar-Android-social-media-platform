@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.adapters.PostListAdapter;
+import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -92,6 +93,7 @@ public class Feed extends AppCompatActivity {
 
             // Create a list to hold all the Post objects
             List<Post> posts = new ArrayList<>();
+            List<Comment> comments = new ArrayList<>();
 
             // Iterate through the JSON array
             for (JsonElement jsonElement : jsonArray) {
@@ -99,18 +101,30 @@ public class Feed extends AppCompatActivity {
 
                 // Extract post information
                 int id = jsonObject.get("id").getAsInt();
-                String author = jsonObject.getAsJsonObject("user").get("username").getAsString();
+                String author = jsonObject.getAsJsonObject("user").get("username")
+                        .getAsString();
                 String content = jsonObject.get("content").getAsString();
                 String postTime = jsonObject.get("postTime").getAsString();
                 int likes = jsonObject.get("likes").getAsInt();
                 int commentsCount = jsonObject.get("commentsCount").getAsInt();
-                String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
+                String profileImage = jsonObject.getAsJsonObject("user").get("image")
+                        .getAsString();
                 Uri profileUri = Uri.parse(profileImage);
 
                 // Create a new Post object with extracted information
-                Post post = new Post(author, content,postTime, likes,commentsCount, R.drawable.pic1, profileUri);
+                Post post = new Post(author, content,postTime, likes,commentsCount,
+                        R.drawable.pic1, profileUri);
                 post.setId(id);
-
+                JsonArray commentsArray = jsonObject.getAsJsonArray("comments");
+                for (JsonElement commentElement : commentsArray) {
+                    JsonObject commentObject = commentElement.getAsJsonObject();
+                    String commenterDisplayName = commentObject.getAsJsonObject("user")
+                            .get("displayName").getAsString();
+                    String commentContent = commentObject.get("content").getAsString();
+                    long commentTime = commentObject.get("commentTime").getAsLong();
+                    Comment comment = new Comment(id, commenterDisplayName, commentContent, commentTime);
+                    comments.add(comment);
+                }
                 // Add the Post object to the list
                 posts.add(post);
             }
