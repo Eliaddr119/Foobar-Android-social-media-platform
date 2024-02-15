@@ -93,7 +93,6 @@ public class Feed extends AppCompatActivity {
 
             // Create a list to hold all the Post objects
             List<Post> posts = new ArrayList<>();
-            List<Comment> comments = new ArrayList<>();
 
             // Iterate through the JSON array
             for (JsonElement jsonElement : jsonArray) {
@@ -123,7 +122,7 @@ public class Feed extends AppCompatActivity {
                     String commentContent = commentObject.get("content").getAsString();
                     long commentTime = commentObject.get("commentTime").getAsLong();
                     Comment comment = new Comment(id, commenterDisplayName, commentContent, commentTime);
-                    comments.add(comment);
+                    post.addComment(comment);
                 }
                 // Add the Post object to the list
                 posts.add(post);

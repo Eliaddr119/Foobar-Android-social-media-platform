@@ -4,6 +4,9 @@ import android.net.Uri;
 
 import com.example.foobarpart2.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Post {
     private int id;
     private String author;
@@ -15,6 +18,8 @@ public class Post {
     private int pic = -1;
     private Uri picUri;
     private Uri profile;
+    private List<Comment> comments = new ArrayList<>();
+
     public Post(){
         this.pic = R.drawable.pic1;
     }
@@ -142,4 +147,14 @@ public class Post {
     public void setCommentsCount(int commentsCount) {
         this.commentsCount = commentsCount;
     }
+
+    // Method to add a comment to the post
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+    // Getter for the comments list
+    public List<Comment> getComments() {
+        return comments;
+    }
+
 }
