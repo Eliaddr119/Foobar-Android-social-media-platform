@@ -9,7 +9,7 @@
         "postTime": "2/2/2024",
         "content": "Can't remember the last time when it was raining this much, wow!",
         "likes": 4,
-        "commentsCount": "2",
+        "commentsCount": "1",
         "comments": [
             {
                 "id": "c1",
@@ -33,7 +33,7 @@
         "postTime": "2/3/2024",
         "content": "Exploring new places is my favorite hobby! Just discovered this hidden gem. 😍",
         "likes": 10,
-        "commentsCount": "3",
+        "commentsCount": "2",
         "comments": [
             {
                 "id": "c3",
@@ -67,7 +67,7 @@
         "postTime": "2/5/2024",
         "content": "Sunday brunch with friends is always a great idea!",
         "likes": 15,
-        "commentsCount": "4",
+        "commentsCount": "3",
         "comments": [
             {
                 "id": "c8",
