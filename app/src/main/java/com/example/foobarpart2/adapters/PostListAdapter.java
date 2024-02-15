@@ -111,6 +111,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             }
             holder.profile.setImageURI(current.getProfile());
             holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+            holder.numOfComments.setText(String.valueOf(current.getCommentsCount()));
         }
     }
     public void setPosts(List<Post> s){

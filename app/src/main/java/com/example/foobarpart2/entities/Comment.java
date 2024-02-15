@@ -4,7 +4,6 @@ public class Comment {
     private int postId;
     private String author;
     private String content;
-
     private long timestamp;
 
     public Comment(int postId, String author, String content, long timestamp) {

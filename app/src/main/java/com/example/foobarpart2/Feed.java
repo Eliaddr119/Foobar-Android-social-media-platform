@@ -101,12 +101,14 @@ public class Feed extends AppCompatActivity {
                 int id = jsonObject.get("id").getAsInt();
                 String author = jsonObject.getAsJsonObject("user").get("username").getAsString();
                 String content = jsonObject.get("content").getAsString();
+                String postTime = jsonObject.get("postTime").getAsString();
                 int likes = jsonObject.get("likes").getAsInt();
+                int commentsCount = jsonObject.get("commentsCount").getAsInt();
                 String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
                 Uri profileUri = Uri.parse(profileImage);
 
                 // Create a new Post object with extracted information
-                Post post = new Post(author, content, likes, R.drawable.pic1, profileUri);
+                Post post = new Post(author, content,postTime, likes,commentsCount, R.drawable.pic1, profileUri);
                 post.setId(id);
 
                 // Add the Post object to the list
