@@ -24,7 +24,12 @@
             android:exported="false" />
         <activity
             android:name=".CreatePostActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Feed"/>
+        <activity
+            android:name=".CommentActivity"
+            android:exported="false"
+            android:parentActivityName=".Feed"/>
         <activity
             android:name=".SignIn"
             android:exported="true">

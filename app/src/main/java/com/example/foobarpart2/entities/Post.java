@@ -3,15 +3,26 @@ package com.example.foobarpart2.entities;
 import android.net.Uri;
 
 import com.example.foobarpart2.R;
+import com.example.foobarpart2.viewmodels.CommentStorage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Post {
     private int id;
     private String author;
     private String content;
+
+    private String postTime;
     private int likes = 0;
+    private int commentsCount = 0;
+
     private boolean isLiked = false;
-    private int pic;
+    private int pic = -1;
+    private Uri picUri;
     private Uri profile;
+    private List<Comment> comments = new ArrayList<>();
+
     public Post(){
         this.pic = R.drawable.pic1;
     }
@@ -33,12 +44,38 @@ public class Post {
         this.profile = profile;
         this.likes = likes;
     }
+    public Post(String author, String content, Uri pic , Uri profile){
+        this.author = author;
+        this.content = content;
+        this.picUri = pic;
+        this.profile = profile;
+    }
 
     public Post(String author, String content,Uri profile){
         this.author = author;
         this.content = content;
         this.profile = profile;
         this.pic = 0;
+    }
+
+    public Post(String author, String content,String postTime, int likes, int commentsCount, Uri picUri, Uri profile ){
+        this.author = author;
+        this.content = content;
+        this.postTime = postTime;
+        this.likes = likes;
+        this.commentsCount = commentsCount;
+        this.picUri = picUri;
+        this.profile = profile;
+    }
+
+    public Post(String author, String content,String postTime, int likes, int commentsCount, int pic, Uri profile ){
+        this.author = author;
+        this.content = content;
+        this.postTime = postTime;
+        this.likes = likes;
+        this.commentsCount = commentsCount;
+        this.pic = pic;
+        this.profile = profile;
     }
 
     public void toggleLikeStatus() {
@@ -93,4 +130,35 @@ public class Post {
     public Uri getProfile() {
         return profile;
     }
+
+    public Uri getPicUri() {
+        return picUri;
+    }
+
+    public String getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(String postTime) {
+        this.postTime = postTime;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    // Method to add a comment to the post
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        CommentStorage.commentsMap.put(id,comments);
+    }
+    // Getter for the comments list
+    public List<Comment> getComments() {
+        return comments;
+    }
+
 }

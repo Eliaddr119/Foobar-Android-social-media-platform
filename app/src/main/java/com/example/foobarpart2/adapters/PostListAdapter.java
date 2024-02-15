@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
+    public interface OnCommentButtonClickListener {
+        void onCommentButtonClicked(int position);
+    }
+
     class PostViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvAuthor;
         private final TextView tvContent;
@@ -28,6 +32,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final TextView numOfLikes;
         private final TextView numOfComments;
         private final ImageButton deletePostButton;
+
+
 
         private PostViewHolder(View itemView) {
             super(itemView);
@@ -67,13 +73,25 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 }
             });
 
+            btnComment.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    commentButtonClickListener.onCommentButtonClicked(position);
+                }
+            });
         }
 
 
     }
     private final LayoutInflater mInflater;
     private List<Post> posts;
-    public PostListAdapter(Context context) { mInflater = LayoutInflater.from(context);}
+
+    private OnCommentButtonClickListener commentButtonClickListener;
+    public PostListAdapter(Context context,OnCommentButtonClickListener listener) {
+        mInflater = LayoutInflater.from(context);
+        this.commentButtonClickListener = listener;
+
+    }
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -86,9 +104,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             final Post current = posts.get(position);
             holder.tvAuthor.setText(current.getAuthor());
             holder.tvContent.setText(current.getContent());
-            holder.ivPic.setImageResource(current.getPic());
+            if (current.getPic() == -1){
+                holder.ivPic.setImageURI(current.getPicUri());
+            }else {
+                holder.ivPic.setImageResource(current.getPic());
+            }
             holder.profile.setImageURI(current.getProfile());
             holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+
+            holder.numOfComments.setText(String.valueOf(current.getCommentsCount()));
+
 
             holder.btnLike.setOnClickListener(v -> {
                 // Toggle like status for the current post
@@ -104,6 +129,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     holder.btnLike.setImageResource(R.drawable.ic_like);
                 }
             });
+
         }
     }
     public void setPosts(List<Post> s){
@@ -114,7 +140,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         if (posts == null) {
             posts = new ArrayList<>();
         }
-        posts.add(post);
+        posts.add(0,post);
         notifyItemInserted(posts.size() - 1);
     }
 

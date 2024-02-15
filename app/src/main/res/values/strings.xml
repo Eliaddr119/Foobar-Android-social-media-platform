@@ -22,8 +22,14 @@
     <string name="comments_string">comments</string>
     <string name="delete_post">Delete</string>
     <string name="what_is_on_your_mind">what is on your mind?</string>
+
+    <string name="share_a_photo">Share a photo</string>
+    <string name="delete">delete</string>
+    <string name="edit">edit</string>
+
     <string name="settings">settings</string>
     <string name="add_a_post">add a post</string>
     <string name="logout">Logout</string>
     <string name="dark_mode">Dark Mode</string>
+
 </resources>
