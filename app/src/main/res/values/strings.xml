@@ -34,5 +34,7 @@
     <string name="share_now_friends">Share Now (Friends)</string>
     <string name="share_to_feed">Share to Feed</string>
     <string name="copy_link">Copy Link</string>
+    <string name="postSettings">postSettings</string>
+    <string name="edit_post">Edit Post</string>
 
 </resources>

@@ -31,7 +31,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final ImageButton btnShare;
         private final TextView numOfLikes;
         private final TextView numOfComments;
-        private final ImageButton deletePostButton;
+        private final ImageButton postSettingsBtn;
 
 
 
@@ -46,7 +46,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             btnShare = itemView.findViewById(R.id.btnShare);
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
-            deletePostButton = itemView.findViewById(R.id.deletePostButton);
+            postSettingsBtn = itemView.findViewById(R.id.postSettings);
 
             btnLike.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -59,16 +59,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                         btnLike.setImageResource(R.drawable.ic_liked);
                     } else {
                         btnLike.setImageResource(R.drawable.ic_like);
-                    }
-                }
-            });
-
-            deletePostButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        removeAt(position);
                     }
                 }
             });
@@ -134,6 +124,25 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 popup.inflate(R.menu.share_menu);
                 popup.show();
                 });
+            holder.postSettingsBtn.setOnClickListener(v -> {
+                PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.postSettingsBtn);
+                popup.inflate(R.menu.post_options_menu);
+                popup.setOnMenuItemClickListener(item -> {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.action_edit_post) {
+                        return true;
+                    }
+                    if (itemId == R.id.action_delete_post) {
+                        if (position != RecyclerView.NO_POSITION) {
+                            removeAt(position);
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+                // Show the popup menu
+                popup.show();
+            });
         }
     }
     public void setPosts(List<Post> s){
