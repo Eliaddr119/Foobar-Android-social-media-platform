@@ -201,4 +201,14 @@ public class Feed extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh your posts list here, for example:
+        posts = PostsManager.getInstance().getPosts();
+        adapter.setPosts(posts);
+        adapter.notifyDataSetChanged();
+    }
+
+
 }

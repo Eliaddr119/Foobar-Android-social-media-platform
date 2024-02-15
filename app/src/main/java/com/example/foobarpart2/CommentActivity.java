@@ -44,6 +44,11 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         int postId = getIntent().getIntExtra("postId", -1); // Use a default value in case it's not found
 
         List<Comment> comments = CommentStorage.commentsMap.get(postId); // postId is the ID of the current post
+        commentsList.clear();
+
+        if (comments != null) {
+            commentsList.addAll(comments);
+        }
         if (comments != null) {
             // Update your RecyclerView adapter with these comments
             commentAdapter.setComments(comments);
