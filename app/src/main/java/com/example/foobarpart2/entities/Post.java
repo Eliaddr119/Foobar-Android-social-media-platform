@@ -18,6 +18,7 @@ public class Post {
     private int commentsCount = 0;
     private boolean isLiked = false;
     private int pic = -1;
+
     private Uri picUri;
     private Uri profile;
     private List<Comment> comments = new ArrayList<>();
@@ -130,6 +131,9 @@ public class Post {
 
     public Uri getPicUri() {
         return picUri;
+    }
+    public void setPicUri(Uri picUri) {
+        this.picUri = picUri;
     }
 
     public String getPostTime() {

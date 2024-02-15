@@ -38,5 +38,6 @@
     <string name="edit_post">Edit Post</string>
     <string name="edit_post_hint">Edit Post</string>
     <string name="save_changes">Save Changes</string>
+    <string name="edit_photo">Edit Photo</string>
 
 </resources>

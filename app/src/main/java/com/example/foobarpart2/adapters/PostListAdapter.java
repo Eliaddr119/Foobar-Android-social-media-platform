@@ -140,8 +140,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     if (itemId == R.id.action_edit_post) {
                         // Start EditPostActivity
                         Intent intent = new Intent(activity, EditPostActivity.class);
-                        intent.putExtra("postId", PostsManager.getInstance().getPosts().get(position).getId());
-                        intent.putExtra("content", PostsManager.getInstance().getPosts().get(position).getContent());
+                        intent.putExtra("postId", PostsManager.getInstance().getPosts()
+                                .get(position).getId());
+                        intent.putExtra("content", PostsManager.getInstance().getPosts()
+                                .get(position).getContent());
+                        intent.putExtra("postPic",PostsManager.getInstance().getPosts()
+                                .get(position).getPicUri().toString());
                         activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
                         return true;
                     }
