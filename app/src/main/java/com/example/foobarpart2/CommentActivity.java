@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +39,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
 
         // Setup RecyclerView with an adapter
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        CommentAdapter commentAdapter = new CommentAdapter(commentsList,this);
+        CommentAdapter commentAdapter = new CommentAdapter(commentsList, this);
         commentsRecyclerView.setAdapter(commentAdapter);
 
         int postId = getIntent().getIntExtra("postId", -1); // Use a default value in case it's not found
@@ -59,6 +60,13 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         String author = getIntent().getStringExtra("author") + ":";
         addCommentButton.setOnClickListener(view -> {
             String commentContent = newCommentEditText.getText().toString();
+
+            if (commentContent.isEmpty()) {
+                // Show a Toast or alert to indicate that the comment cannot be empty
+                Toast.makeText(CommentActivity.this, "Write a Comment First", Toast.LENGTH_SHORT).show();
+                return; // Exit the listener, preventing further execution
+            }
+
             Comment newComment = new Comment(postId, author, commentContent, System.currentTimeMillis());
 
             // Update the Post object
@@ -79,8 +87,8 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         });
 
 
-
     }
+
     @Override
     public void onEditComment(int position, Comment comment) {
         showEditCommentDialog(comment, position);
@@ -101,7 +109,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             comment.setContent(newText);
             // Update in static storage
             List<Comment> commentsForPost = CommentStorage.commentsMap.get(comment.getPostId());
-            if(commentsForPost != null) {
+            if (commentsForPost != null) {
                 commentsForPost.set(position, comment);
                 CommentStorage.commentsMap.put(comment.getPostId(), commentsForPost);
             }
