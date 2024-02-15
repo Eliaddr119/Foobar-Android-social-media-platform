@@ -120,8 +120,7 @@ public class Feed extends AppCompatActivity {
                     String commenterDisplayName = commentObject.getAsJsonObject("user")
                             .get("displayName").getAsString();
                     String commentContent = commentObject.get("content").getAsString();
-                    long commentTime = commentObject.get("commentTime").getAsLong();
-                    Comment comment = new Comment(id, commenterDisplayName, commentContent, commentTime);
+                    Comment comment = new Comment(id, commenterDisplayName, commentContent, 0);
                     post.addComment(comment);
                 }
                 // Add the Post object to the list
