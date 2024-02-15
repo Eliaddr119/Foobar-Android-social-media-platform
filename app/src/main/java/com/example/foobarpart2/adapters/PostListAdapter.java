@@ -81,7 +81,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             });
         }
 
-
+    //hello
     }
     private final LayoutInflater mInflater;
     private List<Post> posts;
