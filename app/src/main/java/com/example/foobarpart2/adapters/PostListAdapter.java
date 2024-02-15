@@ -1,6 +1,8 @@
 package com.example.foobarpart2.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foobarpart2.EditPostActivity;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.entities.Post;
 import com.example.foobarpart2.entities.PostsManager;
@@ -73,12 +76,17 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
 
     }
+
+    private static final int REQUEST_CODE_EDIT_POST = 200;
     private final LayoutInflater mInflater;
     private List<Post> posts;
+    private Activity activity;
+
 
     private OnCommentButtonClickListener commentButtonClickListener;
-    public PostListAdapter(Context context,OnCommentButtonClickListener listener) {
-        mInflater = LayoutInflater.from(context);
+    public PostListAdapter(Activity activity, Context context,OnCommentButtonClickListener listener) {
+        this.activity = activity;
+        this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = listener;
         this.posts = PostsManager.getInstance().getPosts();
     }
@@ -125,11 +133,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 popup.show();
                 });
             holder.postSettingsBtn.setOnClickListener(v -> {
-                PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.postSettingsBtn);
+                PopupMenu popup = new PopupMenu(activity, holder.postSettingsBtn);
                 popup.inflate(R.menu.post_options_menu);
                 popup.setOnMenuItemClickListener(item -> {
                     int itemId = item.getItemId();
                     if (itemId == R.id.action_edit_post) {
+                        // Start EditPostActivity
+                        Intent intent = new Intent(activity, EditPostActivity.class);
+                        intent.putExtra("postId", PostsManager.getInstance().getPosts().get(position).getId());
+                        intent.putExtra("content", PostsManager.getInstance().getPosts().get(position).getContent());
+                        activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
                         return true;
                     }
                     if (itemId == R.id.action_delete_post) {

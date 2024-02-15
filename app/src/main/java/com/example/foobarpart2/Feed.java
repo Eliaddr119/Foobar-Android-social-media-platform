@@ -33,7 +33,9 @@ import java.util.List;
 
 public class Feed extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_ADD_POST = 1;
+    private static final int REQUEST_CODE_ADD_POST = 100;
+    private static final int REQUEST_CODE_EDIT_POST = 200;
+
     PostListAdapter adapter;
     List<Post> posts;
     FloatingActionButton btnSettings;
@@ -46,9 +48,10 @@ public class Feed extends AppCompatActivity {
         UserManager userManager = UserManager.getInstance();
         User user = userManager.getUserByUsername(userManager.getCurrentUser());
 
-        adapter = new PostListAdapter(this, position -> {
+        adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
             intent.putExtra("postId", adapter.getPosts().get(position).getId());
+            // Assuming 'user' is a valid object in your context with a method getDisplayName()
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
         });
@@ -198,6 +201,10 @@ public class Feed extends AppCompatActivity {
             newPost.setId(nextId);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
+        }
+        if (requestCode == REQUEST_CODE_EDIT_POST && resultCode == RESULT_OK) {
+            // Refresh posts list
+            adapter.notifyDataSetChanged(); // Ensure your adapter has the latest posts list
         }
     }
 
