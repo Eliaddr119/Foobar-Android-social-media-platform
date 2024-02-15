@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.entities.Post;
 import com.example.foobarpart2.entities.PostsManager;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -130,7 +129,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     holder.btnLike.setImageResource(R.drawable.ic_like);
                 }
             });
-
+            holder.btnShare.setOnClickListener(v -> {
+                PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.btnShare);
+                popup.inflate(R.menu.share_menu);
+                popup.show();
+                });
         }
     }
     public void setPosts(List<Post> s){
