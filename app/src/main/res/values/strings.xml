@@ -31,5 +31,12 @@
     <string name="add_a_post">add a post</string>
     <string name="logout">Logout</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="share_now_friends">Share Now (Friends)</string>
+    <string name="share_to_feed">Share to Feed</string>
+    <string name="copy_link">Copy Link</string>
+    <string name="postSettings">postSettings</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="edit_post_hint">Edit Post</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>

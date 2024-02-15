@@ -1,19 +1,22 @@
 package com.example.foobarpart2.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foobarpart2.EditPostActivity;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.entities.Post;
-
-import java.util.ArrayList;
+import com.example.foobarpart2.entities.PostsManager;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -31,7 +34,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final ImageButton btnShare;
         private final TextView numOfLikes;
         private final TextView numOfComments;
-        private final ImageButton deletePostButton;
+        private final ImageButton postSettingsBtn;
 
 
 
@@ -46,7 +49,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             btnShare = itemView.findViewById(R.id.btnShare);
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
-            deletePostButton = itemView.findViewById(R.id.deletePostButton);
+            postSettingsBtn = itemView.findViewById(R.id.postSettings);
 
             btnLike.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -63,16 +66,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 }
             });
 
-            deletePostButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        removeAt(position);
-                    }
-                }
-            });
-
             btnComment.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
@@ -83,14 +76,19 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
 
     }
+
+    private static final int REQUEST_CODE_EDIT_POST = 200;
     private final LayoutInflater mInflater;
     private List<Post> posts;
+    private Activity activity;
+
 
     private OnCommentButtonClickListener commentButtonClickListener;
-    public PostListAdapter(Context context,OnCommentButtonClickListener listener) {
-        mInflater = LayoutInflater.from(context);
+    public PostListAdapter(Activity activity, Context context,OnCommentButtonClickListener listener) {
+        this.activity = activity;
+        this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = listener;
-
+        this.posts = PostsManager.getInstance().getPosts();
     }
 
     @Override
@@ -101,7 +99,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position){
         if (posts != null){
-            final Post current = posts.get(position);
+            final Post current = PostsManager.getInstance().getPosts().get(position);
             holder.tvAuthor.setText(current.getAuthor());
             holder.tvContent.setText(current.getContent());
             if (current.getPic() == -1){
@@ -129,18 +127,43 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     holder.btnLike.setImageResource(R.drawable.ic_like);
                 }
             });
-
+            holder.btnShare.setOnClickListener(v -> {
+                PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.btnShare);
+                popup.inflate(R.menu.share_menu);
+                popup.show();
+                });
+            holder.postSettingsBtn.setOnClickListener(v -> {
+                PopupMenu popup = new PopupMenu(activity, holder.postSettingsBtn);
+                popup.inflate(R.menu.post_options_menu);
+                popup.setOnMenuItemClickListener(item -> {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.action_edit_post) {
+                        // Start EditPostActivity
+                        Intent intent = new Intent(activity, EditPostActivity.class);
+                        intent.putExtra("postId", PostsManager.getInstance().getPosts().get(position).getId());
+                        intent.putExtra("content", PostsManager.getInstance().getPosts().get(position).getContent());
+                        activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
+                        return true;
+                    }
+                    if (itemId == R.id.action_delete_post) {
+                        if (position != RecyclerView.NO_POSITION) {
+                            removeAt(position);
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+                // Show the popup menu
+                popup.show();
+            });
         }
     }
     public void setPosts(List<Post> s){
-        posts = s;
+        posts = PostsManager.getInstance().getPosts();
         notifyDataSetChanged();
     }
     public void addPost(Post post) {
-        if (posts == null) {
-            posts = new ArrayList<>();
-        }
-        posts.add(0,post);
+        PostsManager.getInstance().addPost(post);
         notifyItemInserted(posts.size() - 1);
     }
 

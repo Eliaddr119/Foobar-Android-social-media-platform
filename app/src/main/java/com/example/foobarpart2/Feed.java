@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.adapters.PostListAdapter;
 import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
+import com.example.foobarpart2.entities.PostsManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -32,7 +33,9 @@ import java.util.List;
 
 public class Feed extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_ADD_POST = 1;
+    private static final int REQUEST_CODE_ADD_POST = 100;
+    private static final int REQUEST_CODE_EDIT_POST = 200;
+
     PostListAdapter adapter;
     List<Post> posts;
     FloatingActionButton btnSettings;
@@ -45,14 +48,15 @@ public class Feed extends AppCompatActivity {
         UserManager userManager = UserManager.getInstance();
         User user = userManager.getUserByUsername(userManager.getCurrentUser());
 
-        adapter = new PostListAdapter(this, position -> {
+        adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
             intent.putExtra("postId", adapter.getPosts().get(position).getId());
+            // Assuming 'user' is a valid object in your context with a method getDisplayName()
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
         });
-
-        posts = new ArrayList<>();
+        PostsManager postsManager = PostsManager.getInstance();
+        posts = postsManager.getPosts();
         btnSettings = findViewById(R.id.settings);
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
@@ -129,7 +133,7 @@ public class Feed extends AppCompatActivity {
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
             // Create a list to hold all the Post objects
-            List<Post> posts = new ArrayList<>();
+            List<Post> posts = PostsManager.getInstance().getPosts();
 
             // Iterate through the JSON array
             for (JsonElement jsonElement : jsonArray) {
@@ -137,19 +141,25 @@ public class Feed extends AppCompatActivity {
 
                 // Extract post information
                 int id = jsonObject.get("id").getAsInt();
-                String author = jsonObject.getAsJsonObject("user").get("username")
+                String author = jsonObject.getAsJsonObject("user").get("displayName")
                         .getAsString();
                 String content = jsonObject.get("content").getAsString();
                 String postTime = jsonObject.get("postTime").getAsString();
                 int likes = jsonObject.get("likes").getAsInt();
-                int commentsCount = jsonObject.get("commentsCount").getAsInt();
-                String profileImage = jsonObject.getAsJsonObject("user").get("image")
-                        .getAsString();
-                Uri profileUri = Uri.parse(profileImage);
+                String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
+                int lastIndex = profileImage.lastIndexOf('/');
+                profileImage = profileImage.substring(lastIndex + 1).split("\\.")[0];
+                int profileImageResourceId = getResources().getIdentifier(profileImage, "raw", getPackageName());
+                Uri profileUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
+                String postIm = jsonObject.get("image").getAsString();
+                lastIndex = postIm.lastIndexOf('/');
+                postIm = postIm.substring(lastIndex + 1).split("\\.")[0];
+                profileImageResourceId = getResources().getIdentifier(postIm, "raw", getPackageName());
+                Uri postImUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
 
                 // Create a new Post object with extracted information
-                Post post = new Post(author, content,postTime, likes,commentsCount,
-                        R.drawable.pic1, profileUri);
+                Post post = new Post(author, content,postTime, likes,
+                        postImUri, profileUri);
                 post.setId(id);
                 JsonArray commentsArray = jsonObject.getAsJsonArray("comments");
                 for (JsonElement commentElement : commentsArray) {
@@ -192,6 +202,20 @@ public class Feed extends AppCompatActivity {
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
         }
+        if (requestCode == REQUEST_CODE_EDIT_POST && resultCode == RESULT_OK) {
+            // Refresh posts list
+            adapter.notifyDataSetChanged(); // Ensure your adapter has the latest posts list
+        }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh your posts list here, for example:
+        posts = PostsManager.getInstance().getPosts();
+        adapter.setPosts(posts);
+        adapter.notifyDataSetChanged();
+    }
+
 
 }
