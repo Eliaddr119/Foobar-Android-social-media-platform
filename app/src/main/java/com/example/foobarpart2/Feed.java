@@ -44,14 +44,22 @@ public class Feed extends AppCompatActivity {
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
 
 
-        posts.add(new Post("Alice1", "Hello world1", 15, R.drawable.pic1,
-                user.getProfileImage()));
-        posts.add(new Post("Alice2", "Hello world2", 3, R.drawable.pic1,
-                user.getProfileImage()));
-        posts.add(new Post("Alice3", "Hello world3", 4, R.drawable.pic1,
-                user.getProfileImage()));
-        posts.add(new Post("Alice4", "Hello world4", R.drawable.pic1,
-                user.getProfileImage()));
+        Post post1 = new Post("Alice1", "Hello world1", 15, R.drawable.pic1,
+                user.getProfileImage());
+        Post post2 = new Post("Alice2", "Hello world2", 3, R.drawable.pic1,
+                user.getProfileImage());
+        Post post3 = new Post("Alice3", "Hello world3", 4, R.drawable.pic1,
+                user.getProfileImage());
+        Post post4 = new Post("Alice4", "Hello world4", R.drawable.pic1,
+                user.getProfileImage());
+        post1.setId(1);
+        post2.setId(2);
+        post3.setId(3);
+        post4.setId(4);
+        posts.add(post1);
+        posts.add(post2);
+        posts.add(post3);
+        posts.add(post4);
 
         adapter.setPosts(posts);
 
@@ -76,8 +84,9 @@ public class Feed extends AppCompatActivity {
             Uri profile = Uri.parse(p);
             Uri photoUri = Uri.parse(photo);
 
-
+            int nextId = adapter.getItemCount();
             Post newPost = new Post(author, content,photoUri, profile);
+            newPost.setId(nextId);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
         }
