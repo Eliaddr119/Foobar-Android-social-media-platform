@@ -3,6 +3,7 @@ package com.example.foobarpart2.entities;
 import android.net.Uri;
 
 import com.example.foobarpart2.R;
+import com.example.foobarpart2.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,6 +152,7 @@ public class Post {
     // Method to add a comment to the post
     public void addComment(Comment comment) {
         this.comments.add(comment);
+        CommentStorage.commentsMap.put(id,comments);
     }
     // Getter for the comments list
     public List<Comment> getComments() {
