@@ -143,9 +143,11 @@ public class Feed extends AppCompatActivity {
                 String postTime = jsonObject.get("postTime").getAsString();
                 int likes = jsonObject.get("likes").getAsInt();
                 int commentsCount = jsonObject.get("commentsCount").getAsInt();
-                String profileImage = jsonObject.getAsJsonObject("user").get("image")
-                        .getAsString();
-                Uri profileUri = Uri.parse(profileImage);
+                String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
+                int lastIndex = profileImage.lastIndexOf('/');
+                profileImage = profileImage.substring(lastIndex + 1).split("\\.")[0];
+                int profileImageResourceId = getResources().getIdentifier(profileImage, "raw", getPackageName());
+                Uri profileUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
 
                 // Create a new Post object with extracted information
                 Post post = new Post(author, content,postTime, likes,commentsCount,
