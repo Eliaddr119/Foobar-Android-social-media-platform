@@ -21,7 +21,8 @@
                 "commentTime": "2/3/2024",
                 "content": "I love rainy days too!"
             }
-        ]
+        ],
+        "image": "images/posts/p1.jpg"
     },
     {
         "id": "2",
@@ -55,7 +56,8 @@
                 "commentTime": "2/5/2024",
                 "content": "Amazing discovery, Sarah!"
             }
-        ]
+        ],
+        "image": "images/posts/p2.jpg"
     },
     {
         "id": "3",
@@ -99,7 +101,8 @@
                 "commentTime": "2/8/2024",
                 "content": "What did you have for brunch?"
             }
-        ]
+        ],
+        "image": "images/posts/p3.jpg"
     },
     {
         "id": "4",
@@ -163,7 +166,8 @@
                 "commentTime": "2/11/2024",
                 "content": "I like action movies!"
             }
-        ]
+        ],
+        "image": "images/posts/p4.jpg"
     },
     {
         "id": "5",
@@ -187,7 +191,8 @@
                 "commentTime": "2/9/2024",
                 "content": "Great dedication, Chris!"
             }
-        ]
+        ],
+        "image": "images/posts/p5.jpg"
     },
     {
         "id": "6",
@@ -251,7 +256,8 @@
                 "commentTime": "2/15/2024",
                 "content": "I'm craving cookies now!"
             }
-        ]
+        ],
+        "image": "images/posts/p6.jpg"
     },
     {
         "id": "7",
@@ -305,7 +311,8 @@
                 "commentTime": "2/16/2024",
                 "content": "Reading anything interesting?"
             }
-        ]
+        ],
+        "image": "images/posts/p7.jpg"
     },
     {
         "id": "8",
@@ -329,7 +336,8 @@
                 "commentTime": "2/16/2024",
                 "content": "Happy birthday to your pet!"
             }
-        ]
+        ],
+        "image": "images/posts/p8.jpg"
     },
     {
         "id": "9",
@@ -386,57 +394,59 @@
             {
                 "id": "c42",
                 "user": {
-                "username": "mike_smith",
-                "displayName": "Mike Smith",
-                "image": "images/profiles/u6.jpg"
-            },
-            "commentTime": "2/23/2024",
-            "content": "Sunsets are a beautiful reminder of how amazing our world is."
-        }
-    ]
-},
-{
-    "id": "10",
-    "user": {
-        "username": "natalie_brown",
-        "displayName": "Natalie Brown",
-        "image": "images/profiles/u12.jpg"
+                    "username": "mike_smith",
+                    "displayName": "Mike Smith",
+                    "image": "images/profiles/u6.jpg"
+                },
+                "commentTime": "2/23/2024",
+                "content": "Sunsets are a beautiful reminder of how amazing our world is."
+            }
+        ],
+        "image": "images/posts/p9.jpg"
     },
-    "postTime": "2/20/2024",
-    "content": "Trying out a new recipe tonight. Fingers crossed it turns out well!",
-    "likes": 14,
-    "commentsCount": "3",
-    "comments": [
-        {
-            "id": "c43",
-            "user": {
-                "username": "olivia_miller",
-                "displayName": "Olivia Miller",
-                "image": "images/profiles/u8.jpg"
-            },
-            "commentTime": "2/21/2024",
-            "content": "What are you cooking?"
+    {
+        "id": "10",
+        "user": {
+            "username": "natalie_brown",
+            "displayName": "Natalie Brown",
+            "image": "images/profiles/u12.jpg"
         },
-        {
-            "id": "c44",
-            "user": {
-                "username": "sarah_thompson",
-                "displayName": "Sarah Thompson",
-                "image": "images/profiles/u4.jpg"
+        "postTime": "2/20/2024",
+        "content": "Trying out a new recipe tonight. Fingers crossed it turns out well!",
+        "likes": 14,
+        "commentsCount": "3",
+        "comments": [
+            {
+                "id": "c43",
+                "user": {
+                    "username": "olivia_miller",
+                    "displayName": "Olivia Miller",
+                    "image": "images/profiles/u8.jpg"
+                },
+                "commentTime": "2/21/2024",
+                "content": "What are you cooking?"
             },
-            "commentTime": "2/22/2024",
-            "content": "Hope it turns out delicious!"
-        },
-        {
-            "id": "c45",
-            "user": {
-                "username": "chris_johnson",
-                "displayName": "Chris Johnson",
-                "image": "images/profiles/u7.jpg"
+            {
+                "id": "c44",
+                "user": {
+                    "username": "sarah_thompson",
+                    "displayName": "Sarah Thompson",
+                    "image": "images/profiles/u4.jpg"
+                },
+                "commentTime": "2/22/2024",
+                "content": "Hope it turns out delicious!"
             },
-            "commentTime": "2/23/2024",
-            "content": "Let us know how it goes!"
-        }
-    ]
-}
+            {
+                "id": "c45",
+                "user": {
+                    "username": "chris_johnson",
+                    "displayName": "Chris Johnson",
+                    "image": "images/profiles/u7.jpg"
+                },
+                "commentTime": "2/23/2024",
+                "content": "Let us know how it goes!"
+            }
+        ],
+        "image": "images/posts/p10.jpg"
+    }
 ]
