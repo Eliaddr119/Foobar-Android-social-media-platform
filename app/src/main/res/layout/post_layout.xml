@@ -28,12 +28,12 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"/>
         <ImageButton
-            android:id="@+id/deletePostButton"
+            android:id="@+id/postSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete_post"
+            android:text="@string/postSettings"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_close"/>
+            android:src="@drawable/ic_post_settings"/>
     </LinearLayout>
     
     <TextView
