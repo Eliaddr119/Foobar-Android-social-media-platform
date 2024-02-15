@@ -60,21 +60,24 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         addCommentButton.setOnClickListener(view -> {
             String commentContent = newCommentEditText.getText().toString();
             Comment newComment = new Comment(postId, author, commentContent, System.currentTimeMillis());
-            commentsList.add(newComment);
-            commentAdapter.notifyItemInserted(commentsList.size() - 1);
-            newCommentEditText.setText(""); // Clear the input field
 
-            // Add to static storage
-            List<Comment> commentsForPost = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                commentsForPost = CommentStorage.commentsMap.getOrDefault(postId, new ArrayList<>());
-            }
-            commentsForPost.add(newComment);
-            CommentStorage.commentsMap.put(postId, commentsForPost);
-
+            // Update the Post object
             Post postToUpdate = PostsManager.getInstance().findPostById(postId);
-            postToUpdate.addComment(newComment);
+            if (postToUpdate != null) {
+                postToUpdate.addComment(newComment);
+            }
+
+            // Refresh commentsList from CommentStorage
+            commentsList.clear();
+            List<Comment> updatedComments = CommentStorage.commentsMap.get(postId);
+            if (updatedComments != null) {
+                commentsList.addAll(updatedComments);
+            }
+            commentAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
+
+            newCommentEditText.setText(""); // Clear the input field
         });
+
 
 
     }
