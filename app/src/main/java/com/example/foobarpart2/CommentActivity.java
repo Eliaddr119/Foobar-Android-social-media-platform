@@ -80,6 +80,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             List<Comment> updatedComments = CommentStorage.commentsMap.get(postId);
             if (updatedComments != null) {
                 commentsList.addAll(updatedComments);
+                commentAdapter.setComments(updatedComments);
             }
             commentAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
 
