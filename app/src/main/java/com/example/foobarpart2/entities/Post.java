@@ -158,6 +158,10 @@ public class Post {
         this.commentsCount++;
         CommentStorage.commentsMap.put(id,comments);
     }
+    public void removeComment(Comment comment){
+        this.comments.remove(comment);
+        this.commentsCount--;
+    }
     // Getter for the comments list
     public List<Comment> getComments() {
         return comments;

@@ -95,6 +95,24 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         showEditCommentDialog(comment, position);
     }
 
+    @Override
+    public void onDeleteComment(int postId, Comment comment) {
+        // Retrieve the list of comments for the post
+        List<Comment> commentsForPost = CommentStorage.commentsMap.get(postId);
+        Post postToUpdate = PostsManager.getInstance().findPostById(postId);
+        if (commentsForPost != null) {
+            // Remove the comment from the list
+            commentsForPost.remove(comment);
+            // Update the map with the modified list
+            CommentStorage.commentsMap.put(postId, commentsForPost);
+            // Optionally, refresh the comments list in the UI if needed
+            commentsList.clear();
+            commentsList.addAll(commentsForPost);
+            postToUpdate.removeComment(comment);
+            commentsRecyclerView.getAdapter().notifyDataSetChanged();
+        }
+    }
+
     private void showEditCommentDialog(Comment comment, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Comment");

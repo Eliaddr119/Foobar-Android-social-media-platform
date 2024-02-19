@@ -28,6 +28,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     public interface CommentActionListener {
         void onEditComment(int position, Comment comment);
+        void onDeleteComment(int postId, Comment comment);
     }
 
     @NonNull
@@ -76,9 +77,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             deleteCommentButton.setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
-                comments.remove(position);
-                notifyItemRemoved(position);
-                // Additionally, update your data source to reflect this change
+                if (position != RecyclerView.NO_POSITION) {
+                    Comment comment = comments.get(position);
+                    comments.remove(position);
+                    notifyItemRemoved(position);
+                    actionListener.onDeleteComment(comment.getPostId(), comment); // Update the storage
+                }
             });
 
         }
