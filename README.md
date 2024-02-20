@@ -8,4 +8,4 @@ In the feed page we show a list of 10 posts with images that are being loaded fr
 Each post has 3 buttons, make a like, Write a comment ,and a share button.
 to see all the comments of a post you need to click the Write a comment button.
 In the upper right part there is a settings button for the post, if you click on it a menu will open with 2 options, delete post and edit post.
-We recommend using API LEVEL 34
+Min API LEVEL 34
