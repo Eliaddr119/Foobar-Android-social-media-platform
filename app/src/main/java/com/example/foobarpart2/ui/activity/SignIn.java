@@ -1,4 +1,4 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.ui.activity;
 
 
 import android.content.Context;
@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.foobarpart2.R;
+import com.example.foobarpart2.UserManager;
 import com.example.foobarpart2.databinding.ActivitySignInBinding;
 
 

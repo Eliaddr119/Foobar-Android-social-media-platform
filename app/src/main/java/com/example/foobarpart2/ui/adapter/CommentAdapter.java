@@ -1,4 +1,4 @@
-package com.example.foobarpart2.adapters;
+package com.example.foobarpart2.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.entities.Comment;
+import com.example.foobarpart2.db.entity.Comment;
 
 import java.util.List;
 

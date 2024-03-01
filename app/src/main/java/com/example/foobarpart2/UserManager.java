@@ -1,6 +1,6 @@
 package com.example.foobarpart2;
 
-import com.example.foobarpart2.entities.User;
+import com.example.foobarpart2.db.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;

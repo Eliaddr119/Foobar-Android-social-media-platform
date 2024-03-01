@@ -1,6 +1,6 @@
-package com.example.foobarpart2.viewmodels;
+package com.example.foobarpart2.ui.viewmodels;
 
-import com.example.foobarpart2.entities.Comment;
+import com.example.foobarpart2.db.entity.Comment;
 
 import java.util.HashMap;
 import java.util.List;

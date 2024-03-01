@@ -1,4 +1,4 @@
-package com.example.foobarpart2.entities;
+package com.example.foobarpart2.db.entity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +15,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobarpart2.adapters.PostListAdapter;
-import com.example.foobarpart2.entities.Comment;
-import com.example.foobarpart2.entities.Post;
-import com.example.foobarpart2.entities.PostsManager;
-import com.example.foobarpart2.entities.User;
+import com.example.foobarpart2.R;
+import com.example.foobarpart2.UserManager;
+import com.example.foobarpart2.ui.adapter.PostListAdapter;
+import com.example.foobarpart2.db.entity.Comment;
+import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.db.entity.PostsManager;
+import com.example.foobarpart2.db.entity.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

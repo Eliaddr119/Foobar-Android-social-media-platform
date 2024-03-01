@@ -1,4 +1,4 @@
-package com.example.foobarpart2.adapters;
+package com.example.foobarpart2.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobarpart2.EditPostActivity;
+import com.example.foobarpart2.ui.activity.EditPostActivity;
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.entities.Post;
-import com.example.foobarpart2.entities.PostsManager;
+import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.db.entity.PostsManager;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {

@@ -1,4 +1,4 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.ui.activity;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobarpart2.entities.Comment;
-import com.example.foobarpart2.adapters.CommentAdapter;
-import com.example.foobarpart2.entities.Post;
-import com.example.foobarpart2.entities.PostsManager;
-import com.example.foobarpart2.viewmodels.CommentStorage;
+import com.example.foobarpart2.R;
+import com.example.foobarpart2.db.entity.Comment;
+import com.example.foobarpart2.ui.adapter.CommentAdapter;
+import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.db.entity.PostsManager;
+import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
 import java.util.List;

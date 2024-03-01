@@ -1,9 +1,9 @@
-package com.example.foobarpart2.entities;
+package com.example.foobarpart2.db.entity;
 
 import android.net.Uri;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.viewmodels.CommentStorage;
+import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
 import java.util.List;

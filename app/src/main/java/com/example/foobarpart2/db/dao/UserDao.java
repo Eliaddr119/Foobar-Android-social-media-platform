@@ -1,4 +1,4 @@
-package com.example.foobarpart2.models;
+package com.example.foobarpart2.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.foobarpart2.entities.User;
+import com.example.foobarpart2.db.entity.User;
 
 import java.util.List;
 

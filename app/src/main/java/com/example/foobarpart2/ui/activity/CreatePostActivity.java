@@ -1,4 +1,4 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +16,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.foobarpart2.entities.User;
+import com.example.foobarpart2.R;
+import com.example.foobarpart2.UserManager;
+import com.example.foobarpart2.db.entity.User;
 
 import java.io.File;
 import java.io.FileOutputStream;

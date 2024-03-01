@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".EditPostActivity">
+        tools:context=".ui.activity.EditPostActivity">
 
         <TextView
             android:id="@+id/edit_post1"

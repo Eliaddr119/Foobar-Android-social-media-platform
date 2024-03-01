@@ -1,4 +1,4 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.foobarpart2.UserManager;
 import com.example.foobarpart2.databinding.ActivitySignUpBinding;
-import com.example.foobarpart2.entities.User;
+import com.example.foobarpart2.db.entity.User;
 
 import java.io.File;
 import java.io.FileOutputStream;

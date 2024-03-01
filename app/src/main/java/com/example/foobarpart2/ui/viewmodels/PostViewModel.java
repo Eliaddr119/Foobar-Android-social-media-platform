@@ -1,4 +1,4 @@
-package com.example.foobarpart2.viewmodels;
+package com.example.foobarpart2.ui.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 
