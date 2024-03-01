@@ -28,10 +28,12 @@ public class UsersRepository {
 
     public void add(User user) {
         api.add(user);
+        dao.insert(user);
     }
 
     public void delete(User user) {
         api.delete(user);
+        dao.delete(user);
     }
 
     class UserListData extends MutableLiveData <List<User>>{
@@ -42,7 +44,7 @@ public class UsersRepository {
         @Override
         protected void onActive(){
             super.onActive();
-            new Thread(() -> userListData.postValue(dao.get())).start();
+            new Thread(() -> userListData.postValue(dao.index())).start();
         }
     }
 

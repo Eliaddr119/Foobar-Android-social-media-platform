@@ -38,7 +38,7 @@ public class UserAPI {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                dao.insert(user);
+
             }
 
             @Override
@@ -53,7 +53,7 @@ public class UserAPI {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                dao.delete(user);
+
             }
 
             @Override
