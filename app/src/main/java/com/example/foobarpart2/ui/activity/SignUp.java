@@ -34,7 +34,6 @@ public class SignUp extends AppCompatActivity {
 
     private Uri imageUri = null;
     private User user;
-
     SwitchCompat switchMode;
     boolean nightMode;
     SharedPreferences sharedPreferences;
