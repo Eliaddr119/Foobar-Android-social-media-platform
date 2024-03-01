@@ -44,7 +44,7 @@ public class UsersRepository {
         @Override
         protected void onActive(){
             super.onActive();
-            new Thread(() -> userListData.postValue(dao.index())).start();
+            //new Thread(() -> userListData.postValue(dao.index())).start();
         }
     }
 
