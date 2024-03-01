@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.foobarpart2.entities.User;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

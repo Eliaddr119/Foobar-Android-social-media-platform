@@ -1,8 +1,13 @@
-package com.example.foobarpart2;
+package com.example.foobarpart2.entities;
 
 import android.net.Uri;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class User {
+    @PrimaryKey()
     private final String username;
     private final String password;
     private final String displayName;
@@ -13,13 +18,6 @@ public class User {
         this.password = password;
         this.displayName = displayName;
         this.profileImage = profileImage;
-    }
-
-    public User(String username, String displayName, Uri profileImage) {
-        this.username = username;
-        this.displayName = displayName;
-        this.profileImage = profileImage;
-        password = null;
     }
 
     public String getUsername() {

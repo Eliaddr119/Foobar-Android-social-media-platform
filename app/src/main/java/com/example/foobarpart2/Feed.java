@@ -19,6 +19,7 @@ import com.example.foobarpart2.adapters.PostListAdapter;
 import com.example.foobarpart2.entities.Comment;
 import com.example.foobarpart2.entities.Post;
 import com.example.foobarpart2.entities.PostsManager;
+import com.example.foobarpart2.entities.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
