@@ -28,7 +28,7 @@ public interface WebServiceAPI {
     Call<Void> createUser(@Body User user);
 
     @GET("users/{id}")
-    Call<User> getUser(@Path("id") String username);
+    Call<User> getUser(@Path("id") String username ,@Body Token token);
     @PATCH("users/{id}")
     Call<Void> editUser(@Path("id") String username);
     @DELETE("users/{id}")

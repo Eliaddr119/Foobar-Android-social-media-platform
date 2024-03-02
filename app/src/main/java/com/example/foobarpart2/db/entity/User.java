@@ -2,6 +2,7 @@ package com.example.foobarpart2.db.entity;
 
 import android.net.Uri;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,6 +12,8 @@ public class User {
     private final String username;
     private final String password;
     private final String displayName;
+    @ColumnInfo(name = "is_logged_in")
+    private boolean isLoggedIn;
     private final Uri profileImage;
 
     public User(String username, String password, String displayName, Uri profileImage) {

@@ -17,8 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.UserManager;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -140,8 +140,8 @@ public class CreatePostActivity extends AppCompatActivity {
     private void submitPost() {
         String content = editTextPostContent.getText().toString().trim();
         if (!content.isEmpty()) {
-            UserManager userManager = UserManager.getInstance();
-            User user = userManager.getUserByUsername(userManager.getCurrentUser());
+
+            User user = new UserViewModel().getLoggedInUser();
             Uri profileImage = user != null ? user.getProfileImage() : null;
 
             Intent returnIntent = new Intent();

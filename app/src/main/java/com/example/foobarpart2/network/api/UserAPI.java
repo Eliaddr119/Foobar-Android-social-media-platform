@@ -86,6 +86,25 @@ public class UserAPI {
         });
     }
 
+    public void getUser(String username) {
+        TokenRepository tokenRepository = new TokenRepository();
+
+        Call<User> call = webServiceAPI.getUser(username,tokenRepository.get());
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()){
+                    dao.insert(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
     /*public void get() {
         Call<List<User>> call = webServiceAPI.getUsers();
         call.enqueue(new Callback<List<User>>() {

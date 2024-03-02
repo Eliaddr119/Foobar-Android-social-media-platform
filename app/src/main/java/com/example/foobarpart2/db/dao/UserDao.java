@@ -15,12 +15,25 @@ import java.util.List;
 public interface UserDao {
     @Query("SELECT * FROM user")
     List<User> index();
+
     @Query("SELECT * FROM user WHERE username = :username")
     User get(String username);
+
     @Insert
     void insert(User... users);
+
     @Update
     void update(User... users);
+
     @Delete
     void delete(User... users);
+
+    @Query("UPDATE user SET is_logged_in = 1 WHERE username = :username")
+    void logInUser(String username);
+
+    @Query("UPDATE user SET is_logged_in = 0 WHERE username = :username")
+    void logOutUser(String username);
+
+    @Query("SELECT * FROM user WHERE is_logged_in = 1 LIMIT 1")
+    User getLoggedInUser();
 }

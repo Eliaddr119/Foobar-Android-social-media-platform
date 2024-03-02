@@ -36,6 +36,17 @@ public class UsersRepository {
     public void getUser(User user) {
 
     }
+    public User getLoggedInUser(String username) {
+        api.getUser(username);
+        User user = dao.get(username);
+        dao.logInUser(user.getUsername());
+
+        return user;
+    }
+    public User getLoggedInUser(){
+        return dao.getLoggedInUser();
+    }
+
 
     public boolean authenticate(String username, String password) {
          api.authenticate(username, password);
@@ -45,6 +56,7 @@ public class UsersRepository {
     public void reload() {
 
     }
+
 
     class UserListData extends MutableLiveData<List<User>> {
         public UserListData() {

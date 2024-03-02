@@ -2,13 +2,17 @@ package com.example.foobarpart2.db.entity;
 
 import android.net.Uri;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 public class Post {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String author;
     private String content;

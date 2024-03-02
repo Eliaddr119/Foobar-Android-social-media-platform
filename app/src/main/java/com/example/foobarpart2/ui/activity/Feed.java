@@ -22,6 +22,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
+import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -47,8 +48,9 @@ public class Feed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
-        UserManager userManager = UserManager.getInstance();
-        User user = userManager.getUserByUsername(userManager.getCurrentUser());
+
+        UserViewModel userViewModel = new UserViewModel();
+        User user = userViewModel.getLoggedInUser(getIntent().getStringExtra("loggedInUser"));
 
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
@@ -71,6 +73,7 @@ public class Feed extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.btnAdd);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
+            intent.putExtra("loggedInUser",user.getUsername());
             startActivityForResult(intent, REQUEST_CODE_ADD_POST);
         });
 

@@ -1,5 +1,8 @@
 package com.example.foobarpart2.db.entity;
 
+import androidx.room.Entity;
+
+@Entity
 public class Comment {
     private int postId;
     private String author;
