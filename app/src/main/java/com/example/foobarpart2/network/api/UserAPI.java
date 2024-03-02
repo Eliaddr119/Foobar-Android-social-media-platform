@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.foobarpart2.MyApplication;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.dao.UserDao;
+import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.repository.TokenRepository;
 
 import java.util.List;
 
@@ -38,7 +40,10 @@ public class UserAPI {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                new Thread(() -> {
+                    dao.insert(user);
+                    userListData.postValue(dao.index());
+                }).start();
             }
 
             @Override
@@ -58,6 +63,24 @@ public class UserAPI {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void authenticate(String username, String password) {
+        Call<Token> call = webServiceAPI.authenticateUser(username, password);
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    TokenRepository tokenRepository = new TokenRepository();
+                    tokenRepository.add(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
 
             }
         });

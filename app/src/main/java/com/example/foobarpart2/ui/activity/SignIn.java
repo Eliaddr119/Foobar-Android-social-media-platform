@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.UserManager;
 import com.example.foobarpart2.databinding.ActivitySignInBinding;
+import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 
 
 public class SignIn extends AppCompatActivity {
@@ -53,15 +53,21 @@ public class SignIn extends AppCompatActivity {
         });
 
         binding.btnSignIn.setOnClickListener(v -> {
-            UserManager userManager = UserManager.getInstance();
 
-            String userName = binding.username.getText().toString();
+            String username = binding.username.getText().toString();
             String password = binding.password.getText().toString();
-            if(userManager.authenticate(userName,password)){
-                userManager.setCurrentUser(userName);
+
+            UserViewModel userViewModel = new UserViewModel();
+
+            if(userViewModel.authenticate(username,password)){
                 Intent i = new Intent(this, Feed.class);
                 startActivity(i);
-            }else if(!userName.isEmpty() && !password.isEmpty()) {
+            }else {
+                Toast.makeText(this, "Failed to Sign In please try again later.."
+                        , Toast.LENGTH_SHORT).show();
+            }
+
+            if(!username.isEmpty() && !password.isEmpty()) {
                 Toast.makeText(this, "Incorrect username or password"
                         , Toast.LENGTH_SHORT).show();
             } else {

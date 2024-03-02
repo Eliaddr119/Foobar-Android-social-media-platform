@@ -1,9 +1,5 @@
 package com.example.foobarpart2.repository;
 
-import android.os.AsyncTask;
-import android.widget.Toast;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -30,12 +26,24 @@ public class UsersRepository {
 
     public void add(User user) {
         api.add(user);
-        dao.insert(user);
     }
 
     public void delete(User user) {
         api.delete(user);
         dao.delete(user);
+    }
+
+    public void getUser(User user) {
+
+    }
+
+    public boolean authenticate(String username, String password) {
+         api.authenticate(username, password);
+         return true;
+    }
+
+    public void reload() {
+
     }
 
     class UserListData extends MutableLiveData<List<User>> {
@@ -52,11 +60,7 @@ public class UsersRepository {
     }
 
 
-    public LiveData<List<User>> getAll() {
-        return userListData;
-    }
-
-    public void reload() {
+    /*public void reload() {
         new GetUsersTask(userListData, dao).execute();
     }
 
@@ -77,5 +81,5 @@ public class UsersRepository {
             // update objects in LiveData
             return null;
         }
-    }
+    }*/
 }

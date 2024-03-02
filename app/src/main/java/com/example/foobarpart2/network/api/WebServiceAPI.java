@@ -1,6 +1,7 @@
 package com.example.foobarpart2.network.api;
 
 import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
 
 import retrofit2.Call;
@@ -13,10 +14,15 @@ import retrofit2.http.Path;
 
 public interface WebServiceAPI {
 
+    /*
+    * Token Requests
+    */
 
+    @POST("tokens")
+    Call<Token> authenticateUser(@Body String username, String password);
 
     /*
-    * User requests
+    * User Requests
     */
     @POST("users")
     Call<Void> createUser(@Body User user);
