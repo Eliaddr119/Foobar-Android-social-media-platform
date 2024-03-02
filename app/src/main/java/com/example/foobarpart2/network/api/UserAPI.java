@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserAPI {
     private MutableLiveData<List<User>> userListData;
     private UserDao dao;
+    private final TokenRepository tokenRepository = new TokenRepository();
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
 
@@ -87,7 +88,7 @@ public class UserAPI {
     }
 
     public void getUser(String username) {
-        TokenRepository tokenRepository = new TokenRepository();
+
 
         Call<User> call = webServiceAPI.getUser(username,tokenRepository.get());
         call.enqueue(new Callback<User>() {

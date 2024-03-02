@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
+import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -42,14 +44,16 @@ public class Feed extends AppCompatActivity {
     PostListAdapter adapter;
     List<Post> posts;
     FloatingActionButton btnSettings;
+    private PostsViewModel postViewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
-
-        UserViewModel userViewModel = new UserViewModel();
+        postViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         User user = userViewModel.getLoggedInUser(getIntent().getStringExtra("loggedInUser"));
 
         adapter = new PostListAdapter(this, this, position -> {

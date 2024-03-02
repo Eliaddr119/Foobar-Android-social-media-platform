@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.databinding.ActivitySignInBinding;
@@ -57,7 +58,7 @@ public class SignIn extends AppCompatActivity {
             String username = binding.username.getText().toString();
             String password = binding.password.getText().toString();
 
-            UserViewModel userViewModel = new UserViewModel();
+            UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
             if(userViewModel.authenticate(username,password)){
                 Intent i = new Intent(this, Feed.class);

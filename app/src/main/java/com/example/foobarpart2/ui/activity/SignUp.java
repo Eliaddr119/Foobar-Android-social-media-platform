@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.databinding.ActivitySignUpBinding;
 import com.example.foobarpart2.db.entity.User;
@@ -87,7 +88,7 @@ public class SignUp extends AppCompatActivity {
             if (validateInput(userName,password,confirmPassword,displayName,this.imageUri)){
                 Intent i = new Intent(this, SignIn.class);
                 user = new User(userName,password,displayName,this.imageUri);
-                UserViewModel userViewModel = new UserViewModel();
+                UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
                 userViewModel.add(user);
                 startActivity(i);
             }

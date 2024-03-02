@@ -1,9 +1,12 @@
 package com.example.foobarpart2.db.entity;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity
 public class Comment {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private int postId;
     private String author;
     private String content;
@@ -16,7 +19,9 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
-    // Getters and Setters
+    public int getId() {
+        return id;
+    }
     public int getPostId() {
         return postId;
     }

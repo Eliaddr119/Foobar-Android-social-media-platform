@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.User;
@@ -141,7 +142,7 @@ public class CreatePostActivity extends AppCompatActivity {
         String content = editTextPostContent.getText().toString().trim();
         if (!content.isEmpty()) {
 
-            User user = new UserViewModel().getLoggedInUser();
+            User user = new ViewModelProvider(this).get(UserViewModel.class).getLoggedInUser();
             Uri profileImage = user != null ? user.getProfileImage() : null;
 
             Intent returnIntent = new Intent();
