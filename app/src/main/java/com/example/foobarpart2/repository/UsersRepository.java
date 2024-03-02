@@ -1,6 +1,7 @@
 package com.example.foobarpart2.repository;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,6 +20,7 @@ public class UsersRepository {
     private UserDao dao;
     private UserListData userListData;
     private UserAPI api;
+
     public UsersRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "userDB")
                 .allowMainThreadQueries().build();
@@ -36,39 +38,43 @@ public class UsersRepository {
         dao.delete(user);
     }
 
-    class UserListData extends MutableLiveData <List<User>>{
-        public UserListData(){
+    class UserListData extends MutableLiveData<List<User>> {
+        public UserListData() {
             super();
             setValue(new LinkedList<User>());
         }
+
         @Override
-        protected void onActive(){
+        protected void onActive() {
             super.onActive();
             //new Thread(() -> userListData.postValue(dao.index())).start();
         }
     }
 
-    public LiveData<List<User>> getAll(){
+
+    public LiveData<List<User>> getAll() {
         return userListData;
     }
-    public void reload(){
-        new GetUsersTask(userListData,dao).execute();
+
+    public void reload() {
+        new GetUsersTask(userListData, dao).execute();
     }
 
-    public class GetUsersTask extends AsyncTask<Void,Void,Void>{
-        private MutableLiveData<List<User>> userListDatta;
+    public class GetUsersTask extends AsyncTask<Void, Void, Void> {
+        private MutableLiveData<List<User>> userListData;
         private UserDao dao;
 
-        public GetUsersTask(MutableLiveData<List<User>> userListDatta, UserDao dao) {
-            this.userListDatta = userListDatta;
+        public GetUsersTask(MutableLiveData<List<User>> userListData, UserDao dao) {
+            this.userListData = userListData;
             this.dao = dao;
         }
+
         @Override
-        protected Void doInBackground(Void... x){
-             // connect to web-service
-             // retrieve posts
-             // convert json response to objects
-             // update objects in LiveData
+        protected Void doInBackground(Void... x) {
+            // connect to web-service
+            // retrieve posts
+            // convert json response to objects
+            // update objects in LiveData
             return null;
         }
     }

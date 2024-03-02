@@ -14,6 +14,8 @@ import java.util.List;
 public class UserViewModel extends ViewModel {
     private UsersRepository repository;
     private LiveData<List<User>> users;
+    public LiveData<String> errorLiveData;
+
     public UserViewModel(){
         repository = new UsersRepository();
         users = repository.getAll();
