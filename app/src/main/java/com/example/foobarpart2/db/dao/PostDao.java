@@ -16,7 +16,10 @@ public interface PostDao {
     @Query("SELECT * FROM post WHERE id = :id")
     Post get(int id);
 
-    @Insert
+    @Query("DELETE FROM post")
+    void clear();
+
+    @Insert(entity = Post.class)
     void insert(Post... posts);
 
     @Update
@@ -24,5 +27,4 @@ public interface PostDao {
 
     @Delete
     void delete(Post... posts);
-
 }

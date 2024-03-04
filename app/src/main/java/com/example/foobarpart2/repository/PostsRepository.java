@@ -54,7 +54,7 @@ public class PostsRepository {
     }
 
     public void reload() {
-        new GetPostsTask(postListData, dao).execute();
+        new GetPostsTask(postListData, dao,api).execute();
     }
 }
 

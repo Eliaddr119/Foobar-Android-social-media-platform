@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.UserManager;
@@ -42,7 +44,7 @@ public class Feed extends AppCompatActivity {
     private static final int REQUEST_CODE_EDIT_POST = 200;
 
     PostListAdapter adapter;
-    List<Post> posts;
+    LiveData<List<Post>> posts;
     FloatingActionButton btnSettings;
     private PostsViewModel postViewModel;
     private UserViewModel userViewModel;
@@ -59,16 +61,27 @@ public class Feed extends AppCompatActivity {
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
             intent.putExtra("postId", adapter.getPosts().get(position).getId());
-            // Assuming 'user' is a valid object in your context with a method getDisplayName()
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
         });
-        PostsManager postsManager = PostsManager.getInstance();
-        posts = postsManager.getPosts();
+
+
         btnSettings = findViewById(R.id.settings);
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
+
+        posts = postViewModel.get();
+
+        SwipeRefreshLayout refreshLayout = findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(() -> {
+            postViewModel.reload();
+        });
+
+        postViewModel.get().observe(this, posts -> {
+            adapter.setPosts(posts);
+            refreshLayout.setRefreshing(false);
+        });
 
 
         loadPostsFromJson();
@@ -77,7 +90,7 @@ public class Feed extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.btnAdd);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
-            intent.putExtra("loggedInUser",user.getUsername());
+            intent.putExtra("loggedInUser", user.getUsername());
             startActivityForResult(intent, REQUEST_CODE_ADD_POST);
         });
 
@@ -123,6 +136,7 @@ public class Feed extends AppCompatActivity {
         });
 
     }
+
     private void logout() {
         UserManager.getInstance().setCurrentUser(null);
         Intent intent = new Intent(this, SignIn.class);
@@ -167,7 +181,7 @@ public class Feed extends AppCompatActivity {
                 Uri postImUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
 
                 // Create a new Post object with extracted information
-                Post post = new Post(author, content,postTime, likes,
+                Post post = new Post(author, content, postTime, likes,
                         postImUri, profileUri);
                 post.setId(id);
                 JsonArray commentsArray = jsonObject.getAsJsonArray("comments");
@@ -204,11 +218,11 @@ public class Feed extends AppCompatActivity {
             Uri profile = Uri.parse(p);
             String photo = data.getStringExtra("picResource");
             Post newPost;
-            if(photo.equals("null")){
-                newPost = new Post(author,content,profile);
-            }else {
+            if (photo.equals("null")) {
+                newPost = new Post(author, content, profile);
+            } else {
                 Uri photoUri = Uri.parse(photo);
-                newPost = new Post(author, content,photoUri, profile);
+                newPost = new Post(author, content, photoUri, profile);
             }
 
             int nextId = adapter.getItemCount() + 1;
