@@ -26,4 +26,8 @@ public class UserViewModel extends ViewModel {
     public void reload(){
         repository.reload();
     }
+
+    public void logOutCurrUser() {
+        repository.logOutCurrUser();
+    }
 }

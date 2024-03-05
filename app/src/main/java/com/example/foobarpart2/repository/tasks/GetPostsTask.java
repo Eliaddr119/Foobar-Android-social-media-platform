@@ -25,16 +25,8 @@ public class GetPostsTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         try {
             // Simulate fetching posts from a web service
-            List<Post> fetchedPosts = api.get(); // Assuming this method exists and fetches the posts
+            api.get(); // Assuming this method exists and fetches the posts
 
-            // Clear existing posts in the database to replace with new ones
-            dao.clear();
-
-            // Insert new posts into the database
-            dao.insert(fetchedPosts);
-
-            // Post value to LiveData on the main thread
-            postListData.postValue(fetchedPosts);
         } catch (Exception e) {
             // Handle any errors during fetching, parsing, or updating the database
             e.printStackTrace();

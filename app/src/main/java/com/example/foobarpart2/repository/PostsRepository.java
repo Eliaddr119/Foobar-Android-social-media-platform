@@ -28,6 +28,16 @@ public class PostsRepository {
         api = new PostAPI(postListData, dao);
     }
 
+    public void add(Post post) {
+        api.add(post);
+        dao.insert(post);
+    }
+
+    public void delete(Post post) {
+        api.delete(post);
+        dao.delete(post);
+    }
+
     class PostListData extends MutableLiveData<List<Post>> {
 
         public PostListData() {
@@ -41,7 +51,7 @@ public class PostsRepository {
             super.onActive();
 
             new Thread(() -> {
-                postListData.postValue(dao.get());
+                postListData.postValue(dao.index());
             }).start();
 
         }

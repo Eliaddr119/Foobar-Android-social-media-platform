@@ -57,6 +57,10 @@ public class UsersRepository {
 
     }
 
+    public void logOutCurrUser() {
+        dao.logOutUser(getLoggedInUser().getUsername());
+    }
+
 
     class UserListData extends MutableLiveData<List<User>> {
         public UserListData() {
@@ -72,26 +76,4 @@ public class UsersRepository {
     }
 
 
-    /*public void reload() {
-        new GetUsersTask(userListData, dao).execute();
-    }
-
-    public class GetUsersTask extends AsyncTask<Void, Void, Void> {
-        private MutableLiveData<List<User>> userListData;
-        private UserDao dao;
-
-        public GetUsersTask(MutableLiveData<List<User>> userListData, UserDao dao) {
-            this.userListData = userListData;
-            this.dao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... x) {
-            // connect to web-service
-            // retrieve posts
-            // convert json response to objects
-            // update objects in LiveData
-            return null;
-        }
-    }*/
 }

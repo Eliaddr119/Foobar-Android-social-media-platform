@@ -19,23 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.UserManager;
-import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
-import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
 import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Feed extends AppCompatActivity {
@@ -71,8 +63,6 @@ public class Feed extends AppCompatActivity {
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        posts = postViewModel.get();
-
         SwipeRefreshLayout refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(() -> {
             postViewModel.reload();
@@ -84,13 +74,12 @@ public class Feed extends AppCompatActivity {
         });
 
 
-        loadPostsFromJson();
+        //loadPostsFromJson();
 
 
         FloatingActionButton fab = findViewById(R.id.btnAdd);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
-            intent.putExtra("loggedInUser", user.getUsername());
             startActivityForResult(intent, REQUEST_CODE_ADD_POST);
         });
 
@@ -138,14 +127,14 @@ public class Feed extends AppCompatActivity {
     }
 
     private void logout() {
-        UserManager.getInstance().setCurrentUser(null);
+        userViewModel.logOutCurrUser();
         Intent intent = new Intent(this, SignIn.class);
         startActivity(intent);
         finish(); // Close current activity
 
     }
 
-    private void loadPostsFromJson() {
+    /*private void loadPostsFromJson() {
         try {
             // Open the JSON file from the res/raw directory
             InputStream inputStream = getResources().openRawResource(R.raw.posts);
@@ -204,7 +193,7 @@ public class Feed extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     @Override
@@ -217,12 +206,15 @@ public class Feed extends AppCompatActivity {
             String p = data.getStringExtra("profileUri");
             Uri profile = Uri.parse(p);
             String photo = data.getStringExtra("picResource");
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
             Post newPost;
+
             if (photo.equals("null")) {
-                newPost = new Post(author, content, profile);
+                newPost = new Post(author, content, profile,null,currentDate);
             } else {
                 Uri photoUri = Uri.parse(photo);
-                newPost = new Post(author, content, photoUri, profile);
+                newPost = new Post(author, content, profile, photoUri,currentDate);
             }
 
             int nextId = adapter.getItemCount() + 1;
@@ -239,9 +231,9 @@ public class Feed extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh your posts list here, for example:
-        posts = PostsManager.getInstance().getPosts();
-        adapter.setPosts(posts);
+        postViewModel.get().observe(this, posts -> {
+            adapter.setPosts(posts);
+        });
         adapter.notifyDataSetChanged();
     }
 

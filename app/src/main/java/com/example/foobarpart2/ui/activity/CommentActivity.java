@@ -19,7 +19,10 @@ import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Calendar;
+
 
 public class CommentActivity extends AppCompatActivity implements CommentAdapter.CommentActionListener {
     private ArrayList<Comment> commentsList = new ArrayList<>();
@@ -67,8 +70,10 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
                 Toast.makeText(CommentActivity.this, "Write a Comment First", Toast.LENGTH_SHORT).show();
                 return; // Exit the listener, preventing further execution
             }
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
 
-            Comment newComment = new Comment(postId, author, commentContent, System.currentTimeMillis());
+            Comment newComment = new Comment(postId, author, commentContent,currentDate);
 
             // Update the Post object
             Post postToUpdate = PostsManager.getInstance().findPostById(postId);

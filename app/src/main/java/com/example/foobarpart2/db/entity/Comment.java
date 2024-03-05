@@ -3,6 +3,8 @@ package com.example.foobarpart2.db.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity
 public class Comment {
     @PrimaryKey(autoGenerate = true)
@@ -10,9 +12,9 @@ public class Comment {
     private int postId;
     private String author;
     private String content;
-    private long timestamp;
+    private Date timestamp;
 
-    public Comment(int postId, String author, String content, long timestamp) {
+    public Comment(int postId, String author, String content, Date timestamp) {
         this.postId = postId;
         this.author = author;
         this.content = content;
@@ -46,11 +48,11 @@ public class Comment {
         this.content = content;
     }
 
-    public long getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 }

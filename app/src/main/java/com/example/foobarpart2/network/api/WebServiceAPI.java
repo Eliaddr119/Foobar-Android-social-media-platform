@@ -41,14 +41,16 @@ public interface WebServiceAPI {
     /*
      * Post Requests
      */
+    @GET("posts")
+    Call<List<Post>> getPosts (@Body Token token);
     @GET("users/{id}/posts")
     Call<List<Post>> getPosts(@Path("id") String username, @Body Token token);
 
     @POST("users/{id}/posts")
-    Call<Post> createPost(@Path("id") String username, @Body Token token);
+    Call<Void> createPost(@Path("id") String username, @Body Token token, Post post);
 
     @PATCH("users/{id}/posts/{pid}")
-    Call<Void> editPost(@Path("id") String username, @Path("pid") int postId, @Body Token token);
+    Call<Void> editPost(@Path("id") String username, @Path("pid") int postId, @Body Token token, Post post);
 
     @DELETE("users/{id}/posts/{pid}")
     Call<Void> deletePost(@Path("id") String username, @Path("pid") int postId, @Body Token token);

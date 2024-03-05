@@ -17,6 +17,7 @@ import com.example.foobarpart2.ui.activity.EditPostActivity;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.PostsManager;
+
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -35,7 +36,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final TextView numOfLikes;
         private final TextView numOfComments;
         private final ImageButton postSettingsBtn;
-
 
 
         private PostViewHolder(View itemView) {
@@ -84,7 +84,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
 
     private OnCommentButtonClickListener commentButtonClickListener;
-    public PostListAdapter(Activity activity, Context context,OnCommentButtonClickListener listener) {
+
+    public PostListAdapter(Activity activity, Context context, OnCommentButtonClickListener listener) {
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = listener;
@@ -92,26 +93,28 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     }
 
     @Override
-    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View itemView = mInflater.inflate(R.layout.post_layout,parent,false);
+    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.post_layout, parent, false);
         return new PostViewHolder(itemView);
     }
+
     @Override
-    public void onBindViewHolder(PostViewHolder holder, int position){
-        if (posts != null){
+    public void onBindViewHolder(PostViewHolder holder, int position) {
+        if (posts != null) {
             final Post current = PostsManager.getInstance().getPosts().get(position);
             holder.tvAuthor.setText(current.getAuthor());
             holder.tvContent.setText(current.getContent());
-            if (current.getPic() == -1){
+
+            if (current.getPicUri() != null) {
                 holder.ivPic.setImageURI(current.getPicUri());
-            }else {
+            } else {
                 holder.ivPic.setImageResource(current.getPic());
             }
+
             holder.profile.setImageURI(current.getProfile());
             holder.numOfLikes.setText(String.valueOf(current.getLikes()));
 
             holder.numOfComments.setText(String.valueOf(current.getCommentsCount()));
-
 
             holder.btnLike.setOnClickListener(v -> {
                 // Toggle like status for the current post
@@ -131,7 +134,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.btnShare);
                 popup.inflate(R.menu.share_menu);
                 popup.show();
-                });
+            });
             holder.postSettingsBtn.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(activity, holder.postSettingsBtn);
                 popup.inflate(R.menu.post_options_menu);
@@ -144,7 +147,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                                 .get(position).getId());
                         intent.putExtra("content", PostsManager.getInstance().getPosts()
                                 .get(position).getContent());
-                        intent.putExtra("postPic",PostsManager.getInstance().getPosts()
+                        intent.putExtra("postPic", PostsManager.getInstance().getPosts()
                                 .get(position).getPicUri().toString());
                         activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
                         return true;
@@ -162,22 +165,27 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             });
         }
     }
-    public void setPosts(List<Post> s){
+
+    public void setPosts(List<Post> s) {
         posts = PostsManager.getInstance().getPosts();
         notifyDataSetChanged();
     }
+
     public void addPost(Post post) {
         PostsManager.getInstance().addPost(post);
         notifyItemInserted(posts.size() - 1);
     }
 
     @Override
-    public int getItemCount(){
-        if (posts != null){
+    public int getItemCount() {
+        if (posts != null) {
             return posts.size();
-        }else return 0;
+        } else return 0;
     }
-    public List<Post> getPosts() { return posts;}
+
+    public List<Post> getPosts() {
+        return posts;
+    }
 
     public void removeAt(int position) {
         posts.remove(position);
