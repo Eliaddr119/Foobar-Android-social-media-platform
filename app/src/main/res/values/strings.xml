@@ -39,6 +39,6 @@
     <string name="edit_post_hint">Edit Post</string>
     <string name="save_changes">Save Changes</string>
     <string name="edit_photo">Edit Photo</string>
-    <string name="BaseUrl">http://10.0.2.2:5263/api/</string>
+    <string name="BaseUrl">http://10.0.2.2:8080/api/</string>
 
 </resources>

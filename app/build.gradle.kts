@@ -14,6 +14,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
+
     }
 
     buildFeatures {
@@ -37,6 +40,7 @@ android {
 
 dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("androidx.multidex:multidex:2.0.1")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")

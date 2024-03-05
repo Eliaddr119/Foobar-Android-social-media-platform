@@ -107,8 +107,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
             if (current.getPicUri() != null) {
                 holder.ivPic.setImageURI(current.getPicUri());
-            } else {
-                holder.ivPic.setImageResource(current.getPic());
             }
 
             holder.profile.setImageURI(current.getProfile());
