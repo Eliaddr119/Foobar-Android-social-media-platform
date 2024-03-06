@@ -15,11 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.User;
-import com.example.foobarpart2.ui.viewmodels.UserViewModel;
+import com.example.foobarpart2.models.LoggedInUser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -142,7 +141,7 @@ public class CreatePostActivity extends AppCompatActivity {
         String content = editTextPostContent.getText().toString().trim();
         if (!content.isEmpty()) {
 
-            User user = new ViewModelProvider(this).get(UserViewModel.class).getLoggedInUser();
+            User user = LoggedInUser.getInstance().getUser();
             Uri profileImage = user != null ? user.getProfileImage() : null;
 
             Intent returnIntent = new Intent();

@@ -18,11 +18,11 @@ public class TokenRepository {
         this.dao = db.tokenDao();
     }
 
-    public void add(Token token){
+    public void add(Token token) {
         dao.insertToken(token);
     }
 
-    public Token get(){
-        return dao.getToken();
+    public String get() {
+        return "Bearer " + dao.getToken().getToken();
     }
 }

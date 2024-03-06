@@ -26,7 +26,9 @@ public class PostsRepository {
                 .allowMainThreadQueries()
                 .build();
         this.dao = db.postDao();
+        postListData = new PostListData();
         api = new PostAPI(postListData, dao);
+
     }
 
     public void add(Post post) {

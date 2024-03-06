@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.databinding.ActivitySignInBinding;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 
 
@@ -63,8 +64,10 @@ public class SignIn extends AppCompatActivity {
             userViewModel.authenticate(username, password);
             userViewModel.getAuthenticateResult().observe(this, isSuccess -> {
                 if (isSuccess) {
+                    userViewModel.getLoggedInUser(username).observe(this,user -> {
+                        LoggedInUser.getInstance().setUser(user);
+                    });
                     Intent i = new Intent(this, Feed.class);
-                    i.putExtra("loggedInUser", username);
                     startActivity(i);
                 } else {
                     Toast.makeText(this, "Failed to Sign In please try again later.."

@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
 import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
@@ -48,7 +49,7 @@ public class Feed extends AppCompatActivity {
 
         postViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        User user = userViewModel.getLoggedInUser(getIntent().getStringExtra("loggedInUser"));
+        User user = LoggedInUser.getInstance().getUser();
 
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);

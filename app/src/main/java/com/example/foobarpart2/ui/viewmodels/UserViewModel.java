@@ -10,20 +10,22 @@ public class UserViewModel extends ViewModel {
     private UsersRepository repository;
     private LiveData<Boolean> signUpResult;
     private LiveData<Boolean> authenticateResult;
+    private LiveData<User> userLiveData;
 
     public UserViewModel() {
         repository = new UsersRepository();
         signUpResult = repository.getSignUpResult();
         authenticateResult = repository.getAuthenticateResult();
+        userLiveData = repository.getUserData();
     }
 
-
-    public User getLoggedInUser(String username) {
-        return repository.getLoggedInUser(username);
+    public LiveData<User> getUser(String username) {
+        repository.get(username);
+        return userLiveData;
     }
-
-    public User getLoggedInUser() {
-        return repository.getLoggedInUser();
+    public LiveData<User> getLoggedInUser(String username) {
+        repository.get(username);
+        return userLiveData;
     }
 
     public void add(User user) {

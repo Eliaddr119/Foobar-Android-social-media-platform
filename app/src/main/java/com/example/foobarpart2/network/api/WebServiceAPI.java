@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -31,7 +32,7 @@ public interface WebServiceAPI {
     Call<Void> createUser(@Body User user);
 
     @GET("users/{id}")
-    Call<User> getUser(@Path("id") String username, @Body Token token);
+    Call<User> getUser(@Path("id") String username, @Header("Authorization") String token);
 
     @PATCH("users/{id}")
     Call<Void> editUser(@Path("id") String username);
@@ -43,16 +44,16 @@ public interface WebServiceAPI {
      * Post Requests
      */
     @GET("posts")
-    Call<List<Post>> getPosts (@Body Token token);
+    Call<List<Post>> getPosts (@Header("Authorization") String token);
     @GET("users/{id}/posts")
-    Call<List<Post>> getPosts(@Path("id") String username, @Body Token token);
+    Call<List<Post>> getPosts(@Path("id") String username, @Header("Authorization") String token);
 
     @POST("users/{id}/posts")
-    Call<Void> createPost(@Path("id") String username, @Body Token token, Post post);
+    Call<Void> createPost(@Path("id") String username, @Header("Authorization") String token, @Body Post post);
 
     @PATCH("users/{id}/posts/{pid}")
-    Call<Void> editPost(@Path("id") String username, @Path("pid") int postId, @Body Token token, Post post);
+    Call<Void> editPost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token, Post post);
 
     @DELETE("users/{id}/posts/{pid}")
-    Call<Void> deletePost(@Path("id") String username, @Path("pid") int postId, @Body Token token);
+    Call<Void> deletePost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token);
 }

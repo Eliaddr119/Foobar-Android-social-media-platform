@@ -24,8 +24,7 @@ public class GetPostsTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            // Simulate fetching posts from a web service
-            api.get(); // Assuming this method exists and fetches the posts
+            api.get();
 
         } catch (Exception e) {
             // Handle any errors during fetching, parsing, or updating the database

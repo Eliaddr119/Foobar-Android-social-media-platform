@@ -21,15 +21,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserAPI {
     private MutableLiveData<Boolean> signUpResult;
     private MutableLiveData<Boolean> authenticateResult;
-
+    private MutableLiveData<User> userData;
     private UserDao dao;
     private final TokenRepository tokenRepository = new TokenRepository();
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
 
-    public UserAPI(MutableLiveData<Boolean> signUpResult, MutableLiveData<Boolean> authenticateResult, UserDao dao) {
+    public UserAPI(MutableLiveData<Boolean> signUpResult, MutableLiveData<Boolean> authenticateResult, MutableLiveData<User> userData, UserDao dao) {
         this.signUpResult = signUpResult;
         this.authenticateResult = authenticateResult;
+        this.userData = userData;
         this.dao = dao;
 
 
@@ -105,19 +106,23 @@ public class UserAPI {
 
     public void getUser(String username) {
 
-
         Call<User> call = webServiceAPI.getUser(username, tokenRepository.get());
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    dao.insert(response.body());
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to get your User information"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> dao.insert(response.body())).start();
+                    userData.setValue(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
             }
         });
     }

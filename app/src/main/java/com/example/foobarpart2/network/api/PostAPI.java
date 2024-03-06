@@ -7,6 +7,7 @@ import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.dao.PostDao;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.repository.TokenRepository;
 import com.example.foobarpart2.repository.UsersRepository;
 
@@ -60,7 +61,7 @@ public class PostAPI {
     }
 
     public void add(Post post) {
-        User user = usersRepository.getLoggedInUser();
+        User user = LoggedInUser.getInstance().getUser();
         Call<Void> call = webServiceAPI.createPost(user.getUsername(),tokenRepository.get(),post);
         call.enqueue(new Callback<Void>() {
             @Override
@@ -76,7 +77,7 @@ public class PostAPI {
     }
 
     public void delete(Post post) {
-        User user = usersRepository.getLoggedInUser();
+        User user = LoggedInUser.getInstance().getUser();
         Call<Void> call = webServiceAPI.deletePost(user.getUsername(),post.getId(),tokenRepository.get());
         call.enqueue(new Callback<Void>() {
             @Override
