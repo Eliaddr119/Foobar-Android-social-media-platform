@@ -13,11 +13,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foobarpart2.ui.activity.EditPostActivity;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.PostsManager;
+import com.example.foobarpart2.ui.activity.EditPostActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostViewHolder> {
@@ -89,7 +90,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = listener;
-        this.posts = PostsManager.getInstance().getPosts();
+        this.posts = new ArrayList<>();
     }
 
     @Override
@@ -164,8 +165,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         }
     }
 
-    public void setPosts(List<Post> s) {
-        posts = PostsManager.getInstance().getPosts();
+    public void setPosts(List<Post> postList) {
+        posts = postList;
         notifyDataSetChanged();
     }
 

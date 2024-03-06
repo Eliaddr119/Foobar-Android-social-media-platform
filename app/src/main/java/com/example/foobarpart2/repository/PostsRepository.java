@@ -22,6 +22,7 @@ public class PostsRepository {
 
     public PostsRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "postDB")
+                .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
         this.dao = db.postDao();

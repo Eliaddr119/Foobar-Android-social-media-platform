@@ -20,7 +20,9 @@ public class UsersRepository {
 
     public UsersRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "userDB")
-                .allowMainThreadQueries().build();
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
         this.dao = db.userDao();
         api = new UserAPI(signUpResult,authenticateResult, dao);
     }

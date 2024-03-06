@@ -12,7 +12,9 @@ public class TokenRepository {
 
     public TokenRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "tokenDB")
-                .allowMainThreadQueries().build();
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
         this.dao = db.tokenDao();
     }
 

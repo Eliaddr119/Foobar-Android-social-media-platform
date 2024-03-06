@@ -86,7 +86,6 @@ public class SignUp extends AppCompatActivity {
             String displayName = binding.displayNameTextSignup.getText().toString();
 
             if (validateInput(username, password, confirmPassword, displayName, this.imageUri)) {
-                Intent i = new Intent(this, SignIn.class);
                 user = new User(username, password, displayName, this.imageUri);
                 UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
                 userViewModel.add(user);
@@ -97,7 +96,8 @@ public class SignUp extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         // Show error message
-                        Toast.makeText(this, "Sign up failed. Try again later.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Sign up failed. Try again later.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }

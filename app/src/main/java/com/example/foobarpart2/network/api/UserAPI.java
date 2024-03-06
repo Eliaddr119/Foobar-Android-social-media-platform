@@ -49,10 +49,8 @@ public class UserAPI {
                     Toast.makeText(MyApplication.context, "Unable to sign you up, try later :)"
                             , Toast.LENGTH_SHORT).show();
                 } else {
-                    new Thread(() -> {
-                        dao.insert(user);
-                        signUpResult.setValue(true);
-                    }).start();
+                    new Thread(() -> dao.insert(user)).start();
+                    signUpResult.setValue(true);
                 }
 
             }
