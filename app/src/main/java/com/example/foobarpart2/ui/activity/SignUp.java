@@ -49,23 +49,23 @@ public class SignUp extends AppCompatActivity {
         switchMode = binding.switchMode;
 
         sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE);
-        nightMode = sharedPreferences.getBoolean("nightMode",false);
+        nightMode = sharedPreferences.getBoolean("nightMode", false);
 
-        if (!nightMode){
+        if (!nightMode) {
             switchMode.setChecked(true);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         switchMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (nightMode){
+                if (nightMode) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     editor = sharedPreferences.edit();
-                    editor.putBoolean("nightMode",false);
-                }else {
+                    editor.putBoolean("nightMode", false);
+                } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     editor = sharedPreferences.edit();
-                    editor.putBoolean("nightMode",true);
+                    editor.putBoolean("nightMode", true);
                 }
                 editor.apply();
             }
@@ -74,23 +74,32 @@ public class SignUp extends AppCompatActivity {
         binding.uploadPhotoBtn.setOnClickListener(v -> showImageSourceDialog());
 
         binding.retSignIn.setOnClickListener(v -> {
-            Intent i = new Intent(this,SignIn.class);
+            Intent i = new Intent(this, SignIn.class);
             startActivity(i);
         });
 
         binding.btnSignUp.setOnClickListener(v -> {
 
-            String userName = binding.usernameTextSignup.getText().toString();
+            String username = binding.usernameTextSignup.getText().toString();
             String password = binding.passwordTextSignup.getText().toString();
             String confirmPassword = binding.confirmPasswordTextSignup.getText().toString();
             String displayName = binding.displayNameTextSignup.getText().toString();
 
-            if (validateInput(userName,password,confirmPassword,displayName,this.imageUri)){
+            if (validateInput(username, password, confirmPassword, displayName, this.imageUri)) {
                 Intent i = new Intent(this, SignIn.class);
-                user = new User(userName,password,displayName,this.imageUri);
+                user = new User(username, password, displayName, this.imageUri);
                 UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
                 userViewModel.add(user);
-                startActivity(i);
+                userViewModel.getSignUpResult().observe(this, isSuccess -> {
+                    if (isSuccess) {
+                        // Navigate to the next activity
+                        Intent intent = new Intent(this, SignIn.class);
+                        startActivity(intent);
+                    } else {
+                        // Show error message
+                        Toast.makeText(this, "Sign up failed. Try again later.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -122,12 +131,13 @@ public class SignUp extends AppCompatActivity {
             Log.e("SignUp", "Exception occurred: " + e.getMessage(), e);
         }
     }
+
     private void openCamera() {
         try {
             Intent intent = new Intent();
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,CAMERA_REQUEST_CODE);
-        }catch (Exception e){
+            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        } catch (Exception e) {
             Toast.makeText(this, "no camera", Toast.LENGTH_SHORT).show();
         }
 
@@ -145,7 +155,7 @@ public class SignUp extends AppCompatActivity {
                 String savedImagePath = storeImageBitmap(imageBitmap);
                 this.imageUri = Uri.parse("file://" + savedImagePath);
                 binding.profileImage.setImageBitmap(imageBitmap);
-            } else{
+            } else {
                 binding.profileImage.setImageBitmap(null);
                 Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             }
@@ -164,28 +174,28 @@ public class SignUp extends AppCompatActivity {
     }
 
     boolean validateInput(String username, String password, String confirmPassword,
-                          String displayName,Uri imageUri){
-        if(username.isEmpty() || password.isEmpty()
-            || confirmPassword.isEmpty() || displayName.isEmpty()){
+                          String displayName, Uri imageUri) {
+        if (username.isEmpty() || password.isEmpty()
+                || confirmPassword.isEmpty() || displayName.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields"
                     , Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (!password.equals(confirmPassword)){
+        if (!password.equals(confirmPassword)) {
             Toast.makeText(this, "Passwords do not match"
                     , Toast.LENGTH_LONG).show();
             return false;
         }
         Regex passwordRegex = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$");
-        if(!passwordRegex.matches(password)){
+        if (!passwordRegex.matches(password)) {
             Toast.makeText(this,
                     "Password must be at least 8 characters with uppercase, " +
                             "lowercase, and numeric characters"
                     , Toast.LENGTH_LONG).show();
             return false;
         }
-        if (imageUri == null){
+        if (imageUri == null) {
             Toast.makeText(this, "must upload a profile image"
                     , Toast.LENGTH_LONG).show();
             return false;

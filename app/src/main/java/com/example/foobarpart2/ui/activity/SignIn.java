@@ -23,6 +23,7 @@ public class SignIn extends AppCompatActivity {
     boolean nightMode;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,21 +35,21 @@ public class SignIn extends AppCompatActivity {
         switchMode = findViewById(R.id.switchMode);
 
         sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE);
-        nightMode = sharedPreferences.getBoolean("nightMode",false);
+        nightMode = sharedPreferences.getBoolean("nightMode", false);
 
-        if (!nightMode){
+        if (!nightMode) {
             switchMode.setChecked(true);
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         switchMode.setOnClickListener(v -> {
-            if (nightMode){
+            if (nightMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 editor = sharedPreferences.edit();
-                editor.putBoolean("nightMode",false);
-            }else {
+                editor.putBoolean("nightMode", false);
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 editor = sharedPreferences.edit();
-                editor.putBoolean("nightMode",true);
+                editor.putBoolean("nightMode", true);
             }
             editor.apply();
         });
@@ -59,23 +60,17 @@ public class SignIn extends AppCompatActivity {
             String password = binding.password.getText().toString();
 
             UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
-            if(userViewModel.authenticate(username,password)){
-                Intent i = new Intent(this, Feed.class);
-                i.putExtra("loggedInUser",username);
-                startActivity(i);
-            }else {
-                Toast.makeText(this, "Failed to Sign In please try again later.."
-                        , Toast.LENGTH_SHORT).show();
-            }
-
-            if(!username.isEmpty() && !password.isEmpty()) {
-                Toast.makeText(this, "Incorrect username or password"
-                        , Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Please fill in all fields"
-                        , Toast.LENGTH_SHORT).show();
-            }
+            userViewModel.authenticate(username, password);
+            userViewModel.getAuthenticateResult().observe(this, isSuccess -> {
+                if (isSuccess) {
+                    Intent i = new Intent(this, Feed.class);
+                    i.putExtra("loggedInUser", username);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(this, "Failed to Sign In please try again later.."
+                            , Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         binding.retSignUp.setOnClickListener(v -> {

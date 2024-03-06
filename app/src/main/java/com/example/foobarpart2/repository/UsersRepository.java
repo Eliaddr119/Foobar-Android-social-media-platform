@@ -1,5 +1,6 @@
 package com.example.foobarpart2.repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -9,19 +10,19 @@ import com.example.foobarpart2.db.database.AppDB;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.network.api.UserAPI;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class UsersRepository {
     private UserDao dao;
-    private UserListData userListData;
+    private MutableLiveData<Boolean> signUpResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> authenticateResult = new MutableLiveData<>();
+
+
     private UserAPI api;
 
     public UsersRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "userDB")
                 .allowMainThreadQueries().build();
         this.dao = db.userDao();
-        api = new UserAPI(userListData, dao);
+        api = new UserAPI(signUpResult,authenticateResult, dao);
     }
 
     public void add(User user) {
@@ -33,9 +34,7 @@ public class UsersRepository {
         dao.delete(user);
     }
 
-    public void getUser(User user) {
 
-    }
     public User getLoggedInUser(String username) {
         api.getUser(username);
         User user = dao.get(username);
@@ -43,14 +42,22 @@ public class UsersRepository {
 
         return user;
     }
-    public User getLoggedInUser(){
+
+    public User getLoggedInUser() {
         return dao.getLoggedInUser();
     }
 
 
-    public boolean authenticate(String username, String password) {
-         api.authenticate(username, password);
-         return true;
+    public void authenticate(String username, String password) {
+        api.authenticate(username, password);
+    }
+
+    public LiveData<Boolean> getSignUpResult() {
+        return this.signUpResult;
+    }
+
+    public LiveData<Boolean> getAuthenticateResult() {
+        return  this.authenticateResult;
     }
 
     public void reload() {
@@ -61,19 +68,6 @@ public class UsersRepository {
         dao.logOutUser(getLoggedInUser().getUsername());
     }
 
-
-    class UserListData extends MutableLiveData<List<User>> {
-        public UserListData() {
-            super();
-            setValue(new LinkedList<User>());
-        }
-
-        @Override
-        protected void onActive() {
-            super.onActive();
-            //new Thread(() -> userListData.postValue(dao.index())).start();
-        }
-    }
 
 
 }

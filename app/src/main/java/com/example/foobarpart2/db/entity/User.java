@@ -24,15 +24,16 @@ public class User {
         isLoggedIn = loggedIn;
     }
 
-    private Uri profileImage;
+    private final Uri profileImage;
 
-    public User(String username, String password, String displayName, Uri profileImage) {
+    public User(@NonNull String username, String password, String displayName, Uri profileImage) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
         this.profileImage = profileImage;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }

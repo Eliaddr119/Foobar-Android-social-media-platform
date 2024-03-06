@@ -3,6 +3,7 @@ package com.example.foobarpart2.network.api;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.network.request.LoginRequest;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface WebServiceAPI {
      */
 
     @POST("tokens")
-    Call<Token> authenticateUser(@Body String username, String password);
+    Call<Token> authenticateUser(@Body LoginRequest loginRequest);
 
     /*
      * User Requests
