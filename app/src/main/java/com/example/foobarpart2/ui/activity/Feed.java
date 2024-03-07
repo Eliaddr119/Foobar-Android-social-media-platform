@@ -3,7 +3,6 @@ package com.example.foobarpart2.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -202,24 +201,24 @@ public class Feed extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD_POST && resultCode == RESULT_OK) {
             // Extract post details from data, create a Post object
-            String author = data.getStringExtra("author");
             String content = data.getStringExtra("content");
-            String p = data.getStringExtra("profileUri");
-            Uri profile = Uri.parse(p);
-            String photo = data.getStringExtra("picResource");
+            String image = data.getStringExtra("image");
+
+            User currentUser = LoggedInUser.getInstance().getUser();
+
             Calendar calendar = Calendar.getInstance();
             Date currentDate = calendar.getTime();
             Post newPost;
 
-            if (photo.equals("null")) {
-                newPost = new Post(author, content, profile,null,currentDate);
+            if (image.equals("null")) {
+                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName()
+                        ,currentDate,content, currentUser.getProfilePic(),null);
             } else {
-                Uri photoUri = Uri.parse(photo);
-                newPost = new Post(author, content, profile, photoUri,currentDate);
-            }
 
-            int nextId = adapter.getItemCount() + 1;
-            newPost.setId(nextId);
+                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName()
+                        ,currentDate,content, currentUser.getProfilePic(),image);
+            }
+            postViewModel.add(newPost);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
         }

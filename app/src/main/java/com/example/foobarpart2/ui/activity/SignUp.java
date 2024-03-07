@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.foobarpart2.databinding.ActivitySignUpBinding;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
+import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,7 +87,13 @@ public class SignUp extends AppCompatActivity {
             String displayName = binding.displayNameTextSignup.getText().toString();
 
             if (validateInput(username, password, confirmPassword, displayName, this.imageUri)) {
-                user = new User(username, password, displayName, this.imageUri);
+                String imageBase64 = null;
+                try {
+                    imageBase64 = ImageUtils.convertToBase64(this.imageUri);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                user = new User(username, password, displayName, imageBase64);
                 UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
                 userViewModel.add(user);
                 userViewModel.getSignUpResult().observe(this, isSuccess -> {

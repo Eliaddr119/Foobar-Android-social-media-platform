@@ -16,8 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.db.entity.Post;
-import com.example.foobarpart2.db.entity.PostsManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,11 +54,11 @@ public class EditPostActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> {
             String updatedContent = editTextContent.getText().toString();
             // Update the post in PostsManager
-            Post post = PostsManager.getInstance().findPostById(postId);
+            /*Post post = PostsManager.getInstance().findPostById(postId);
             if (post != null) {
                 post.setContent(updatedContent);
                 post.setPicUri(photoUri);
-            }
+            }*/
             // Set result and finish
             setResult(RESULT_OK);
             finish();

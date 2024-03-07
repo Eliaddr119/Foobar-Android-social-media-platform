@@ -1,7 +1,5 @@
 package com.example.foobarpart2.db.entity;
 
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -13,13 +11,15 @@ public class User {
     private final String username;
     private final String password;
     private final String displayName;
-    private final Uri profileImage;
+    private final String profilePic;
 
-    public User(@NonNull String username, String password, String displayName, Uri profileImage) {
+
+
+    public User(@NonNull String username, String password, String displayName, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
-        this.profileImage = profileImage;
+        this.profilePic = profilePic;
     }
 
     @NonNull
@@ -35,7 +35,7 @@ public class User {
         return displayName;
     }
 
-    public Uri getProfileImage() {
-        return profileImage;
+    public String getProfilePic() {
+        return profilePic;
     }
 }

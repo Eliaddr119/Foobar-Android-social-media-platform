@@ -17,8 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.db.entity.User;
-import com.example.foobarpart2.models.LoggedInUser;
+import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +32,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private Button btnUpic;
     private ImageView photo;
     private Uri photoUri = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +45,16 @@ public class CreatePostActivity extends AppCompatActivity {
         buttonSubmitPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitPost();
+                try {
+                    submitPost();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         btnUpic.setOnClickListener(v -> showImageSourceDialog());
     }
+
     private void showImageSourceDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose Image Source");
@@ -64,6 +69,7 @@ public class CreatePostActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -74,16 +80,18 @@ public class CreatePostActivity extends AppCompatActivity {
             Log.e("SignUp", "Exception occurred: " + e.getMessage(), e);
         }
     }
+
     private void openCamera() {
         try {
             Intent intent = new Intent();
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,CAMERA_REQUEST_CODE);
-        }catch (Exception e){
+            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        } catch (Exception e) {
             Toast.makeText(this, "no camera", Toast.LENGTH_SHORT).show();
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -96,7 +104,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 String savedImagePath = storeImageBitmap(imageBitmap);
                 photoUri = Uri.parse("file://" + savedImagePath);
                 photo.setImageBitmap(imageBitmap);
-            } else{
+            } else {
                 photo.setImageBitmap(null);
                 Toast.makeText(this, "Failed to retrieve image"
                         , Toast.LENGTH_SHORT).show();
@@ -115,6 +123,7 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         }
     }
+
     private String storeImageBitmap(Bitmap imageBitmap) {
         // Create a unique file name
         String fileName = "temp_image_" + System.currentTimeMillis() + ".jpg";
@@ -137,22 +146,20 @@ public class CreatePostActivity extends AppCompatActivity {
         // Return the saved image path
         return imageFile.getAbsolutePath();
     }
-    private void submitPost() {
+
+    private void submitPost() throws IOException {
         String content = editTextPostContent.getText().toString().trim();
         if (!content.isEmpty()) {
 
-            User user = LoggedInUser.getInstance().getUser();
-            Uri profileImage = user != null ? user.getProfileImage() : null;
-
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("author", user.getDisplayName());
+
             returnIntent.putExtra("content", content);
-            if(photoUri !=null) {
-                returnIntent.putExtra("picResource", photoUri.toString());
-            }else {
-                returnIntent.putExtra("picResource", "null");
+            if (photoUri != null) {
+                String imageBase64 = ImageUtils.convertToBase64(photoUri);
+                returnIntent.putExtra("image", imageBase64);
+            } else {
+                returnIntent.putExtra("image", "null");
             }
-            returnIntent.putExtra("profileUri", profileImage.toString());
             setResult(RESULT_OK, returnIntent);
             finish();
         }

@@ -1,5 +1,7 @@
 package com.example.foobarpart2.network.api;
 
+import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.foobarpart2.MyApplication;
@@ -39,6 +41,7 @@ public class PostAPI {
         tokenRepository = new TokenRepository();
         usersRepository = new UsersRepository();
     }
+
     public void get() {
 
 
@@ -62,23 +65,30 @@ public class PostAPI {
 
     public void add(Post post) {
         User user = LoggedInUser.getInstance().getUser();
-        Call<Void> call = webServiceAPI.createPost(user.getUsername(),tokenRepository.get(),post);
+        Call<Void> call = webServiceAPI.createPost(user.getUsername(), tokenRepository.get(), post);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to add the post, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> {
+                        dao.insert(post);
+                    }).start();
+                }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void delete(Post post) {
         User user = LoggedInUser.getInstance().getUser();
-        Call<Void> call = webServiceAPI.deletePost(user.getUsername(),post.getId(),tokenRepository.get());
+        Call<Void> call = webServiceAPI.deletePost(user.getUsername(), post.getId(), tokenRepository.get());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

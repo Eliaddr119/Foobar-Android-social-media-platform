@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
-import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.ui.activity.EditPostActivity;
+import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 if (position != RecyclerView.NO_POSITION) {
                     Post post = posts.get(position);
                     post.toggleLikeStatus();
-                    int likeCount = post.getLikes();
+                    int likeCount = post.getNumlikes();
                     numOfLikes.setText(String.valueOf(likeCount));
                     if (post.isLiked()) {
                         btnLike.setImageResource(R.drawable.ic_liked);
@@ -102,16 +102,17 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
         if (posts != null) {
-            final Post current = PostsManager.getInstance().getPosts().get(position);
-            holder.tvAuthor.setText(current.getAuthor());
+            final Post current = posts.get(position);
+            holder.tvAuthor.setText(current.getDisplayName());
             holder.tvContent.setText(current.getContent());
 
-            if (current.getPicUri() != null) {
-                holder.ivPic.setImageURI(current.getPicUri());
+            if (current.getImage() != null) {
+                holder.ivPic.setImageBitmap(ImageUtils.decodeBase64ToBitmap(current.getImage()));
             }
-
-            holder.profile.setImageURI(current.getProfile());
-            holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+            if (current.getProfilePic() != null) {
+                holder.profile.setImageBitmap(ImageUtils.decodeBase64ToBitmap(current.getProfilePic()));
+            }
+            holder.numOfLikes.setText(String.valueOf(current.getNumlikes()));
 
             holder.numOfComments.setText(String.valueOf(current.getCommentsCount()));
 
@@ -120,7 +121,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 current.toggleLikeStatus();
 
                 // Update like count in the UI
-                holder.numOfLikes.setText(String.valueOf(current.getLikes()));
+                holder.numOfLikes.setText(String.valueOf(current.getNumlikes()));
 
                 // Update like button icon based on like status
                 if (current.isLiked()) {
@@ -142,12 +143,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     if (itemId == R.id.action_edit_post) {
                         // Start EditPostActivity
                         Intent intent = new Intent(activity, EditPostActivity.class);
-                        intent.putExtra("postId", PostsManager.getInstance().getPosts()
-                                .get(position).getId());
-                        intent.putExtra("content", PostsManager.getInstance().getPosts()
-                                .get(position).getContent());
-                        intent.putExtra("postPic", PostsManager.getInstance().getPosts()
-                                .get(position).getPicUri().toString());
+                        intent.putExtra("postId", posts.get(position).getId());
+                        intent.putExtra("content", posts.get(position).getContent());
+                        intent.putExtra("postPic", posts.get(position).getImage());
                         activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
                         return true;
                     }
@@ -171,8 +169,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     }
 
     public void addPost(Post post) {
-        PostsManager.getInstance().addPost(post);
-        notifyItemInserted(posts.size() - 1);
+        posts.add(post);
+        notifyItemInserted(posts.size() + 1);
     }
 
     @Override

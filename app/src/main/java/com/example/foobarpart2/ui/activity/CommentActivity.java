@@ -14,14 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.ui.adapter.CommentAdapter;
-import com.example.foobarpart2.db.entity.Post;
-import com.example.foobarpart2.db.entity.PostsManager;
 import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Calendar;
 
 
 public class CommentActivity extends AppCompatActivity implements CommentAdapter.CommentActionListener {
@@ -76,10 +74,10 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             Comment newComment = new Comment(postId, author, commentContent,currentDate);
 
             // Update the Post object
-            Post postToUpdate = PostsManager.getInstance().findPostById(postId);
+            /*Post postToUpdate = PostsManager.getInstance().findPostById(postId);
             if (postToUpdate != null) {
                 postToUpdate.addComment(newComment);
-            }
+            }*/
 
             // Refresh commentsList from CommentStorage
             commentsList.clear();
@@ -105,7 +103,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     public void onDeleteComment(int postId, Comment comment) {
         // Retrieve the list of comments for the post
         List<Comment> commentsForPost = CommentStorage.commentsMap.get(postId);
-        Post postToUpdate = PostsManager.getInstance().findPostById(postId);
+        //Post postToUpdate = PostsManager.getInstance().findPostById(postId);
         if (commentsForPost != null) {
             // Remove the comment from the list
             commentsForPost.remove(comment);
@@ -114,7 +112,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             // Optionally, refresh the comments list in the UI if needed
             commentsList.clear();
             commentsList.addAll(commentsForPost);
-            postToUpdate.removeComment(comment);
+            //postToUpdate.removeComment(comment);
             commentsRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }

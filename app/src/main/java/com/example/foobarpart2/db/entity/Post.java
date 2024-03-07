@@ -1,11 +1,8 @@
 package com.example.foobarpart2.db.entity;
 
-import android.net.Uri;
-
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,31 +12,111 @@ import java.util.List;
 public class Post {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String author;
+    @NonNull
+    private String username;
+    private String displayName;
+    private String profilePic;
+    @NonNull
+    private Date date;
+    @NonNull
     private String content;
-    private Date postTime;
-    private int likes = 0;
+    private int numlikes = 0;
+
     private int commentsCount = 0;
+
+
     private boolean isLiked = false;
-    private Uri picUri;
-    private Uri profile;
+    private String image;
+
     private List<Comment> comments = new ArrayList<>();
 
-    public Post(String author, String content, Uri profile, Uri picUri, Date postTime) {
-        this.author = author;
+    public Post(@NonNull String username, String displayName, @NonNull Date date, @NonNull String content, String profilePic, String image) {
+        this.username = username;
+        this.displayName = displayName;
+        this.profilePic = profilePic;
+        this.date = date;
         this.content = content;
-        this.profile = profile;
-        this.picUri = picUri;
-        this.postTime = postTime;
+        this.image = image;
+
     }
 
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @NonNull
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(@NonNull String username) {
+        this.username = username;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfile(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    @NonNull
+    public Date getDate() {
+        return this.date;
+    }
+
+    public void setDate(@NonNull Date date) {
+        this.date = date;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getNumlikes() {
+        return this.numlikes;
+    }
+
+    public void setNumlikes(int numlikes) {
+        this.numlikes = numlikes;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
 
     public void setLiked(boolean liked) {
         isLiked = liked;
-    }
-
-    public void setProfile(Uri profile) {
-        this.profile = profile;
     }
 
     public void setComments(List<Comment> comments) {
@@ -53,77 +130,17 @@ public class Post {
     public void toggleLikeStatus() {
         isLiked = !isLiked; // Toggle the like status
         if (isLiked) {
-            likes++; // If liked, increment the like count
+            numlikes++; // If liked, increment the like count
         } else {
-            likes--; // If unliked, decrement the like count
+            numlikes--; // If unliked, decrement the like count
         }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public Uri getProfile() {
-        return profile;
-    }
-
-    public Uri getPicUri() {
-        return picUri;
-    }
-
-    public void setPicUri(Uri picUri) {
-        this.picUri = picUri;
-    }
-
-    public Date getPostTime() {
-        return postTime;
-    }
-
-    public void setPostTime(Date postTime) {
-        this.postTime = postTime;
-    }
-
-    public int getCommentsCount() {
-        return commentsCount;
-    }
-
-    public void setCommentsCount(int commentsCount) {
-        this.commentsCount = commentsCount;
     }
 
     // Method to add a comment to the post
     public void addComment(Comment comment) {
         this.comments.add(comment);
         this.commentsCount++;
-        CommentStorage.commentsMap.put(id, comments);
+        // CommentStorage.commentsMap.put(id, comments);
     }
 
     public void removeComment(Comment comment) {

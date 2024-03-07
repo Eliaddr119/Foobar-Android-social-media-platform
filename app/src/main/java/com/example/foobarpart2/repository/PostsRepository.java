@@ -33,7 +33,6 @@ public class PostsRepository {
 
     public void add(Post post) {
         api.add(post);
-        dao.insert(post);
     }
 
     public void delete(Post post) {
