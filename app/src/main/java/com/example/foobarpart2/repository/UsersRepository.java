@@ -65,6 +65,7 @@ public class UsersRepository {
     }
 
     public void logOutCurrUser() {
+        new Thread(()-> dao.deleteAllUsers());
         LoggedInUser.getInstance().setUser(null);
     }
 }

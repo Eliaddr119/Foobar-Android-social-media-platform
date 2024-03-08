@@ -80,7 +80,7 @@ public class UserAPI {
     }
 
     public void authenticate(String username, String password) {
-        LoginRequest loginRequest = new LoginRequest(username,password);
+        LoginRequest loginRequest = new LoginRequest(username, password);
         Call<Token> call = webServiceAPI.authenticateUser(loginRequest);
         call.enqueue(new Callback<Token>() {
             @Override
@@ -90,6 +90,7 @@ public class UserAPI {
                             , Toast.LENGTH_SHORT).show();
                 } else {
                     TokenRepository tokenRepository = new TokenRepository();
+                    tokenRepository.delete();
                     tokenRepository.add(response.body());
                     authenticateResult.setValue(true);
                 }

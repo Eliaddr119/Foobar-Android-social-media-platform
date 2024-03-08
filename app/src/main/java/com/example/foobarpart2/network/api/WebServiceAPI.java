@@ -4,6 +4,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.network.request.LoginRequest;
+import com.example.foobarpart2.network.request.PostEditRequest;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public interface WebServiceAPI {
     Call<Void> createPost(@Path("id") String username, @Header("Authorization") String token, @Body Post post);
 
     @PATCH("users/{id}/posts/{pid}")
-    Call<Void> editPost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token, Post post);
+    Call<Post> editPost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token,  @Body PostEditRequest postEditRequest);
 
     @DELETE("users/{id}/posts/{pid}")
     Call<Void> deletePost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token);

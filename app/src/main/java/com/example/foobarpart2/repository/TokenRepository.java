@@ -25,4 +25,8 @@ public class TokenRepository {
     public String get() {
         return "Bearer " + dao.getToken().getToken();
     }
+
+    public void delete() {
+        dao.deleteAllTokens();
+    }
 }

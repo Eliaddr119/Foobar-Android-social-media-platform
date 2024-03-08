@@ -10,6 +10,7 @@ import com.example.foobarpart2.db.dao.PostDao;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.models.LoggedInUser;
+import com.example.foobarpart2.network.request.PostEditRequest;
 import com.example.foobarpart2.repository.TokenRepository;
 import com.example.foobarpart2.repository.UsersRepository;
 
@@ -78,6 +79,7 @@ public class PostAPI {
                     }).start();
                 }
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(MyApplication.context, "Unable to connect to the server."
@@ -86,18 +88,51 @@ public class PostAPI {
         });
     }
 
-    public void delete(Post post) {
+    public void delete(int postId) {
         User user = LoggedInUser.getInstance().getUser();
-        Call<Void> call = webServiceAPI.deletePost(user.getUsername(), post.getId(), tokenRepository.get());
+        Call<Void> call = webServiceAPI.deletePost(user.getUsername(), postId, tokenRepository.get());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to delete the post, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> {
+                        dao.delete(dao.get(postId));
+                    }).start();
 
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    public void edit(int postId, String updatedContent, String image) {
+        User user = LoggedInUser.getInstance().getUser();
+        PostEditRequest postEditRequest = new PostEditRequest(updatedContent, image);
+        Call<Post> call = webServiceAPI.editPost(user.getUsername(), postId, tokenRepository.get(),
+               postEditRequest);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()){
+                    Toast.makeText(MyApplication.context, "Unable to edit the post, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -14,7 +14,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
 
-@Database(entities = {User.class, Token.class, Post.class}, version = 13)
+@Database(entities = {User.class, Token.class, Post.class}, version = 14)
 @TypeConverters({TimeConverters.class, UriConverters.class, CommentConverters.class})
 public abstract class AppDB extends RoomDatabase {
     public abstract UserDao userDao();

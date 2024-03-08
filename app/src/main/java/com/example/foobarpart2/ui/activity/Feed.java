@@ -55,7 +55,7 @@ public class Feed extends AppCompatActivity {
             intent.putExtra("postId", adapter.getPosts().get(position).getId());
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
-        });
+        },this::onDeletePost);
 
 
         btnSettings = findViewById(R.id.settings);
@@ -134,67 +134,6 @@ public class Feed extends AppCompatActivity {
 
     }
 
-    /*private void loadPostsFromJson() {
-        try {
-            // Open the JSON file from the res/raw directory
-            InputStream inputStream = getResources().openRawResource(R.raw.posts);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            // Parse the JSON data using Gson
-            Gson gson = new Gson();
-            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-
-            // Create a list to hold all the Post objects
-            List<Post> posts = PostsManager.getInstance().getPosts();
-
-            // Iterate through the JSON array
-            for (JsonElement jsonElement : jsonArray) {
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                // Extract post information
-                int id = jsonObject.get("id").getAsInt();
-                String author = jsonObject.getAsJsonObject("user").get("displayName")
-                        .getAsString();
-                String content = jsonObject.get("content").getAsString();
-                String postTime = jsonObject.get("postTime").getAsString();
-                int likes = jsonObject.get("likes").getAsInt();
-                String profileImage = jsonObject.getAsJsonObject("user").get("image").getAsString();
-                int lastIndex = profileImage.lastIndexOf('/');
-                profileImage = profileImage.substring(lastIndex + 1).split("\\.")[0];
-                int profileImageResourceId = getResources().getIdentifier(profileImage, "raw", getPackageName());
-                Uri profileUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
-                String postIm = jsonObject.get("image").getAsString();
-                lastIndex = postIm.lastIndexOf('/');
-                postIm = postIm.substring(lastIndex + 1).split("\\.")[0];
-                profileImageResourceId = getResources().getIdentifier(postIm, "raw", getPackageName());
-                Uri postImUri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + profileImageResourceId);
-
-                // Create a new Post object with extracted information
-                Post post = new Post(author, content, postTime, likes,
-                        postImUri, profileUri);
-                post.setId(id);
-                JsonArray commentsArray = jsonObject.getAsJsonArray("comments");
-                for (JsonElement commentElement : commentsArray) {
-                    JsonObject commentObject = commentElement.getAsJsonObject();
-                    String commenterDisplayName = commentObject.getAsJsonObject("user")
-                            .get("displayName").getAsString();
-                    String commentContent = commentObject.get("content").getAsString();
-                    Comment comment = new Comment(id, commenterDisplayName, commentContent, 0);
-                    post.addComment(comment);
-                }
-                // Add the Post object to the list
-                posts.add(post);
-            }
-
-            // Update your RecyclerView adapter with the list of posts
-            adapter.setPosts(posts);
-            adapter.notifyDataSetChanged();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -224,7 +163,7 @@ public class Feed extends AppCompatActivity {
         }
         if (requestCode == REQUEST_CODE_EDIT_POST && resultCode == RESULT_OK) {
             // Refresh posts list
-            adapter.notifyDataSetChanged(); // Ensure your adapter has the latest posts list
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -235,6 +174,9 @@ public class Feed extends AppCompatActivity {
             adapter.setPosts(posts);
         });
         adapter.notifyDataSetChanged();
+    }
+    public void onDeletePost(int postId) {
+        postViewModel.delete(postId);
     }
 
 

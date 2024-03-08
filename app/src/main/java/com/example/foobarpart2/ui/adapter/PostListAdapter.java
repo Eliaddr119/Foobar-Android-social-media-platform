@@ -25,6 +25,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public interface OnCommentButtonClickListener {
         void onCommentButtonClicked(int position);
     }
+    public interface PostActionListener {
+        void onDeletePost(int postId);
+    }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvAuthor;
@@ -82,14 +85,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     private final LayoutInflater mInflater;
     private List<Post> posts;
     private Activity activity;
-
-
+    private PostActionListener listener;
     private OnCommentButtonClickListener commentButtonClickListener;
 
-    public PostListAdapter(Activity activity, Context context, OnCommentButtonClickListener listener) {
+    public PostListAdapter(Activity activity, Context context,
+                           OnCommentButtonClickListener commentButtonClickListener,
+                           PostActionListener listener) {
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
-        this.commentButtonClickListener = listener;
+        this.commentButtonClickListener = commentButtonClickListener;
+        this.listener = listener;
         this.posts = new ArrayList<>();
     }
 
@@ -145,13 +150,14 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                         Intent intent = new Intent(activity, EditPostActivity.class);
                         intent.putExtra("postId", posts.get(position).getId());
                         intent.putExtra("content", posts.get(position).getContent());
-                        intent.putExtra("postPic", posts.get(position).getImage());
                         activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
                         return true;
                     }
                     if (itemId == R.id.action_delete_post) {
                         if (position != RecyclerView.NO_POSITION) {
-                            removeAt(position);
+                            Post postToDelete = posts.get(position);
+                            listener.onDeletePost(postToDelete.getId());
+                            removeAt(position); // Assumes local removal is still desired
                         }
                         return true;
                     }

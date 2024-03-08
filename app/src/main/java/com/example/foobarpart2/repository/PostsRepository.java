@@ -18,6 +18,7 @@ import java.util.List;
 public class PostsRepository {
     private PostDao dao;
     private PostListData postListData;
+    private MutableLiveData<Post> postMutableLiveData;
     private PostAPI api;
 
     public PostsRepository() {
@@ -27,6 +28,7 @@ public class PostsRepository {
                 .build();
         this.dao = db.postDao();
         postListData = new PostListData();
+        postMutableLiveData = new MutableLiveData<>();
         api = new PostAPI(postListData, dao);
 
     }
@@ -35,9 +37,23 @@ public class PostsRepository {
         api.add(post);
     }
 
-    public void delete(Post post) {
-        api.delete(post);
-        dao.delete(post);
+    public void delete(int postId) {
+        api.delete(postId);
+    }
+
+    public void getPostFromDao(int postId) {
+        new Thread(() -> {
+            Post post = dao.get(postId);
+            postMutableLiveData.postValue(post);
+        }).start();
+    }
+
+    public LiveData<Post> getPostData() {
+        return this.postMutableLiveData;
+    }
+
+    public void edit(int postId, String updatedContent, String image) {
+        api.edit(postId,updatedContent,image);
     }
 
     class PostListData extends MutableLiveData<List<Post>> {

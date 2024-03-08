@@ -14,8 +14,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.foobarpart2.R;
+import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
+import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,18 +27,20 @@ import java.io.IOException;
 
 public class EditPostActivity extends AppCompatActivity {
     private EditText editTextContent;
-
+    private PostsViewModel postViewModel;
     private Button btnEditP;
     private Button btnSave;
     private ImageView photo;
     Uri photoUri;
     private int postId;
+    private Post editedPost;
     private static final int GALLERY_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        postViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         setContentView(R.layout.activity_edit_post);
 
         editTextContent = findViewById(R.id.editTextContent);
@@ -44,29 +50,33 @@ public class EditPostActivity extends AppCompatActivity {
 
         // Get the post ID and current content from the intent
         postId = getIntent().getIntExtra("postId", -1);
-        String content = getIntent().getStringExtra("content");
-        Uri photoS =Uri.parse(getIntent().getStringExtra("postPic"));
-        photoUri = photoS;
-        photo.setImageURI(photoS);
 
+        String content = getIntent().getStringExtra("content");
         editTextContent.setText(content);
+
+        postViewModel.getPostFromDao(postId);
+        postViewModel.getPost().observe(this, post -> {
+            Bitmap photoS = ImageUtils.decodeBase64ToBitmap(post.getImage());
+            photo.setImageBitmap(photoS);
+        });
+
 
         btnSave.setOnClickListener(v -> {
             String updatedContent = editTextContent.getText().toString();
-            // Update the post in PostsManager
-            /*Post post = PostsManager.getInstance().findPostById(postId);
-            if (post != null) {
-                post.setContent(updatedContent);
-                post.setPicUri(photoUri);
-            }*/
-            // Set result and finish
+
+            try {
+                postViewModel.edit(postId, updatedContent, ImageUtils.convertToBase64(photoUri));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             setResult(RESULT_OK);
             finish();
         });
 
-       btnEditP.setOnClickListener(v -> {
-           showImageSourceDialog();
-       });
+        btnEditP.setOnClickListener(v -> {
+            showImageSourceDialog();
+        });
     }
 
     private void showImageSourceDialog() {
@@ -94,12 +104,13 @@ public class EditPostActivity extends AppCompatActivity {
             Log.e("SignUp", "Exception occurred: " + e.getMessage(), e);
         }
     }
+
     private void openCamera() {
         try {
             Intent intent = new Intent();
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,CAMERA_REQUEST_CODE);
-        }catch (Exception e){
+            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        } catch (Exception e) {
             Toast.makeText(this, "no camera", Toast.LENGTH_SHORT).show();
         }
 
@@ -116,7 +127,7 @@ public class EditPostActivity extends AppCompatActivity {
                 String savedImagePath = storeImageBitmap(imageBitmap);
                 this.photoUri = Uri.parse("file://" + savedImagePath);
                 photo.setImageBitmap(imageBitmap);
-            } else{
+            } else {
                 photo.setImageBitmap(null);
                 Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             }
