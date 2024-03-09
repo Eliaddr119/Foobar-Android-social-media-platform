@@ -7,6 +7,7 @@ import androidx.room.Room;
 import com.example.foobarpart2.MyApplication;
 import com.example.foobarpart2.db.dao.PostDao;
 import com.example.foobarpart2.db.database.AppDB;
+import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.network.api.PostAPI;
 import com.example.foobarpart2.repository.tasks.GetPostsTask;
@@ -62,6 +63,10 @@ public class PostsRepository {
 
     public void disLikePost(String postId) {
         api.disLikePost(postId);
+    }
+
+    public void addComment(String postId, Comment newComment) {
+        api.addComment(postId,newComment);
     }
 
     class PostListData extends MutableLiveData<List<Post>> {

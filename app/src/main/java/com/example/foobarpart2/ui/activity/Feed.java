@@ -59,7 +59,7 @@ public class Feed extends AppCompatActivity {
             intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
-        },this::onDeletePost,this::onLikePost,this::onLDisLikePost);
+        },this::onDeletePost,this::onLikePost,this::onLDisLikePost,this::onLikeList);
 
 
         btnSettings = findViewById(R.id.settings);
@@ -148,33 +148,25 @@ public class Feed extends AppCompatActivity {
             String content = data.getStringExtra("content");
 
             String imageUriString = data.getStringExtra("image");
-            Uri imageUri = null;
-            if (!"null".equals(imageUriString)) {
+            Uri imageUri;
+            String image = null;
+            if (imageUriString != null && !"null".equals(imageUriString)) {
                 imageUri = Uri.parse(imageUriString);
+                try {
+                    image = ImageUtils.convertToBase64(imageUri);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-            String image;
-            try {
-                image = ImageUtils.convertToBase64(imageUri);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
             User currentUser = LoggedInUser.getInstance().getUser();
 
             Calendar calendar = Calendar.getInstance();
             Date currentDate = calendar.getTime();
-            Post newPost;
 
-            if (image.equals("null")) {
-                assert content != null;
-                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
-                        currentUser.getProfilePic(),currentDate,content,0,
-                        new ArrayList<>(),0,null,null);
-            } else {
-                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
-                        currentUser.getProfilePic(),currentDate,content,0,
-                        new ArrayList<>(),0,null,image);
-            }
+            Post newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
+                    currentUser.getProfilePic(), currentDate, content, 0,
+                    new ArrayList<>(), 0, null, image);
+
             postViewModel.add(newPost);
             adapter.addPost(newPost);
             adapter.notifyDataSetChanged();
@@ -201,5 +193,10 @@ public class Feed extends AppCompatActivity {
     }
     private void onLDisLikePost(String postId) {
         postViewModel.disLikePost(postId);
+    }
+    private void onLikeList(String postId) {
+        Intent intent = new Intent(getApplicationContext(), LikersListActivity.class);
+        intent.putExtra("postId", postId); // Assuming you have a postId variable
+        startActivity(intent);
     }
 }

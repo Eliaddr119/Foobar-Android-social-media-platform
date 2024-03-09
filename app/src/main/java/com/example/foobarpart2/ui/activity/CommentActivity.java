@@ -8,13 +8,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Comment;
+import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.ui.adapter.CommentAdapter;
 import com.example.foobarpart2.ui.viewmodels.CommentStorage;
+import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +30,9 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
     private RecyclerView commentsRecyclerView;
     private EditText newCommentEditText;
     private Button addCommentButton;
+    private PostsViewModel postViewModel;
+    private Post currentPost;
+
     //check
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +50,25 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         CommentAdapter commentAdapter = new CommentAdapter(commentsList, this);
         commentsRecyclerView.setAdapter(commentAdapter);
 
-        int postId = getIntent().getIntExtra("postId", -1); // Use a default value in case it's not found
+        int postId = getIntent().getIntExtra("postId", -1);
 
-        List<Comment> comments = CommentStorage.commentsMap.get(postId); // postId is the ID of the current post
-        commentsList.clear();
+        postViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        postViewModel.getPostFromDao(postId);
+        postViewModel.getPost().observe(this, post -> {
+            currentPost = post;
+            List<Comment> comments = currentPost.getComments(); // postId is the ID of the current post
+            commentsList.clear();
 
-        if (comments != null) {
-            commentsList.addAll(comments);
-        }
-        if (comments != null) {
-            // Update your RecyclerView adapter with these comments
-            commentAdapter.setComments(comments);
-            commentAdapter.notifyDataSetChanged();
-        }
+            if (comments != null) {
+                commentsList.addAll(comments);
+            }
+            if (comments != null) {
+                // Update your RecyclerView adapter with these comments
+                commentAdapter.setComments(comments);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
 
-        // Assume postId is passed via Intent
         String author = getIntent().getStringExtra("author") + ":";
         addCommentButton.setOnClickListener(view -> {
             String commentContent = newCommentEditText.getText().toString();
@@ -71,20 +81,24 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             Calendar calendar = Calendar.getInstance();
             Date currentDate = calendar.getTime();
 
-            Comment newComment = new Comment(postId, author, commentContent,currentDate);
+            Comment newComment = new Comment(currentPost.getPostId(),currentPost.get_id(),
+                    currentPost.getUsername(),author, commentContent, currentDate);
 
             // Update the Post object
-            /*Post postToUpdate = PostsManager.getInstance().findPostById(postId);
-            if (postToUpdate != null) {
-                postToUpdate.addComment(newComment);
-            }*/
+            if (currentPost != null) {
+                currentPost.addComment(newComment);
+            }
 
             // Refresh commentsList from CommentStorage
             commentsList.clear();
-            List<Comment> updatedComments = CommentStorage.commentsMap.get(postId);
+
+            assert currentPost != null;
+            List<Comment> updatedComments = currentPost.getComments();
             if (updatedComments != null) {
                 commentsList.addAll(updatedComments);
                 commentAdapter.setComments(updatedComments);
+
+                postViewModel.addComment(currentPost.get_id(),newComment);
             }
             commentAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
 

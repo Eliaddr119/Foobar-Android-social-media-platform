@@ -66,9 +66,9 @@ public class SignIn extends AppCompatActivity {
                 if (isSuccess) {
                     userViewModel.getLoggedInUser(username).observe(this,user -> {
                         LoggedInUser.getInstance().setUser(user);
+                        Intent i = new Intent(this, Feed.class);
+                        startActivity(i);
                     });
-                    Intent i = new Intent(this, Feed.class);
-                    startActivity(i);
                 } else {
                     Toast.makeText(this, "Failed to Sign In please try again later.."
                             , Toast.LENGTH_SHORT).show();

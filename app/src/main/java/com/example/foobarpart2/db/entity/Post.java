@@ -186,7 +186,6 @@ public class Post {
     public void addComment(Comment comment) {
         this.comments.add(comment);
         this.numComments++;
-        // CommentStorage.commentsMap.put(id, comments);
     }
 
     public void removeComment(Comment comment) {

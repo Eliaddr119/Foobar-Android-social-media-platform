@@ -3,6 +3,7 @@ package com.example.foobarpart2.ui.viewmodels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.repository.PostsRepository;
 
@@ -42,5 +43,9 @@ public class PostsViewModel extends ViewModel {
 
     public void disLikePost(String postId) {
         repository.disLikePost(postId);
+    }
+
+    public void addComment(String postId, Comment newComment) {
+        repository.addComment(postId,newComment);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.foobarpart2.network.api;
 
+import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
@@ -45,20 +46,33 @@ public interface WebServiceAPI {
      * Post Requests
      */
     @GET("posts")
-    Call<List<Post>> getPosts (@Header("Authorization") String token);
+    Call<List<Post>> getPosts(@Header("Authorization") String token);
+
     @GET("users/{id}/posts")
-    Call<List<Post>> getPosts(@Path("id") String username, @Header("Authorization") String token);
+    Call<List<Post>> getPosts(@Path("id") String username,
+                              @Header("Authorization") String token);
 
     @POST("users/{id}/posts")
-    Call<Void> createPost(@Path("id") String username, @Header("Authorization") String token, @Body Post post);
+    Call<Void> createPost(@Path("id") String username,
+                          @Header("Authorization") String token, @Body Post post);
 
     @PATCH("users/{id}/posts/{pid}")
-    Call<Post> editPost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token,  @Body PostEditRequest postEditRequest);
+    Call<Post> editPost(@Path("id") String username, @Path("pid") String _id,
+                        @Header("Authorization") String token, @Body PostEditRequest postEditRequest);
 
     @DELETE("users/{id}/posts/{pid}")
-    Call<Void> deletePost(@Path("id") String username, @Path("pid") String postId, @Header("Authorization") String token);
+    Call<Void> deletePost(@Path("id") String username, @Path("pid") String postId,
+                          @Header("Authorization") String token);
+
     @PATCH("users/{id}/posts/{pid}/like")
-    Call<Post> likePost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token);
+    Call<Post> likePost(@Path("id") String username, @Path("pid") String _id,
+                        @Header("Authorization") String token);
+
     @DELETE("users/{id}/posts/{pid}/like")
-    Call<Post> disLikePost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token);
+    Call<Post> disLikePost(@Path("id") String username, @Path("pid") String _id,
+                           @Header("Authorization") String token);
+
+    @POST("users/{id}/posts/{pid}/comment")
+    Call<Post> addComment(@Path("id") String username, @Path("pid") String _id,
+                          @Header("Authorization") String token, @Body Comment newComment);
 }

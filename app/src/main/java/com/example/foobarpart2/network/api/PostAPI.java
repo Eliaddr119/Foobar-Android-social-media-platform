@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.foobarpart2.MyApplication;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.dao.PostDao;
+import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.models.LoggedInUser;
@@ -121,14 +122,14 @@ public class PostAPI {
         User user = LoggedInUser.getInstance().getUser();
         PostEditRequest postEditRequest = new PostEditRequest(updatedContent, image);
         Call<Post> call = webServiceAPI.editPost(user.getUsername(), serverId, tokenRepository.get(),
-               postEditRequest);
+                postEditRequest);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to edit the post, try later :)"
                             , Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     new Thread(() -> dao.update(response.body())).start();
                 }
             }
@@ -143,14 +144,14 @@ public class PostAPI {
 
     public void likePost(String postId) {
         User user = LoggedInUser.getInstance().getUser();
-        Call<Post> call = webServiceAPI.likePost(user.getUsername(), postId,tokenRepository.get());
+        Call<Post> call = webServiceAPI.likePost(user.getUsername(), postId, tokenRepository.get());
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to like the post, try later :)"
                             , Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     new Thread(() -> dao.update(response.body())).start();
                 }
             }
@@ -166,14 +167,36 @@ public class PostAPI {
 
     public void disLikePost(String postId) {
         User user = LoggedInUser.getInstance().getUser();
-        Call<Post> call = webServiceAPI.disLikePost(user.getUsername(), postId,tokenRepository.get());
+        Call<Post> call = webServiceAPI.disLikePost(user.getUsername(), postId, tokenRepository.get());
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to like the post, try later :)"
                             , Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addComment(String postId, Comment newComment) {
+        User user = LoggedInUser.getInstance().getUser();
+        Call<Post> call = webServiceAPI.addComment(user.getUsername(), postId, tokenRepository.get(), newComment);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to add the comment, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
                     new Thread(() -> dao.update(response.body())).start();
                 }
             }

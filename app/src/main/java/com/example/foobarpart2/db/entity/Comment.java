@@ -14,15 +14,18 @@ public class Comment {
     private String id;
     @NonNull
     private String username;
+    private String displayName;
     @NonNull
     private String content;
     private Date timestamp;
 
-    public Comment(int postId, @NonNull String username, @NonNull String content, Date timestamp) {
+    public Comment(int postId, String id,@NonNull String username,String displayName, @NonNull String content, Date timestamp) {
         this.postId = postId;
+        this.id = id;
         this.username = username;
         this.content = content;
         this.timestamp = timestamp;
+        this.displayName = displayName;
     }
 
     public Comment(int postId, String id, @NonNull String username, @NonNull String content) {
@@ -79,5 +82,13 @@ public class Comment {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
