@@ -27,13 +27,15 @@
             android:gravity="start"
             android:layout_marginStart="10dp"
             android:layout_weight="1"/>
+
         <ImageButton
             android:id="@+id/postSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/postSettings"
+            android:layout_width="42dp"
+            android:layout_height="38dp"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_post_settings"/>
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_post_settings"
+            android:text="@string/postSettings" />
     </LinearLayout>
     
     <TextView
