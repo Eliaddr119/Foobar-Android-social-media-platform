@@ -14,8 +14,10 @@ public interface PostDao {
     @Query("SELECT * FROM post")
     List<Post> index();
 
-    @Query("SELECT * FROM post WHERE id = :id")
+    @Query("SELECT * FROM post WHERE postId = :id")
     Post get(int id);
+    @Query("SELECT * FROM post WHERE _id = :serverId")
+    Post get(String serverId);
 
     @Query("DELETE FROM post")
     void clear();

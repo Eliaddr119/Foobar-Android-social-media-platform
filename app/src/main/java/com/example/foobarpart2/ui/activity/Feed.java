@@ -3,6 +3,7 @@ package com.example.foobarpart2.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +25,11 @@ import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
 import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
+import com.example.foobarpart2.utilities.ImageUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -52,10 +56,10 @@ public class Feed extends AppCompatActivity {
 
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
-            intent.putExtra("postId", adapter.getPosts().get(position).getId());
+            intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
-        },this::onDeletePost);
+        },this::onDeletePost,this::onLikePost);
 
 
         btnSettings = findViewById(R.id.settings);
@@ -126,12 +130,13 @@ public class Feed extends AppCompatActivity {
 
     }
 
+
+
     private void logout() {
         userViewModel.logOutCurrUser();
         Intent intent = new Intent(this, SignIn.class);
         startActivity(intent);
         finish(); // Close current activity
-
     }
 
 
@@ -141,7 +146,18 @@ public class Feed extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_ADD_POST && resultCode == RESULT_OK) {
             // Extract post details from data, create a Post object
             String content = data.getStringExtra("content");
-            String image = data.getStringExtra("image");
+
+            String imageUriString = data.getStringExtra("image");
+            Uri imageUri = null;
+            if (!"null".equals(imageUriString)) {
+                imageUri = Uri.parse(imageUriString);
+            }
+            String image;
+            try {
+                image = ImageUtils.convertToBase64(imageUri);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             User currentUser = LoggedInUser.getInstance().getUser();
 
@@ -150,12 +166,14 @@ public class Feed extends AppCompatActivity {
             Post newPost;
 
             if (image.equals("null")) {
-                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName()
-                        ,currentDate,content, currentUser.getProfilePic(),null);
+                assert content != null;
+                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
+                        currentUser.getProfilePic(),currentDate,content,0,
+                        new ArrayList<>(),0,null,null);
             } else {
-
-                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName()
-                        ,currentDate,content, currentUser.getProfilePic(),image);
+                newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
+                        currentUser.getProfilePic(),currentDate,content,0,
+                        new ArrayList<>(),0,null,image);
             }
             postViewModel.add(newPost);
             adapter.addPost(newPost);
@@ -175,9 +193,10 @@ public class Feed extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
     }
-    public void onDeletePost(int postId) {
+    public void onDeletePost(String postId) {
         postViewModel.delete(postId);
     }
-
-
+    private void onLikePost(String postId) {
+        postViewModel.likePost(postId);
+    }
 }

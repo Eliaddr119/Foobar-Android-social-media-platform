@@ -17,7 +17,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foobarpart2.R;
-import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,11 +44,7 @@ public class CreatePostActivity extends AppCompatActivity {
         buttonSubmitPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     submitPost();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
         });
         btnUpic.setOnClickListener(v -> showImageSourceDialog());
@@ -147,7 +142,7 @@ public class CreatePostActivity extends AppCompatActivity {
         return imageFile.getAbsolutePath();
     }
 
-    private void submitPost() throws IOException {
+    private void submitPost() {
         String content = editTextPostContent.getText().toString().trim();
         if (!content.isEmpty()) {
 
@@ -155,8 +150,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
             returnIntent.putExtra("content", content);
             if (photoUri != null) {
-                String imageBase64 = ImageUtils.convertToBase64(photoUri);
-                returnIntent.putExtra("image", imageBase64);
+                returnIntent.putExtra("image", photoUri.toString());
             } else {
                 returnIntent.putExtra("image", "null");
             }

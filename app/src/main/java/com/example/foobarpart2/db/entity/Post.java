@@ -2,16 +2,17 @@ package com.example.foobarpart2.db.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Post {
+    private String _id;
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int postId;
     @NonNull
     private String username;
     private String displayName;
@@ -20,33 +21,56 @@ public class Post {
     private Date date;
     @NonNull
     private String content;
-    private int numlikes = 0;
-
-    private int commentsCount = 0;
-
-
-    private boolean isLiked = false;
+    private int numComments;
+    private List<Comment> comments;
+    private int numlikes;
+    private String[] likeby;
+    private boolean isLiked;
     private String image;
 
-    private List<Comment> comments = new ArrayList<>();
-
-    public Post(@NonNull String username, String displayName, @NonNull Date date, @NonNull String content, String profilePic, String image) {
+    public Post(@NonNull String username, String displayName, String profilePic, @NonNull Date date, @NonNull String content, int numComments, List<Comment> comments, int numlikes, String[] likeby, String image) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
         this.date = date;
         this.content = content;
+        this.numComments = numComments;
+        this.comments = comments;
+        this.numlikes = numlikes;
+        this.likeby = likeby;
+        this.isLiked = false;
         this.image = image;
-
+    }
+    @Ignore
+    public Post(String id, @NonNull String username, String displayName, String profilePic, @NonNull Date date, @NonNull String content, int numComments, List<Comment> comments, int numlikes, String[] likeby, String image) {
+        this._id = id;
+        this.username = username;
+        this.displayName = displayName;
+        this.profilePic = profilePic;
+        this.date = date;
+        this.content = content;
+        this.numComments = numComments;
+        this.comments = comments;
+        this.numlikes = numlikes;
+        this.likeby = likeby;
+        this.isLiked = false;
+        this.image = image;
     }
 
-
-    public int getId() {
-        return this.id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public int getPostId() {
+        return this.postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     @NonNull
@@ -70,7 +94,7 @@ public class Post {
         return profilePic;
     }
 
-    public void setProfile(String profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 
@@ -83,12 +107,21 @@ public class Post {
         this.date = date;
     }
 
+    @NonNull
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(@NonNull String content) {
         this.content = content;
+    }
+
+    public int getNumComments() {
+        return numComments;
+    }
+
+    public void setNumComments(int numComments) {
+        this.numComments = numComments;
     }
 
     public int getNumlikes() {
@@ -108,20 +141,33 @@ public class Post {
     }
 
     public int getCommentsCount() {
-        return commentsCount;
+        return numComments;
     }
 
     public void setCommentsCount(int commentsCount) {
-        this.commentsCount = commentsCount;
+        this.numComments = commentsCount;
     }
 
     public void setLiked(boolean liked) {
         isLiked = liked;
     }
 
+    public String[] getLikeby() {
+        return likeby;
+    }
+
+    public void setLikeby(String[] likeby) {
+        this.likeby = likeby;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
 
     public boolean isLiked() {
         return isLiked;
@@ -139,18 +185,12 @@ public class Post {
     // Method to add a comment to the post
     public void addComment(Comment comment) {
         this.comments.add(comment);
-        this.commentsCount++;
+        this.numComments++;
         // CommentStorage.commentsMap.put(id, comments);
     }
 
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
-        this.commentsCount--;
+        this.numComments--;
     }
-
-    // Getter for the comments list
-    public List<Comment> getComments() {
-        return comments;
-    }
-
 }

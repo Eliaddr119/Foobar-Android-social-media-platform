@@ -37,7 +37,7 @@ public class PostsRepository {
         api.add(post);
     }
 
-    public void delete(int postId) {
+    public void delete(String postId) {
         api.delete(postId);
     }
 
@@ -52,8 +52,12 @@ public class PostsRepository {
         return this.postMutableLiveData;
     }
 
-    public void edit(int postId, String updatedContent, String image) {
-        api.edit(postId,updatedContent,image);
+    public void edit(String serverId, String updatedContent, String image) {
+        api.edit(serverId,updatedContent,image);
+    }
+
+    public void likePost(String postId) {
+        api.likePost(postId);
     }
 
     class PostListData extends MutableLiveData<List<Post>> {

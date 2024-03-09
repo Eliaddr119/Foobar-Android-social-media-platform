@@ -4,22 +4,27 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity
 public class User {
     @PrimaryKey
     @NonNull
     private final String username;
     private final String password;
-    private final String displayName;
+    private String displayName;
     private final String profilePic;
+    private List<String> friends;
+    private List<String> friendsRequest;
 
-
-
-    public User(@NonNull String username, String password, String displayName, String profilePic) {
+    public User(@NonNull String username, String password, String displayName, String profilePic,
+                List<String> friends, List<String> friendsRequest) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
         this.profilePic = profilePic;
+        this.friends = friends;
+        this.friendsRequest = friendsRequest;
     }
 
     @NonNull
@@ -37,5 +42,25 @@ public class User {
 
     public String getProfilePic() {
         return profilePic;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public List<String> getFriendsRequest() {
+        return friendsRequest;
+    }
+
+    public void setFriendsRequest(List<String> friendsRequest) {
+        this.friendsRequest = friendsRequest;
     }
 }

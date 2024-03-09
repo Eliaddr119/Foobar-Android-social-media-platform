@@ -53,8 +53,10 @@ public interface WebServiceAPI {
     Call<Void> createPost(@Path("id") String username, @Header("Authorization") String token, @Body Post post);
 
     @PATCH("users/{id}/posts/{pid}")
-    Call<Post> editPost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token,  @Body PostEditRequest postEditRequest);
+    Call<Post> editPost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token,  @Body PostEditRequest postEditRequest);
 
     @DELETE("users/{id}/posts/{pid}")
-    Call<Void> deletePost(@Path("id") String username, @Path("pid") int postId, @Header("Authorization") String token);
+    Call<Void> deletePost(@Path("id") String username, @Path("pid") String postId, @Header("Authorization") String token);
+    @PATCH("users/{id}/posts/{pid}")
+    Call<Post> likePost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token);
 }

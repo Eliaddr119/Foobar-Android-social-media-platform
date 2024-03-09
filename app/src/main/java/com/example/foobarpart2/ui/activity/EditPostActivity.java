@@ -31,8 +31,10 @@ public class EditPostActivity extends AppCompatActivity {
     private Button btnEditP;
     private Button btnSave;
     private ImageView photo;
-    Uri photoUri;
+    private Uri photoUri;
+    private  String image;
     private int postId;
+    private String serverId;
     private Post editedPost;
     private static final int GALLERY_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -56,7 +58,9 @@ public class EditPostActivity extends AppCompatActivity {
 
         postViewModel.getPostFromDao(postId);
         postViewModel.getPost().observe(this, post -> {
-            Bitmap photoS = ImageUtils.decodeBase64ToBitmap(post.getImage());
+            image = post.getImage();
+            serverId = post.get_id();
+            Bitmap photoS = ImageUtils.decodeBase64ToBitmap(image);
             photo.setImageBitmap(photoS);
         });
 
@@ -65,7 +69,10 @@ public class EditPostActivity extends AppCompatActivity {
             String updatedContent = editTextContent.getText().toString();
 
             try {
-                postViewModel.edit(postId, updatedContent, ImageUtils.convertToBase64(photoUri));
+                if (photoUri != null){
+                    image = ImageUtils.convertToBase64(photoUri);
+                }
+                postViewModel.edit(serverId, updatedContent, image);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

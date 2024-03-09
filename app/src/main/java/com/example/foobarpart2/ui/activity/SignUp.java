@@ -26,6 +26,7 @@ import com.example.foobarpart2.utilities.ImageUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import kotlin.text.Regex;
 
@@ -93,7 +94,7 @@ public class SignUp extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                user = new User(username, password, displayName, imageBase64);
+                user = new User(username, password, displayName, imageBase64,new ArrayList<>(),new ArrayList<>());
                 UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
                 userViewModel.add(user);
                 userViewModel.getSignUpResult().observe(this, isSuccess -> {

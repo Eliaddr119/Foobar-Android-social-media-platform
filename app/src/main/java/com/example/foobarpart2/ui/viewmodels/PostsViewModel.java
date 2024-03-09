@@ -21,7 +21,7 @@ public class PostsViewModel extends ViewModel {
     }
     public LiveData<List<Post>> get() { return posts; }
     public void add(Post post) { repository.add(post); }
-    public void delete(int postId) { repository.delete(postId); }
+    public void delete(String postId) { repository.delete(postId); }
     public void reload() { repository.reload(); }
 
     public void getPostFromDao(int postId) {
@@ -32,7 +32,11 @@ public class PostsViewModel extends ViewModel {
         return post;
     }
 
-    public void edit(int postId, String updatedContent, String image) {
-        repository.edit(postId,updatedContent,image);
+    public void edit(String serverId, String updatedContent, String image) {
+        repository.edit(serverId,updatedContent,image);
+    }
+
+    public void likePost(String postId) {
+        repository.likePost(postId);
     }
 }

@@ -13,6 +13,8 @@ import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.network.request.PostEditRequest;
 import com.example.foobarpart2.repository.TokenRepository;
 import com.example.foobarpart2.repository.UsersRepository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -33,10 +35,12 @@ public class PostAPI {
     public PostAPI(MutableLiveData<List<Post>> postListData, PostDao dao) {
         this.postListData = postListData;
         this.dao = dao;
-
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ") // Server's date format
+                .create();
         retrofit = new Retrofit.Builder()
                 .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
         tokenRepository = new TokenRepository();
@@ -88,7 +92,7 @@ public class PostAPI {
         });
     }
 
-    public void delete(int postId) {
+    public void delete(String postId) {
         User user = LoggedInUser.getInstance().getUser();
         Call<Void> call = webServiceAPI.deletePost(user.getUsername(), postId, tokenRepository.get());
         call.enqueue(new Callback<Void>() {
@@ -113,10 +117,10 @@ public class PostAPI {
         });
     }
 
-    public void edit(int postId, String updatedContent, String image) {
+    public void edit(String serverId, String updatedContent, String image) {
         User user = LoggedInUser.getInstance().getUser();
         PostEditRequest postEditRequest = new PostEditRequest(updatedContent, image);
-        Call<Post> call = webServiceAPI.editPost(user.getUsername(), postId, tokenRepository.get(),
+        Call<Post> call = webServiceAPI.editPost(user.getUsername(), serverId, tokenRepository.get(),
                postEditRequest);
         call.enqueue(new Callback<Post>() {
             @Override
@@ -135,5 +139,28 @@ public class PostAPI {
                         , Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void likePost(String postId) {
+        User user = LoggedInUser.getInstance().getUser();
+        Call<Post> call = webServiceAPI.likePost(user.getUsername(), postId,tokenRepository.get());
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()){
+                    Toast.makeText(MyApplication.context, "Unable to like the post, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
