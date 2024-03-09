@@ -39,4 +39,8 @@ public class PostsViewModel extends ViewModel {
     public void likePost(String postId) {
         repository.likePost(postId);
     }
+
+    public void disLikePost(String postId) {
+        repository.disLikePost(postId);
+    }
 }

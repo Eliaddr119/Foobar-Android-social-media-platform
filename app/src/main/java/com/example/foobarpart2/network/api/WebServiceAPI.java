@@ -57,6 +57,8 @@ public interface WebServiceAPI {
 
     @DELETE("users/{id}/posts/{pid}")
     Call<Void> deletePost(@Path("id") String username, @Path("pid") String postId, @Header("Authorization") String token);
-    @PATCH("users/{id}/posts/{pid}")
+    @PATCH("users/{id}/posts/{pid}/like")
     Call<Post> likePost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token);
+    @DELETE("users/{id}/posts/{pid}/like")
+    Call<Post> disLikePost(@Path("id") String username, @Path("pid") String _id, @Header("Authorization") String token);
 }

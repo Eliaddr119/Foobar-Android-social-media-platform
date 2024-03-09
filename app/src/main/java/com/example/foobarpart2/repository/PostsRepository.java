@@ -60,6 +60,10 @@ public class PostsRepository {
         api.likePost(postId);
     }
 
+    public void disLikePost(String postId) {
+        api.disLikePost(postId);
+    }
+
     class PostListData extends MutableLiveData<List<Post>> {
 
         public PostListData() {

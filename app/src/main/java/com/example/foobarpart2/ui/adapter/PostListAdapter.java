@@ -31,6 +31,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public interface PostLikeListener{
         void onLikePost(String postId);
     }
+    public interface PostDisLikeListener{
+        void onDisLikePost(String postId);
+    }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvAuthor;
@@ -90,17 +93,19 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     private Activity activity;
     private PostActionListener listener;
     private PostLikeListener likeListener;
+    private PostDisLikeListener disLikeListener;
 
     private OnCommentButtonClickListener commentButtonClickListener;
 
     public PostListAdapter(Activity activity, Context context,
                            OnCommentButtonClickListener commentButtonClickListener,
-                           PostActionListener listener, PostLikeListener postLikeListener) {
+                           PostActionListener listener, PostLikeListener postLikeListener,PostDisLikeListener disLikeListener) {
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = commentButtonClickListener;
         this.listener = listener;
         this.likeListener = postLikeListener;
+        this.disLikeListener = disLikeListener;
         this.posts = new ArrayList<>();
     }
 
@@ -139,10 +144,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 // Update like button icon based on like status
                 if (current.isLiked()) {
                     holder.btnLike.setImageResource(R.drawable.ic_liked);
+                    likeListener.onLikePost(posts.get(position).get_id());
                 } else {
                     holder.btnLike.setImageResource(R.drawable.ic_like);
+                    disLikeListener.onDisLikePost(posts.get(position).get_id());
                 }
-                likeListener.onLikePost(posts.get(position).get_id());
             });
             holder.btnShare.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.btnShare);

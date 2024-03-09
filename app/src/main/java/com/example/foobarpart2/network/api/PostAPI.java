@@ -163,4 +163,26 @@ public class PostAPI {
         });
 
     }
+
+    public void disLikePost(String postId) {
+        User user = LoggedInUser.getInstance().getUser();
+        Call<Post> call = webServiceAPI.disLikePost(user.getUsername(), postId,tokenRepository.get());
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()){
+                    Toast.makeText(MyApplication.context, "Unable to like the post, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
