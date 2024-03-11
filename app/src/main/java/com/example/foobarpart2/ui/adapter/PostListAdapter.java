@@ -34,9 +34,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public interface PostDisLikeListener{
         void onDisLikePost(String postId);
     }
-    public interface LikeListListener{
-        void onLikeList(String postId);
-    }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvAuthor;
@@ -48,7 +45,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final ImageButton btnShare;
         private final TextView numOfLikes;
         private final TextView numOfComments;
-        private final TextView tvLikes;
         private final ImageButton postSettingsBtn;
 
 
@@ -64,7 +60,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
             postSettingsBtn = itemView.findViewById(R.id.postSettings);
-            tvLikes = itemView.findViewById(R.id.tvLikes);
 
             btnLike.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -99,20 +94,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     private PostActionListener listener;
     private PostLikeListener likeListener;
     private PostDisLikeListener disLikeListener;
-    private LikeListListener likeListListener;
 
     private OnCommentButtonClickListener commentButtonClickListener;
 
     public PostListAdapter(Activity activity, Context context,
                            OnCommentButtonClickListener commentButtonClickListener,
-                           PostActionListener listener, PostLikeListener postLikeListener,PostDisLikeListener disLikeListener,LikeListListener likeListListener) {
+                           PostActionListener listener, PostLikeListener postLikeListener,PostDisLikeListener disLikeListener) {
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = commentButtonClickListener;
         this.listener = listener;
         this.likeListener = postLikeListener;
         this.disLikeListener = disLikeListener;
-        this.likeListListener = likeListListener;
         this.posts = new ArrayList<>();
     }
 
@@ -162,10 +155,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 PopupMenu popup = new PopupMenu(mInflater.getContext(), holder.btnShare);
                 popup.inflate(R.menu.share_menu);
                 popup.show();
-            });
-
-            holder.tvLikes.setOnClickListener(v -> {
-                likeListener.onLikePost(posts.get(position).get_id());
             });
 
             holder.postSettingsBtn.setOnClickListener(v -> {

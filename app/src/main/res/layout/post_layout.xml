@@ -81,9 +81,7 @@
             android:layout_weight="0.4"
             android:background="@android:color/transparent"
             android:text="@string/likes_string"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@color/black"
         />
         <TextView
             android:id="@+id/num_of_comments"

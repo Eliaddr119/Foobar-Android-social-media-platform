@@ -59,7 +59,7 @@ public class Feed extends AppCompatActivity {
             intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
             intent.putExtra("author", user.getDisplayName());
             startActivity(intent);
-        },this::onDeletePost,this::onLikePost,this::onLDisLikePost,this::onLikeList);
+        },this::onDeletePost,this::onLikePost,this::onDisLikePost);
 
 
         btnSettings = findViewById(R.id.settings);
@@ -191,12 +191,7 @@ public class Feed extends AppCompatActivity {
     private void onLikePost(String postId) {
         postViewModel.likePost(postId);
     }
-    private void onLDisLikePost(String postId) {
+    private void onDisLikePost(String postId) {
         postViewModel.disLikePost(postId);
-    }
-    private void onLikeList(String postId) {
-        Intent intent = new Intent(getApplicationContext(), LikersListActivity.class);
-        intent.putExtra("postId", postId); // Assuming you have a postId variable
-        startActivity(intent);
     }
 }
