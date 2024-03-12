@@ -65,7 +65,8 @@ public class Feed extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //btnSettings = findViewById(R.id.settings);
+        //btnSettings = findViewById(R.id.sett);
+
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));

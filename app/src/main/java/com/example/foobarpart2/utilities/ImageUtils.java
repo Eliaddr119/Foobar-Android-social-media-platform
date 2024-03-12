@@ -21,6 +21,11 @@ public class ImageUtils {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
     public static Bitmap decodeBase64ToBitmap(String base64String) {
+        // Check if the base64 string contains the metadata prefix
+        if (base64String.startsWith("data:image")) {
+            // Strip off the metadata part (e.g., "data:image/png;base64,")
+            base64String = base64String.replaceFirst("^data:image/[a-zA-Z]+;base64,", "");
+        }
         byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
