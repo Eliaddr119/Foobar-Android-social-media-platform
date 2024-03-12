@@ -65,8 +65,6 @@ public class Feed extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //btnSettings = findViewById(R.id.sett);
-
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
@@ -81,52 +79,6 @@ public class Feed extends AppCompatActivity {
             refreshLayout.setRefreshing(false);
         });
 
-        /*FloatingActionButton fab = findViewById(R.id.btnAdd);
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CreatePostActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_ADD_POST);
-        });*/
-
-
-       /* btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(Feed.this, btnSettings);
-                popup.getMenuInflater().inflate(R.menu.menu_settings, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.menu_logout) {
-                            logout();
-                            Toast.makeText(Feed.this, "Logout clicked",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (item.getItemId() == R.id.menu_dark_mode) {
-                            SharedPreferences sharedPreferences = getSharedPreferences("Mode",
-                                    Context.MODE_PRIVATE);
-                            boolean nightMode = sharedPreferences.getBoolean("nightMode",
-                                    false);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            if (nightMode) {
-                                AppCompatDelegate.
-                                        setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                                editor.putBoolean("nightMode", false);
-                            } else {
-                                AppCompatDelegate.
-                                        setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                                editor.putBoolean("nightMode", true);
-                            }
-                            editor.apply(); // Apply changes to SharedPreferences
-                            Toast.makeText(Feed.this, "Dark Mode clicked",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
-            }
-        });*/
 
     }
 

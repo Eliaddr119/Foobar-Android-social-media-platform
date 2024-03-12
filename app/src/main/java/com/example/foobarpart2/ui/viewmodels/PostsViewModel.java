@@ -17,17 +17,28 @@ public class PostsViewModel extends ViewModel {
     private LiveData<Post> post;
 
 
-
     public PostsViewModel() {
         repository = new PostsRepository();
         posts = repository.getAll();
         post = repository.getPostData();
         wallPosts = repository.getWallPostsData();
     }
-    public LiveData<List<Post>> get() { return posts; }
-    public void add(Post post) { repository.add(post); }
-    public void delete(String postId) { repository.delete(postId); }
-    public void reload() { repository.reload(); }
+
+    public LiveData<List<Post>> get() {
+        return posts;
+    }
+
+    public void add(Post post) {
+        repository.add(post);
+    }
+
+    public void delete(String postId) {
+        repository.delete(postId);
+    }
+
+    public void reload() {
+        repository.reload();
+    }
 
     public void getPostFromDao(int postId) {
         repository.getPostFromDao(postId);
@@ -38,7 +49,7 @@ public class PostsViewModel extends ViewModel {
     }
 
     public void edit(String serverId, String updatedContent, String image) {
-        repository.edit(serverId,updatedContent,image);
+        repository.edit(serverId, updatedContent, image);
     }
 
     public void likePost(String postId) {
@@ -50,7 +61,7 @@ public class PostsViewModel extends ViewModel {
     }
 
     public void addComment(String postId, Comment newComment) {
-        repository.addComment(postId,newComment);
+        repository.addComment(postId, newComment);
     }
 
     public LiveData<List<Post>> getPostsForWall() {

@@ -18,6 +18,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.activity.EditPostActivity;
 import com.example.foobarpart2.ui.activity.WallActivity;
+import com.example.foobarpart2.utilities.DateUtil;
 import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         private final TextView numOfLikes;
         private final TextView numOfComments;
         private final ImageButton postSettingsBtn;
+        private final TextView uploadTime;
 
 
         private PostViewHolder(View itemView) {
@@ -65,6 +67,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             numOfLikes = itemView.findViewById(R.id.num_of_likes);
             numOfComments = itemView.findViewById(R.id.num_of_comments);
             postSettingsBtn = itemView.findViewById(R.id.postSettings);
+            uploadTime = itemView.findViewById(R.id.tvUploadTime);
 
             btnLike.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -125,6 +128,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
         if (posts != null) {
             final Post current = posts.get(position);
             holder.tvAuthor.setText(current.getDisplayName());
+            holder.uploadTime.setText(DateUtil.formatDateString(current.getDate().toString()));
             holder.tvContent.setText(current.getContent());
 
             if (current.getImage() != null) {
@@ -191,7 +195,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                     // Show the popup menu
                     popup.show();
                 });
-            }else {
+            } else {
                 holder.postSettingsBtn.setVisibility(View.GONE);
             }
 
