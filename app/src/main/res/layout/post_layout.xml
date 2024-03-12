@@ -33,6 +33,7 @@
             android:textSize="25dp"/>
 
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/postSettings"
             android:layout_width="42dp"
             android:layout_height="38dp"

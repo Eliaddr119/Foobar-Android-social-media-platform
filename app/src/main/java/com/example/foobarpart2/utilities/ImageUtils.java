@@ -15,10 +15,10 @@ public class ImageUtils {
     public static String convertToBase64(Uri imageUri) throws IOException {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(MyApplication.context.getContentResolver(), imageUri);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
         byte[] byteArray = outputStream.toByteArray();
 
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return "data:image/png;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
     public static Bitmap decodeBase64ToBitmap(String base64String) {
         // Check if the base64 string contains the metadata prefix

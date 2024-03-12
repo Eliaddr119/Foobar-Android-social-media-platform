@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.activity.EditPostActivity;
 import com.example.foobarpart2.ui.activity.WallActivity;
 import com.example.foobarpart2.utilities.ImageUtils;
@@ -26,13 +27,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
     public interface OnCommentButtonClickListener {
         void onCommentButtonClicked(int position);
     }
+
     public interface PostActionListener {
         void onDeletePost(String postId);
     }
-    public interface PostLikeListener{
+
+    public interface PostLikeListener {
         void onLikePost(String postId);
     }
-    public interface PostDisLikeListener{
+
+    public interface PostDisLikeListener {
         void onDisLikePost(String postId);
     }
 
@@ -100,7 +104,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
 
     public PostListAdapter(Activity activity, Context context,
                            OnCommentButtonClickListener commentButtonClickListener,
-                           PostActionListener listener, PostLikeListener postLikeListener,PostDisLikeListener disLikeListener) {
+                           PostActionListener listener, PostLikeListener postLikeListener, PostDisLikeListener disLikeListener) {
         this.activity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.commentButtonClickListener = commentButtonClickListener;
@@ -126,7 +130,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             if (current.getImage() != null) {
                 holder.ivPic.setVisibility(View.VISIBLE);
                 holder.ivPic.setImageBitmap(ImageUtils.decodeBase64ToBitmap(current.getImage()));
-            }else {
+            } else {
                 holder.ivPic.setVisibility(View.GONE);
             }
             if (current.getProfilePic() != null) {
@@ -158,32 +162,39 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 popup.show();
             });
 
-            holder.postSettingsBtn.setOnClickListener(v -> {
-                PopupMenu popup = new PopupMenu(activity, holder.postSettingsBtn);
-                popup.inflate(R.menu.post_options_menu);
-                popup.setOnMenuItemClickListener(item -> {
-                    int itemId = item.getItemId();
-                    if (itemId == R.id.action_edit_post) {
-                        // Start EditPostActivity
-                        Intent intent = new Intent(activity, EditPostActivity.class);
-                        intent.putExtra("postId", posts.get(position).getPostId());
-                        intent.putExtra("content", posts.get(position).getContent());
-                        activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
-                        return true;
-                    }
-                    if (itemId == R.id.action_delete_post) {
-                        if (position != RecyclerView.NO_POSITION) {
-                            Post postToDelete = posts.get(position);
-                            listener.onDeletePost(postToDelete.get_id());
-                            removeAt(position);
+
+            if (current.getUsername().equals(LoggedInUser.getInstance().getUser().getUsername())) {
+                holder.postSettingsBtn.setVisibility(View.VISIBLE);
+                holder.postSettingsBtn.setOnClickListener(v -> {
+                    PopupMenu popup = new PopupMenu(activity, holder.postSettingsBtn);
+                    popup.inflate(R.menu.post_options_menu);
+                    popup.setOnMenuItemClickListener(item -> {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.action_edit_post) {
+                            // Start EditPostActivity
+                            Intent intent = new Intent(activity, EditPostActivity.class);
+                            intent.putExtra("postId", posts.get(position).getPostId());
+                            intent.putExtra("content", posts.get(position).getContent());
+                            activity.startActivityForResult(intent, REQUEST_CODE_EDIT_POST);
+                            return true;
                         }
-                        return true;
-                    }
-                    return false;
+                        if (itemId == R.id.action_delete_post) {
+                            if (position != RecyclerView.NO_POSITION) {
+                                Post postToDelete = posts.get(position);
+                                listener.onDeletePost(postToDelete.get_id());
+                                removeAt(position);
+                            }
+                            return true;
+                        }
+                        return false;
+                    });
+                    // Show the popup menu
+                    popup.show();
                 });
-                // Show the popup menu
-                popup.show();
-            });
+            }else {
+                holder.postSettingsBtn.setVisibility(View.GONE);
+            }
+
             holder.tvAuthor.setOnClickListener(v -> {
                 Intent intent = new Intent(activity, WallActivity.class);
                 intent.putExtra("friendUserName", posts.get(position).getUsername());
