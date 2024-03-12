@@ -26,6 +26,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostAPI {
+    private final MutableLiveData<List<Post>> wallPostData;
     private MutableLiveData<List<Post>> postListData;
     private PostDao dao;
     private Retrofit retrofit;
@@ -33,8 +34,9 @@ public class PostAPI {
     private TokenRepository tokenRepository;
     private UsersRepository usersRepository;
 
-    public PostAPI(MutableLiveData<List<Post>> postListData, PostDao dao) {
+    public PostAPI(MutableLiveData<List<Post>> postListData, PostDao dao, MutableLiveData<List<Post>> wallPostData) {
         this.postListData = postListData;
+        this.wallPostData = wallPostData;
         this.dao = dao;
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ") // Server's date format
@@ -49,8 +51,6 @@ public class PostAPI {
     }
 
     public void get() {
-
-
         Call<List<Post>> call = webServiceAPI.getPosts(tokenRepository.get());
         call.enqueue(new Callback<List<Post>>() {
             @Override
@@ -65,6 +65,33 @@ public class PostAPI {
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getWallPosts(User wallUser) {
+        Call<List<Post>> call = webServiceAPI.getPostsFriend(wallUser.getUsername(), tokenRepository.get());
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to load the posts, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> {
+                        dao.clear();
+                        dao.insert(response.body().toArray(new Post[0]));
+                        wallPostData.postValue(dao.getWallPosts(wallUser.getUsername()));
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -208,4 +235,6 @@ public class PostAPI {
             }
         });
     }
+
+
 }

@@ -19,8 +19,10 @@ public class UserViewModel extends ViewModel {
         userLiveData = repository.getUserData();
     }
 
-    public LiveData<User> getUser(String username) {
+    public void getUser(String username) {
         repository.get(username);
+    }
+    public LiveData<User> getUserLiveData(){
         return userLiveData;
     }
     public LiveData<User> getLoggedInUser(String username) {
@@ -57,4 +59,19 @@ public class UserViewModel extends ViewModel {
     }
 
 
+    public boolean isFriendsWith(User wallUser) {
+        return repository.isFriendsWith(wallUser);
+    }
+
+    public void addFriend(User wallUser) {
+        repository.addFriend(wallUser);
+    }
+
+    public void acceptFriendRequest(String username) {
+        repository.acceptFriendRequest(username);
+    }
+
+    public void declineFriendRequest(String username) {
+        repository.declineFriendRequest(username);
+    }
 }

@@ -11,6 +11,8 @@ import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.network.api.UserAPI;
 
+import java.util.List;
+
 public class UsersRepository {
     private UserDao dao;
     private MutableLiveData<Boolean> signUpResult = new MutableLiveData<>();
@@ -37,9 +39,9 @@ public class UsersRepository {
         api.delete(user);
         dao.delete(user);
     }
-    public LiveData<User> get(String username){
+
+    public void get(String username) {
         api.getUser(username);
-        return userData;
     }
 
 
@@ -65,8 +67,27 @@ public class UsersRepository {
     }
 
     public void logOutCurrUser() {
-        new Thread(()-> dao.deleteAllUsers());
+        new Thread(() -> dao.deleteAllUsers());
         LoggedInUser.getInstance().setUser(null);
+    }
+
+    public boolean isFriendsWith(User wallUser) {
+        User loggedInUser = LoggedInUser.getInstance().getUser();
+        List<String> friendsUsernames = loggedInUser.getFriends();
+        // Check if the list is not null and contains the username
+        return (friendsUsernames != null) && friendsUsernames.contains(wallUser.getUsername());
+    }
+
+    public void addFriend(User wallUser) {
+        api.addFriend(wallUser);
+    }
+
+    public void acceptFriendRequest(String username) {
+        api.acceptFriendRequest(username);
+    }
+
+    public void declineFriendRequest(String username) {
+        api.declineFriendRequest(username);
     }
 }
 

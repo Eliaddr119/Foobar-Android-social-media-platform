@@ -75,4 +75,13 @@ public interface WebServiceAPI {
     @POST("users/{id}/posts/{pid}/comment")
     Call<Post> addComment(@Path("id") String username, @Path("pid") String _id,
                           @Header("Authorization") String token, @Body Comment newComment);
+    @GET("users/{id}/posts")
+    Call<List<Post>> getPostsFriend(@Path("id") String username, @Header("Authorization") String token);
+
+    @POST("users/{id}/friends")
+    Call<Void> addFriend(@Path("id")String friendUserName, @Header("Authorization") String token);
+    @PATCH("users/{id}/friends/{fid}")
+    Call<Void> acceptFriendRequest(@Path("id")String loggedInUserName,@Path("fid") String friendUserName,@Header("Authorization") String token);
+    @DELETE("users/{id}/friends/{fid}")
+    Call<Void> declineFriendRequest(@Path("id")String loggedInUserName,@Path("fid") String friendUserName,@Header("Authorization") String token);
 }

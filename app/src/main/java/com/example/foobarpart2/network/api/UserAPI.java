@@ -9,6 +9,7 @@ import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.dao.UserDao;
 import com.example.foobarpart2.db.entity.Token;
 import com.example.foobarpart2.db.entity.User;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.network.request.LoginRequest;
 import com.example.foobarpart2.repository.TokenRepository;
 
@@ -116,7 +117,7 @@ public class UserAPI {
                             , Toast.LENGTH_SHORT).show();
                 } else {
                     new Thread(() -> dao.insert(response.body())).start();
-                    userData.setValue(response.body());
+                    userData.postValue(response.body());
                 }
             }
 
@@ -129,4 +130,73 @@ public class UserAPI {
     }
 
 
+    public void addFriend(User wallUser) {
+        Call<Void> call = webServiceAPI.addFriend(wallUser.getUsername(), tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to add the friend try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "friend request sent successfully"
+                            , Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void acceptFriendRequest(String username) {
+        User loggedInUser = LoggedInUser.getInstance().getUser();
+        Call<Void> call = webServiceAPI.acceptFriendRequest(loggedInUser.getUsername(),username,
+                tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to accept the friend request try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "friend accepted"
+                            , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void declineFriendRequest(String username) {
+        User loggedInUser = LoggedInUser.getInstance().getUser();
+        Call<Void> call = webServiceAPI.declineFriendRequest(loggedInUser.getUsername(),username,
+                tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to decline the friend request try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "friend request declined"
+                            , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

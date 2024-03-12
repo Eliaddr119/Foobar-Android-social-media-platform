@@ -5,14 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.LiveData;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.adapter.PostListAdapter;
+import com.example.foobarpart2.ui.fragment.FriendRequestListFragment;
 import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
 import com.example.foobarpart2.ui.viewmodels.UserViewModel;
 import com.example.foobarpart2.utilities.ImageUtils;
@@ -32,7 +35,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Feed extends AppCompatActivity {
 
@@ -40,7 +42,6 @@ public class Feed extends AppCompatActivity {
     private static final int REQUEST_CODE_EDIT_POST = 200;
 
     PostListAdapter adapter;
-    LiveData<List<Post>> posts;
     FloatingActionButton btnSettings;
     private PostsViewModel postViewModel;
     private UserViewModel userViewModel;
@@ -52,17 +53,19 @@ public class Feed extends AppCompatActivity {
 
         postViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        User user = LoggedInUser.getInstance().getUser();
+        User loggedInUser = LoggedInUser.getInstance().getUser();
 
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
             intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
-            intent.putExtra("author", user.getDisplayName());
+            intent.putExtra("author", loggedInUser.getDisplayName());
             startActivity(intent);
         },this::onDeletePost,this::onLikePost,this::onDisLikePost);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        btnSettings = findViewById(R.id.settings);
+        //btnSettings = findViewById(R.id.settings);
         RecyclerView lstPosts = findViewById(R.id.lstPosts);
         lstPosts.setAdapter(adapter);
         lstPosts.setLayoutManager(new LinearLayoutManager(this));
@@ -77,18 +80,14 @@ public class Feed extends AppCompatActivity {
             refreshLayout.setRefreshing(false);
         });
 
-
-        //loadPostsFromJson();
-
-
-        FloatingActionButton fab = findViewById(R.id.btnAdd);
+        /*FloatingActionButton fab = findViewById(R.id.btnAdd);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ADD_POST);
-        });
+        });*/
 
 
-        btnSettings.setOnClickListener(new View.OnClickListener() {
+       /* btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(Feed.this, btnSettings);
@@ -126,11 +125,83 @@ public class Feed extends AppCompatActivity {
                 });
                 popup.show();
             }
-        });
+        });*/
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.action_add) {
+            onAddButton();
+        } else if (id == R.id.action_settings) {
+            onSettingsButton();
+        } else if (id == R.id.action_friend_requests) {
+            onFriendRequestButton();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void onFriendRequestButton() {
+        FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
+        fragmentContainer.setVisibility(View.VISIBLE); // Make the container visible
+
+        FriendRequestListFragment fragment = new FriendRequestListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void onAddButton() {
+        Intent intent = new Intent(this, CreatePostActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_ADD_POST);
+    }
+
+    private void onSettingsButton() {
+        PopupMenu popup = new PopupMenu(Feed.this, btnSettings);
+        popup.getMenuInflater().inflate(R.menu.menu_settings, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_logout) {
+                    logout();
+                    Toast.makeText(Feed.this, "Logout clicked",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (item.getItemId() == R.id.menu_dark_mode) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("Mode",
+                            Context.MODE_PRIVATE);
+                    boolean nightMode = sharedPreferences.getBoolean("nightMode",
+                            false);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if (nightMode) {
+                        AppCompatDelegate.
+                                setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        editor.putBoolean("nightMode", false);
+                    } else {
+                        AppCompatDelegate.
+                                setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        editor.putBoolean("nightMode", true);
+                    }
+                    editor.apply(); // Apply changes to SharedPreferences
+                    Toast.makeText(Feed.this, "Dark Mode clicked",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        popup.show();
+    }
 
     private void logout() {
         userViewModel.logOutCurrUser();

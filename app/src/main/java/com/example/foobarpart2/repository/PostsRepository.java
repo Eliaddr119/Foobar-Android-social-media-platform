@@ -9,6 +9,7 @@ import com.example.foobarpart2.db.dao.PostDao;
 import com.example.foobarpart2.db.database.AppDB;
 import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.db.entity.User;
 import com.example.foobarpart2.network.api.PostAPI;
 import com.example.foobarpart2.repository.tasks.GetPostsTask;
 
@@ -21,6 +22,7 @@ public class PostsRepository {
     private PostListData postListData;
     private MutableLiveData<Post> postMutableLiveData;
     private PostAPI api;
+    private MutableLiveData<List<Post>> wallPostData;
 
     public PostsRepository() {
         AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "postDB")
@@ -30,7 +32,8 @@ public class PostsRepository {
         this.dao = db.postDao();
         postListData = new PostListData();
         postMutableLiveData = new MutableLiveData<>();
-        api = new PostAPI(postListData, dao);
+        wallPostData = new MutableLiveData<>();
+        api = new PostAPI(postListData, dao,wallPostData);
 
     }
 
@@ -67,6 +70,14 @@ public class PostsRepository {
 
     public void addComment(String postId, Comment newComment) {
         api.addComment(postId,newComment);
+    }
+
+    public void reloadWall(User wallUser) {
+        api.getWallPosts(wallUser);
+    }
+
+    public LiveData<List<Post>> getWallPostsData() {
+        return this.wallPostData;
     }
 
     class PostListData extends MutableLiveData<List<Post>> {

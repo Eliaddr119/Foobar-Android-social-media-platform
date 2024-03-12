@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Post;
 import com.example.foobarpart2.ui.activity.EditPostActivity;
+import com.example.foobarpart2.ui.activity.WallActivity;
 import com.example.foobarpart2.utilities.ImageUtils;
 
 import java.util.ArrayList;
@@ -182,6 +183,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
                 });
                 // Show the popup menu
                 popup.show();
+            });
+            holder.tvAuthor.setOnClickListener(v -> {
+                Intent intent = new Intent(activity, WallActivity.class);
+                intent.putExtra("friendUserName", posts.get(position).getUsername());
+                activity.startActivity(intent);
             });
         }
     }

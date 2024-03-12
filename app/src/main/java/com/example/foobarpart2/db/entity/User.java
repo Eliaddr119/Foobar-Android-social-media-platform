@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -57,7 +58,10 @@ public class User {
     }
 
     public List<String> getFriendsRequest() {
-        return friendsRequest;
+        if (this.friendsRequest == null) {
+            return new ArrayList<>(); // Return an empty list if friendsRequest is null
+        }
+        return this.friendsRequest;
     }
 
     public void setFriendsRequest(List<String> friendsRequest) {
