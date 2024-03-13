@@ -57,7 +57,6 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
         postViewModel.getPost().observe(this, post -> {
             currentPost = post;
             List<Comment> comments = currentPost.getComments(); // postId is the ID of the current post
-            commentsList.clear();
 
             if (comments != null) {
                 commentsList.addAll(comments);
