@@ -2,7 +2,6 @@ package com.example.foobarpart2.db.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -28,7 +27,7 @@ public class Post {
     private boolean isLiked;
     private String image;
 
-    public Post(@NonNull String username, String displayName, String profilePic, @NonNull Date date, @NonNull String content, int numComments, List<Comment> comments, int numlikes, String[] likeby, String image) {
+    public Post(@NonNull String username, String displayName, String profilePic, @NonNull Date date, @NonNull String content, int numComments, List<Comment> comments, int numlikes, String[] likeby,boolean isLiked ,String image) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
@@ -39,21 +38,14 @@ public class Post {
         this.numlikes = numlikes;
         this.likeby = likeby;
         this.isLiked = false;
-        this.image = image;
-    }
-    @Ignore
-    public Post(String id, @NonNull String username, String displayName, String profilePic, @NonNull Date date, @NonNull String content, int numComments, List<Comment> comments, int numlikes, String[] likeby, String image) {
-        this._id = id;
-        this.username = username;
-        this.displayName = displayName;
-        this.profilePic = profilePic;
-        this.date = date;
-        this.content = content;
-        this.numComments = numComments;
-        this.comments = comments;
-        this.numlikes = numlikes;
-        this.likeby = likeby;
-        this.isLiked = false;
+        if (likeby != null) {
+            for (String liker : likeby) {
+                if (username.equals(liker)) {
+                    this.isLiked = true;
+                    break;
+                }
+            }
+        }
         this.image = image;
     }
 

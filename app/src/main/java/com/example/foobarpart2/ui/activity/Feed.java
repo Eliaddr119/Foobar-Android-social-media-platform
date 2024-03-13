@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,7 +59,7 @@ public class Feed extends AppCompatActivity {
             intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
             intent.putExtra("author", loggedInUser.getDisplayName());
             startActivity(intent);
-        },this::onDeletePost,this::onLikePost,this::onDisLikePost);
+        }, this::onDeletePost, this::onLikePost, this::onDisLikePost);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,20 +86,46 @@ public class Feed extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_add) {
             onAddButton();
-        } else if (id == R.id.action_settings) {
-            onSettingsButton();
+        } else if (id == R.id.menu_dark_mode) {
+            onDarkMode();
         } else if (id == R.id.action_friend_requests) {
             onFriendRequestButton();
+        } else if (id == R.id.menu_logout) {
+            logout();
+            Toast.makeText(Feed.this, "Logout clicked",
+                    Toast.LENGTH_SHORT).show();
         } else {
             return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void onDarkMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Mode",
+                Context.MODE_PRIVATE);
+        boolean nightMode = sharedPreferences.getBoolean("nightMode",
+                false);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (nightMode) {
+            AppCompatDelegate.
+                    setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            editor.putBoolean("nightMode", false);
+        } else {
+            AppCompatDelegate.
+                    setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            editor.putBoolean("nightMode", true);
+        }
+        editor.apply(); // Apply changes to SharedPreferences
+        Toast.makeText(Feed.this, "Dark Mode clicked",
+                Toast.LENGTH_SHORT).show();
+
     }
 
     private void onFriendRequestButton() {
@@ -119,42 +144,6 @@ public class Feed extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_ADD_POST);
     }
 
-    private void onSettingsButton() {
-        PopupMenu popup = new PopupMenu(Feed.this, btnSettings);
-        popup.getMenuInflater().inflate(R.menu.menu_settings, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_logout) {
-                    logout();
-                    Toast.makeText(Feed.this, "Logout clicked",
-                            Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (item.getItemId() == R.id.menu_dark_mode) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("Mode",
-                            Context.MODE_PRIVATE);
-                    boolean nightMode = sharedPreferences.getBoolean("nightMode",
-                            false);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    if (nightMode) {
-                        AppCompatDelegate.
-                                setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        editor.putBoolean("nightMode", false);
-                    } else {
-                        AppCompatDelegate.
-                                setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        editor.putBoolean("nightMode", true);
-                    }
-                    editor.apply(); // Apply changes to SharedPreferences
-                    Toast.makeText(Feed.this, "Dark Mode clicked",
-                            Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                return false;
-            }
-        });
-        popup.show();
-    }
 
     private void logout() {
         userViewModel.logOutCurrUser();
@@ -189,7 +178,7 @@ public class Feed extends AppCompatActivity {
 
             Post newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
                     currentUser.getProfilePic(), currentDate, content, 0,
-                    new ArrayList<>(), 0, null, image);
+                    new ArrayList<>(), 0, null, false,image);
 
             postViewModel.add(newPost);
             adapter.addPost(newPost);
@@ -209,12 +198,15 @@ public class Feed extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
     }
+
     public void onDeletePost(String postId) {
         postViewModel.delete(postId);
     }
+
     private void onLikePost(String postId) {
         postViewModel.likePost(postId);
     }
+
     private void onDisLikePost(String postId) {
         postViewModel.disLikePost(postId);
     }

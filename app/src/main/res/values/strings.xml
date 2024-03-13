@@ -49,5 +49,7 @@
     <string name="no_friend_requests">There are no friend requests, \ntry to send your self :)</string>
     <string name="accept">accept</string>
     <string name="decline">decline</string>
+    <string name="logout2">Logout</string>
+    <string name="toggle_dark_mode">Toggle Dark Mode</string>
 
 </resources>

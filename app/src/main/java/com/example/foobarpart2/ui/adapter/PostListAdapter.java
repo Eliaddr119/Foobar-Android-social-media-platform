@@ -69,21 +69,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             postSettingsBtn = itemView.findViewById(R.id.postSettings);
             uploadTime = itemView.findViewById(R.id.tvUploadTime);
 
-            btnLike.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Post post = posts.get(position);
-                    post.toggleLikeStatus();
-                    int likeCount = post.getNumlikes();
-                    numOfLikes.setText(String.valueOf(likeCount));
-                    if (post.isLiked()) {
-                        btnLike.setImageResource(R.drawable.ic_liked);
-                    } else {
-                        btnLike.setImageResource(R.drawable.ic_like);
-                    }
-                }
-            });
-
             btnComment.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
@@ -140,6 +125,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostVi
             if (current.getProfilePic() != null) {
                 holder.profile.setImageBitmap(ImageUtils.decodeBase64ToBitmap(current.getProfilePic()));
             }
+
+            if (current.isLiked()){
+                holder.btnLike.setImageResource(R.drawable.ic_liked);
+            }
+
             holder.numOfLikes.setText(String.valueOf(current.getNumlikes()));
 
             holder.numOfComments.setText(String.valueOf(current.getCommentsCount()));
