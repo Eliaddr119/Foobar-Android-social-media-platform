@@ -3,15 +3,14 @@ package com.example.foobarpart2.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import android.widget.TextView;
-
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Comment;
+import com.example.foobarpart2.models.LoggedInUser;
 
 import java.util.List;
 
@@ -43,6 +42,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Comment comment = comments.get(position);
         holder.authorTextView.setText(comment.getUsername());
         holder.contentTextView.setText(comment.getContent());
+
+        if (comment.getUsername().equals(LoggedInUser.getInstance().getUser().getUsername())) {
+            holder.editCommentButton.setVisibility(View.VISIBLE);
+            holder.deleteCommentButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.editCommentButton.setVisibility(View.GONE);
+            holder.deleteCommentButton.setVisibility(View.GONE);
+        }
     }
 
     @Override

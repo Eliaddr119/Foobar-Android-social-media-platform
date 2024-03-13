@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foobarpart2.R;
 import com.example.foobarpart2.db.entity.Comment;
 import com.example.foobarpart2.db.entity.Post;
+import com.example.foobarpart2.models.LoggedInUser;
 import com.example.foobarpart2.ui.adapter.CommentAdapter;
 import com.example.foobarpart2.ui.viewmodels.CommentStorage;
 import com.example.foobarpart2.ui.viewmodels.PostsViewModel;
@@ -81,7 +82,7 @@ public class CommentActivity extends AppCompatActivity implements CommentAdapter
             Date currentDate = calendar.getTime();
 
             Comment newComment = new Comment(currentPost.getPostId(),currentPost.get_id(),
-                    currentPost.getUsername(),author, commentContent, currentDate);
+                    LoggedInUser.getInstance().getUser().getUsername(),author, commentContent, currentDate);
 
             // Update the Post object
             if (currentPost != null) {
