@@ -54,6 +54,11 @@ public class Feed extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         User loggedInUser = LoggedInUser.getInstance().getUser();
 
+        postViewModel.reload();
+        postViewModel.get().observe(this, posts -> {
+            adapter.setPosts(posts);
+        });
+
         adapter = new PostListAdapter(this, this, position -> {
             Intent intent = new Intent(Feed.this, CommentActivity.class);
             intent.putExtra("postId", adapter.getPosts().get(position).getPostId());
@@ -178,7 +183,7 @@ public class Feed extends AppCompatActivity {
 
             Post newPost = new Post(currentUser.getUsername(), currentUser.getDisplayName(),
                     currentUser.getProfilePic(), currentDate, content, 0,
-                    new ArrayList<>(), 0, null, false,image);
+                    new ArrayList<>(), 0, null, false, image);
 
             postViewModel.add(newPost);
             adapter.addPost(newPost);
@@ -193,6 +198,7 @@ public class Feed extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        postViewModel.reload();
         postViewModel.get().observe(this, posts -> {
             adapter.setPosts(posts);
         });
