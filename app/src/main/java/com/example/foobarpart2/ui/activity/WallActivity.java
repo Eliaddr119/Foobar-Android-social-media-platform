@@ -107,7 +107,7 @@ public class WallActivity extends AppCompatActivity {
     private void loadWallPosts() {
         boolean isFriends = userViewModel.isFriendsWith(wallUser);
 
-        if (isFriends) {
+        if (isFriends || wallUser.getUsername().equals(LoggedInUser.getInstance().getUser().getUsername())) {
             postViewModel.getPostsForWall().observe(this, posts -> {
                 if (!posts.isEmpty()) {
                     // If they are friends and there are posts, show the posts and hide the message.
@@ -116,10 +116,9 @@ public class WallActivity extends AppCompatActivity {
                     findViewById(R.id.tvNotFriendsMessage).setVisibility(View.GONE);
                 } else {
                     // They are friends but there are no posts to show, hide both the RecyclerView and the message
-                    // Alternatively, you might want to show a different message indicating there are no posts to display
                     rvUserPosts.setVisibility(View.GONE);
                     TextView notFriendsMessage = findViewById(R.id.tvNotFriendsMessage);
-                    notFriendsMessage.setText(R.string.no_posts_available); // Assuming you have a "no_posts_available" string resource
+                    notFriendsMessage.setText(R.string.no_posts_available);
                     notFriendsMessage.setVisibility(View.VISIBLE);
                 }
                 refreshLayout.setRefreshing(false);
