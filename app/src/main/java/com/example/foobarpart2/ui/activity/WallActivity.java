@@ -52,7 +52,7 @@ public class WallActivity extends AppCompatActivity {
             wallUser = user;
 
             updateWallUserInfo(wallUser);
-            // Trigger posts loading here, ensuring it's done after the user is fetched
+            postViewModel.reloadWall(wallUser);
             loadWallPosts();
         });
 
