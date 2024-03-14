@@ -74,4 +74,8 @@ public class UserViewModel extends ViewModel {
     public void declineFriendRequest(String username) {
         repository.declineFriendRequest(username);
     }
+
+    public void updateUser(User updatedUser) {
+        repository.updateUser(updatedUser);
+    }
 }

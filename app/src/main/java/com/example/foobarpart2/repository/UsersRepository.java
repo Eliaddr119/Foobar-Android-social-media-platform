@@ -89,6 +89,10 @@ public class UsersRepository {
     public void declineFriendRequest(String username) {
         api.declineFriendRequest(username);
     }
+
+    public void updateUser(User updatedUser) {
+        api.updateUser(updatedUser);
+    }
 }
 
 

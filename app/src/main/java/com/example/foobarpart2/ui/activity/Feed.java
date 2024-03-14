@@ -106,10 +106,17 @@ public class Feed extends AppCompatActivity {
             logout();
             Toast.makeText(Feed.this, "Logout clicked",
                     Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (id == R.id.menu_update_info) {
+            onUpdateUserInfo();
+        }else{
             return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void onUpdateUserInfo() {
+        Intent  intent = new Intent(this, ChangeUserInfoActivity.class);
+        startActivity(intent);
     }
 
     private void onDarkMode() {
@@ -186,7 +193,10 @@ public class Feed extends AppCompatActivity {
                     new ArrayList<>(), 0, null, false, image);
 
             postViewModel.add(newPost);
-            adapter.addPost(newPost);
+            postViewModel.reload();
+            postViewModel.get().observe(this, posts -> {
+                adapter.setPosts(posts);
+            });
             adapter.notifyDataSetChanged();
         }
         if (requestCode == REQUEST_CODE_EDIT_POST && resultCode == RESULT_OK) {

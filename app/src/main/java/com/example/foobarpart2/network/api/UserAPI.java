@@ -199,4 +199,27 @@ public class UserAPI {
             }
         });
     }
+
+    public void updateUser(User updatedUser) {
+        Call<User> call = webServiceAPI.updateUser(updatedUser.getUsername(),tokenRepository.get(),updatedUser);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to decline the friend request try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "updated your info"
+                            , Toast.LENGTH_SHORT).show();
+                    new Thread(() -> dao.update(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

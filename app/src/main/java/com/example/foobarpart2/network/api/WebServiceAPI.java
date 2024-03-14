@@ -37,7 +37,7 @@ public interface WebServiceAPI {
     Call<User> getUser(@Path("id") String username, @Header("Authorization") String token);
 
     @PATCH("users/{id}")
-    Call<Void> editUser(@Path("id") String username);
+    Call<User> updateUser(@Path("id") String username, @Header("Authorization") String token, @Body User updatedUser);
 
     @DELETE("users/{id}")
     Call<Void> deleteUser(@Path("id") String username);
@@ -84,4 +84,6 @@ public interface WebServiceAPI {
     Call<Void> acceptFriendRequest(@Path("id")String loggedInUserName,@Path("fid") String friendUserName,@Header("Authorization") String token);
     @DELETE("users/{id}/friends/{fid}")
     Call<Void> declineFriendRequest(@Path("id")String loggedInUserName,@Path("fid") String friendUserName,@Header("Authorization") String token);
+
+
 }

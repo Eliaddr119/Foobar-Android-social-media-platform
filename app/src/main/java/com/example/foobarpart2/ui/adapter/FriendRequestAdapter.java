@@ -63,4 +63,11 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             btnDecline = itemView.findViewById(R.id.btnDecline);
         }
     }
+    public void removeRequest(String username) {
+        int position = friendRequests.indexOf(username);
+        if (position > -1) {
+            friendRequests.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
 }

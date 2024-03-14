@@ -14,7 +14,7 @@ public class User {
     private final String username;
     private final String password;
     private String displayName;
-    private final String profilePic;
+    private String profilePic;
     private List<String> friends;
     private List<String> friendsRequest;
 
@@ -66,5 +66,9 @@ public class User {
 
     public void setFriendsRequest(List<String> friendsRequest) {
         this.friendsRequest = friendsRequest;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }

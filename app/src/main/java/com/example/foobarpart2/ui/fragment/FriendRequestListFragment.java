@@ -52,11 +52,15 @@ public class FriendRequestListFragment extends Fragment {
             @Override
             public void onAccept(String username) {
                 userViewModel.acceptFriendRequest(username);
+                adapter.removeRequest(username);
+                updateUI();
             }
 
             @Override
             public void onDecline(String username) {
                 userViewModel.declineFriendRequest(username);
+                adapter.removeRequest(username);
+                updateUI();
             }
         });
 

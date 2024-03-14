@@ -51,5 +51,6 @@
     <string name="decline">decline</string>
     <string name="logout2">Logout</string>
     <string name="toggle_dark_mode">Toggle Dark Mode</string>
+    <string name="update_info">Update Info</string>
 
 </resources>
