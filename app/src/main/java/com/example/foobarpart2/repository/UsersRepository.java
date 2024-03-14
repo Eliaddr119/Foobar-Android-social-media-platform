@@ -93,6 +93,10 @@ public class UsersRepository {
     public void updateUser(User updatedUser) {
         api.updateUser(updatedUser);
     }
+
+    public void removeFriend(User wallUser) {
+        api.removeFriend(wallUser);
+    }
 }
 
 

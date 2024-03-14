@@ -78,4 +78,8 @@ public class UserViewModel extends ViewModel {
     public void updateUser(User updatedUser) {
         repository.updateUser(updatedUser);
     }
+
+    public void removeFriend(User wallUser) {
+        repository.removeFriend(wallUser);
+    }
 }

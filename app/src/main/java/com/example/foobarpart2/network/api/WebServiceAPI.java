@@ -85,5 +85,4 @@ public interface WebServiceAPI {
     @DELETE("users/{id}/friends/{fid}")
     Call<Void> declineFriendRequest(@Path("id")String loggedInUserName,@Path("fid") String friendUserName,@Header("Authorization") String token);
 
-
 }

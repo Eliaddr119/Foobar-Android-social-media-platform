@@ -54,6 +54,7 @@ public class WallActivity extends AppCompatActivity {
             updateWallUserInfo(wallUser);
             postViewModel.reloadWall(wallUser);
             loadWallPosts();
+            updateFriendshipStatusAndUI();
         });
 
         refreshLayout.setOnRefreshListener(() -> {
@@ -132,6 +133,21 @@ public class WallActivity extends AppCompatActivity {
             refreshLayout.setRefreshing(false);
         }
     }
+    private void updateFriendshipStatusAndUI() {
+        ImageButton friendRequestButton = findViewById(R.id.friend_request_button);
+
+        if (userViewModel.isFriendsWith(wallUser)) {
+            // If they are friends, show the "friends" icon
+            friendRequestButton.setImageResource(R.drawable.ic_unfriend); // Assuming ic_friends is a drawable resource
+            friendRequestButton.setOnClickListener(v -> removeFriend());
+        } else {
+            // If they are not friends, show the "add friend" icon
+            friendRequestButton.setImageResource(R.drawable.ic_add_friend);
+            friendRequestButton.setOnClickListener(v -> sendFriendRequest());
+        }
+    }
+
+
 
 
     public void onDeletePost(String postId) {
@@ -156,4 +172,14 @@ public class WallActivity extends AppCompatActivity {
 
         friendRequestButton.setEnabled(false);
     }
+    private void removeFriend() {
+        userViewModel.removeFriend(wallUser);
+
+        // Update the UI to reflect the change
+        ImageButton friendRequestButton = findViewById(R.id.friend_request_button);
+        friendRequestButton.setImageResource(R.drawable.ic_add_friend);
+        friendRequestButton.setOnClickListener(v -> sendFriendRequest());
+
+    }
+
 }

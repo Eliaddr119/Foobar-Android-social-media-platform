@@ -222,4 +222,29 @@ public class UserAPI {
             }
         });
     }
+
+    public void removeFriend(User wallUser) {
+        User loggedInUser = LoggedInUser.getInstance().getUser();
+        Call<Void> call = webServiceAPI.declineFriendRequest(loggedInUser.getUsername(),wallUser.getUsername(),
+                tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to remove the friend try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "friend removed successfully"
+                            , Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
