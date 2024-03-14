@@ -46,11 +46,11 @@
     <string name="friend_requests">friend requests</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="no_friend_requests">There are no friend requests, \ntry to send your self :)</string>
+    <string name="no_friend_requests">There are no friend requests</string>
     <string name="accept">accept</string>
     <string name="decline">decline</string>
     <string name="logout2">Logout</string>
     <string name="toggle_dark_mode">Toggle Dark Mode</string>
-    <string name="update_info">Update Info</string>
+    <string name="update_info">Update Profile</string>
 
 </resources>
