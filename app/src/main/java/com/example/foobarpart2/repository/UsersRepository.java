@@ -37,7 +37,6 @@ public class UsersRepository {
 
     public void delete(User user) {
         api.delete(user);
-        dao.delete(user);
     }
 
     public void get(String username) {

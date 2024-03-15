@@ -34,6 +34,7 @@ public class ChangeUserInfoActivity extends AppCompatActivity {
     private EditText displayNameEditText, passwordEditText;
     private ImageButton profileImageView;
     private Button saveChangesButton;
+    private Button deletAccountButton;
     private Uri photoUri = null;
     private UserViewModel userViewModel;
 
@@ -46,6 +47,7 @@ public class ChangeUserInfoActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextPassword);
         profileImageView = findViewById(R.id.imageViewProfile);
         saveChangesButton = findViewById(R.id.buttonSaveChanges);
+        deletAccountButton = findViewById(R.id.deleteAccountBtn);
 
         User currentUser = LoggedInUser.getInstance().getUser();
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -91,6 +93,14 @@ public class ChangeUserInfoActivity extends AppCompatActivity {
             userViewModel.updateUser(updatedUser);
 
         });
+
+        deletAccountButton.setOnClickListener(view ->{
+            userViewModel.delete(currentUser);
+            Intent intent = new Intent(this, SignIn.class);
+            startActivity(intent);
+
+        });
+
     }
 
     private boolean validatePassword(String newPassword) {

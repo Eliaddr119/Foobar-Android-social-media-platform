@@ -66,11 +66,19 @@ public class UserAPI {
     }
 
     public void delete(User user) {
-        Call<Void> call = webServiceAPI.deleteUser(user.getUsername());
+        Call<Void> call = webServiceAPI.deleteUser(user.getUsername(),tokenRepository.get());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to delete user, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> dao.delete(user)).start();
+                    Toast.makeText(MyApplication.context, "Your User has been Deleted, Hope to See You Soon"
+                            , Toast.LENGTH_SHORT).show();
+                    LoggedInUser.getInstance().setUser(null);
+                }
             }
 
             @Override
@@ -87,7 +95,7 @@ public class UserAPI {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(MyApplication.context, "Unable to log you in, try later :)"
+                    Toast.makeText(MyApplication.context, "User Not Found!"
                             , Toast.LENGTH_SHORT).show();
                 } else {
                     TokenRepository tokenRepository = new TokenRepository();
@@ -211,7 +219,7 @@ public class UserAPI {
                 }else {
                     Toast.makeText(MyApplication.context, "updated your info"
                             , Toast.LENGTH_SHORT).show();
-                    new Thread(() -> dao.update(response.body()));
+                    new Thread(() -> dao.update(response.body())).start();
                 }
             }
 

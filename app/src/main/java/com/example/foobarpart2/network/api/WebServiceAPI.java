@@ -40,7 +40,7 @@ public interface WebServiceAPI {
     Call<User> updateUser(@Path("id") String username, @Header("Authorization") String token, @Body User updatedUser);
 
     @DELETE("users/{id}")
-    Call<Void> deleteUser(@Path("id") String username);
+    Call<Void> deleteUser(@Path("id") String username,@Header("Authorization") String token);
 
     /*
      * Post Requests
