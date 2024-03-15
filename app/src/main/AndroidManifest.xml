@@ -5,8 +5,10 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,28 +17,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoobarPart2"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Feed"
+            android:name=".ui.activity.ChangeUserInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUp"
+            android:name=".ui.activity.WallActivity"
             android:exported="false" />
         <activity
-            android:name=".EditPostActivity"
-            android:exported="false"
-            android:parentActivityName=".Feed" />
-
+            android:name=".ui.activity.Feed"
+            android:exported="false" />
         <activity
-            android:name=".CreatePostActivity"
-            android:exported="false"
-            android:parentActivityName=".Feed" />
+            android:name=".ui.activity.SignUp"
+            android:exported="false" />
         <activity
-            android:name=".CommentActivity"
+            android:name=".ui.activity.EditPostActivity"
             android:exported="false"
-            android:parentActivityName=".Feed" />
+            android:parentActivityName=".ui.activity.Feed" />
         <activity
-            android:name=".SignIn"
+            android:name=".ui.activity.CreatePostActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.activity.Feed" />
+        <activity
+            android:name=".ui.activity.CommentActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.activity.Feed" />
+        <activity
+            android:name=".ui.activity.SignIn"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
