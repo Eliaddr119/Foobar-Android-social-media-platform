@@ -106,6 +106,7 @@ public class PostAPI {
                     Toast.makeText(MyApplication.context, "Unable to add the post, " +
                                     "it includes a forbidden link :( "
                             , Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to add the post, try later :)"
@@ -162,6 +163,7 @@ public class PostAPI {
                     Toast.makeText(MyApplication.context, "Unable to edit the post, " +
                                     "it includes a forbidden link try again without it"
                             , Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to edit the post, try later :)"
