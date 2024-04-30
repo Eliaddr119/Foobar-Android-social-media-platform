@@ -102,6 +102,11 @@ public class PostAPI {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 410){
+                    Toast.makeText(MyApplication.context, "Unable to add the post, " +
+                                    "it includes a forbidden link :( "
+                            , Toast.LENGTH_SHORT).show();
+                }
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to add the post, try later :)"
                             , Toast.LENGTH_SHORT).show();
@@ -153,6 +158,11 @@ public class PostAPI {
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
+                if (response.code() == 410){
+                    Toast.makeText(MyApplication.context, "Unable to edit the post, " +
+                                    "it includes a forbidden link try again without it"
+                            , Toast.LENGTH_SHORT).show();
+                }
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to edit the post, try later :)"
                             , Toast.LENGTH_SHORT).show();
